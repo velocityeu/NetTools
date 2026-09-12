@@ -33,7 +33,7 @@ jobs:
         shell: pwsh
         run: |
           $ErrorActionPreference = "Stop"
-          $m = Select-String CMakeLists.txt 'project\(VelocityNetTools VERSION ([0-9]+\.[0-9]+\.[0-9]+)' | Select-Object -First 1
+          $m = Select-String -Path CMakeLists.txt -Pattern 'project\(VelocityNetTools VERSION ([0-9]+\.[0-9]+\.[0-9]+)' | Select-Object -First 1
           if (-not $m) { throw "CMake project version is unavailable." }
           $base = $m.Matches[0].Groups[1].Value
           $sha = "$env:GITHUB_SHA".ToLowerInvariant(); $short = $sha.Substring(0,7)
