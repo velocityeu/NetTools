@@ -1,0 +1,25 @@
+# Development and local preview state
+.vs/
+.vscode/
+.sites-runtime/
+.openai/
+out/
+build/
+cmake-build-*/
+*.obj
+*.pdb
+*.ilk
+*.exe
+*.dll
+*.log
+__pycache__/
+node_modules/
+.env
+.env.*
+!.env.example
+*.pfx
+*.p12
+*.key
+*.pem
+# Local environment inventory is not public project documentation.
+docs/research/2026-09-12-network-toolkit.md
