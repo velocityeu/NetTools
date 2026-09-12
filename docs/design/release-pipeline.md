@@ -14,19 +14,21 @@ A bug fix or feature merge should produce a traceable, tested x64 preview automa
 | Merge to main | Same gates, package verification, version metadata | A uniquely versioned GitHub prerelease for application changes |
 | Stable tag vX.Y.Z | Validate tag, rebuild at exact tagged SHA, full release checks, signing policy | Stable GitHub release and release manifest |
 | Preview tag vX.Y.Z-rc.N | Full release checks | Immutable release-candidate prerelease |
-| Documentation-only change | Docs links/examples, website checks | Documentation update; no unnecessary executable release |
+| Web-only or repository-doc-only change | Docs links/examples, website checks | Documentation update; no unnecessary executable release |
+| Embedded help, icon, licence or version-resource change | Full application gates | New application build, because executable content changed |
 
 Use prerelease versions such as 0.2.0-dev.123+abcdef0; PE numeric version fields require a separate four-integer mapping. A stable version tag is the release intent, after which publishing can be automatic. Automatically making every merge a stable release is a separate policy decision; the proposed default protects the stable download while still publishing current builds.
 
 ## Build and publish stages
 
 ```mermaid
-flowchart LR
-  Change[Pull request or main merge] --> Validate[Compile and test]
-  Tag[Version tag] --> Validate
-  Validate --> Package[Embed help and version resources]
-  Package --> Check[Check imports and portable package]
-  Check --> Sign[Sign according to channel policy]
+flowchart TD
+  Change[PR, main merge or version tag] --> Resources[Generate embedded help and version resources]
+  Resources --> Validate[Compile and test exact source revision]
+  Validate --> Check[Check imports and portable package]
+  Check --> Gate{Trusted main or approved version tag?}
+  Gate -->|No: pull request| Artifacts[Review artifacts only]
+  Gate -->|Yes| Sign[Sign according to channel policy]
   Sign --> Verify[Verify signature and compute hashes]
   Verify --> Stage[Create draft release and upload assets]
   Stage --> Audit[Verify complete release assets]
@@ -37,6 +39,8 @@ flowchart LR
 ## Proposed implementation details
 
 - CMake presets and an explicit Windows runner image label; record the runner image version, compiler and SDK with each build. Pin third-party actions to reviewed commit SHAs. Do not rely on mutable action tags or claim that a hosted runner image label is immutable.
+- Generate/validate help, icons and version resources before compilation, then test and publish that resulting executable. A later signing step changes bytes but not the compiled source; verify its signature and compute the final hash after signing.
+- The publish job condition explicitly excludes pull_request and fork contexts, regardless of successful tests. Stable tags must identify a reviewed main-history commit and pass the same checks at the tagged SHA. Validate semantic version and numeric PE-version fields; fail on any 16-bit field overflow rather than truncating build numbers.
 - Use Release /MT. Embed the manual, common-controls manifest, icon, version information, MIT text and notices. Package one VelocityNetTools-x64.exe plus ancillary download files, not runtime sidecars.
 - Treat maths edge cases as release gates: /0, /31, /32, /127, /128, alignment, invalid masks, exact aggregation, range coverage and overflow. Test lesson examples against the calculation engine once it exists.
 - Inspect PE imports to enforce the supported API baseline and absence of separately installed runtime DLL dependencies. Run smoke/UI checks and a separate clean-machine compatibility matrix, including the oldest supported Windows image. Hosted runner success alone does not prove compatibility.
@@ -87,7 +91,7 @@ The portable application does not silently update itself. Automatic publication 
 
 ## Decisions required before enabling publishing
 
-1. Exact oldest Windows/Server versions and compatibility-test environment.
+1. Provision clean-machine tests for the compatibility target in product-design.md, including Windows 10 build 10240 and Server 2016 Desktop Experience.
 2. Signing provider and whether preview builds are also signed.
 3. Acceptance of automatic prereleases from main and stable version-tag releases.
 4. Public website hosting destination and manual versioning URL structure.

@@ -12,6 +12,8 @@ Maintain canonical, versioned topic content in this repository. A future documen
 
 The current 15-lesson Markdown file is a snapshot of the web preview. It must not be treated as an independently maintained second source. Adopt a structured topic schema before adding the application renderer: stable topic ID, title, summary, prerequisites, content blocks, examples with expected answers, related topics, context IDs, references and last-reviewed version/date.
 
+The implementation will use a restricted structured-content format (paragraphs, headings, lists, tables, code/examples and internal/external links), with no arbitrary HTML or script execution. Build-time generators produce Markdown, web content and Rich Edit resources from that one source. Mathematical examples include machine-readable input/expected values and are checked against the engine. Embedded-manual changes require rebuilding the executable, not just redeploying the website.
+
 ## Native help window
 
 Use a resizable native window with Back, Forward, Contents and Search commands; a native tree for contents, an edit control for search, a list view for hits, and the OS Rich Edit control for text. No WebView2, CHM sidecar, JavaScript engine or help-server process. Rich Edit is provided by Windows; embed rich-text content and images as application resources.
@@ -36,6 +38,8 @@ Topic title / help version                           Copy   Close
 - Examples offer Copy input and Copy result. Any future “Open in calculator” action must populate fields without starting network probes.
 - Keyboard navigation, screen-reader semantics, scalable text, high contrast, copy/select-all and printing/exporting readable topics are part of the design.
 - Display the manual version alongside the app version. Version the hosted manual for historical releases; show which product version a topic describes.
+- First-release command help describes only shipped subnet functionality. General ping/DNS tutorials may remain educational material but must not imply those application tools exist yet.
+- Filtered search, selected topic and next/previous navigation must agree. No-match results replace the article with a clear empty state. Keyboard focus moves to the heading after explicit topic navigation, but stays in search while typing.
 
 ## Complete manual coverage
 

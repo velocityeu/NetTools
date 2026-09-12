@@ -36,7 +36,7 @@ Velocity NetTools is being designed for engineers who need accurate answers with
 | Help | Embedded, searchable manual; F1 context help; examples; glossary; online references |
 | Diagnostics, later | Visual ping, traceroute, DNS lookup, adapters, routes and TCP connectivity |
 
-**Target:** Windows 10/11 x64 and compatible Windows Server editions. The precise minimum OS builds and Server Core support are still being defined.
+**Compatibility target for approval:** Windows 10 x64 (build 10240 onward), Windows 11 x64, and Windows Server 2016 onward with Desktop Experience. Server Core is outside the first GUI release. Compatibility will be verified on clean machines during implementation; it has not been tested yet.
 
 **Distribution:** one portable executable, with no separately installed application runtime. C++20, Win32 controls, MSVC and a statically linked C++ runtime. Windows-supplied APIs provide controls, networking and graph rendering.
 
@@ -97,6 +97,8 @@ LICENSE                    MIT licence
 [Open an issue](https://github.com/velocityeu/NetTools/issues) for a calculation concern, unclear lesson, accessibility issue or feature suggestion. Include the example input, expected result and reasoning. For future application bugs, include the version and Windows build. Use anonymised network examples; avoid posting credentials or confidential network inventories.
 
 Application implementation begins after the feature and UI design is finalised. Design and documentation improvements are welcome now.
+
+The [design review](docs/design/design-review.md) records the corrected interaction and release issues and the scope submitted for development approval.
 
 ## Licence and publisher
 

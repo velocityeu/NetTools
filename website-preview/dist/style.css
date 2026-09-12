@@ -13,3 +13,6 @@
 @media(max-width:1050px){.learning-hero{gap:25px}.site-header{flex-wrap:wrap}.app-showcase figcaption{display:block}.app-showcase figcaption span{display:block;margin-top:5px}}
 @media(max-width:760px){.learning-hero{grid-template-columns:1fr}.download-strip-inner{align-items:flex-start;flex-direction:column;gap:16px}.app-showcase{padding:10px}.app-showcase figcaption{padding:12px 4px 4px}.site-header nav{gap:16px}.learning-hero h1{font-size:2.5rem}}
 @media print{.download-strip{display:none}}
+
+.clear-search{border:0;background:none;padding:9px 0;color:var(--blue);font-size:.85rem;text-decoration:underline;text-underline-offset:3px}.help-nav #search-status{margin:8px 0 18px}.help-article #lesson-title:focus-visible{outline:2px solid var(--blue);outline-offset:6px}.hero-actions{flex-wrap:wrap}.brand{min-width:0}.brand-mark{flex-shrink:0}dialog{max-height:calc(100dvh - 32px);overflow:auto}
+
