@@ -34,9 +34,9 @@ Potential subsequent tools: visual ping, repeated traceroute, DNS lookup, interf
 
 ## Visual direction
 
-![Initial subnet UI concept](subnet-concept-01.png)
+![Initial subnet UI concept](subnet-concept-02.png)
 
-This generated image predates the final brand name and is a design illustration, not a screenshot of a built application. Preserve the standard Win32 controls, update the title to Velocity NetTools, and consider collapsing binary details by default.
+This updated image uses the Velocity V mark, Velocity NetTools title and velocity-eu.com branding. It is a design illustration, not a screenshot of a built application. Preserve the standard Win32 controls and consider collapsing binary details by default.
 
 Brand palette proposal:
 
@@ -48,7 +48,7 @@ Brand palette proposal:
 | Pale blue | #EDF4FA | Web learning surfaces |
 | Ink | #182D44 | Web body text |
 
-Typography: Segoe UI family for the website and OS-selected UI font for the application; monospace only where it helps compare addresses or bits. The proposed N monogram uses a small orange accent. The actual corporate logo is not being replaced. Proposed tagline: **Clarity for every connection.** Brand name is confirmed; the icon, palette and tagline remain reviewable.
+Typography: Segoe UI family for the website and OS-selected UI font for the application; monospace only where it helps compare addresses or bits. The approved V symbol uses a small orange accent and is paired with velocity-eu.com across the website, app concept, About dialog, favicon and repository identity. The actual corporate logo is not being replaced. Proposed tagline: **Clarity for every connection.** Brand name is confirmed; the icon, palette and tagline remain reviewable.
 
 ## Related designs
 

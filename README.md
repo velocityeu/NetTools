@@ -1,5 +1,7 @@
 <div align="center">
 
+![Velocity V symbol](docs/design/velocity-mark.svg)
+
 # Velocity NetTools
 
 **Clarity for every connection.**
@@ -7,6 +9,8 @@
 A portable native Windows network toolkit, with an engineer’s field guide that explains the numbers behind the answers.
 
 **By [Velocity EU Inc](https://www.velocity-eu.com/)**
+
+**[velocity-eu.com](https://www.velocity-eu.com/)**
 
 [Learn subnetting](docs/help/README.md) · [Design & roadmap](docs/design/product-design.md) · [Releases](https://github.com/velocityeu/NetTools/releases) · [Report an issue](https://github.com/velocityeu/NetTools/issues)
 
@@ -18,9 +22,9 @@ A portable native Windows network toolkit, with an engineer’s field guide that
 
 Velocity NetTools is being designed for engineers who need accurate answers without installing a large tool suite. The first application release will focus on subnet calculation and planning. The companion learning centre teaches the same operations by hand, with worked examples and practical guidance.
 
-![Subnet calculator interface concept — not a running application](docs/design/subnet-concept-01.png)
+![Subnet calculator interface concept — not a running application](docs/design/subnet-concept-02.png)
 
-*Interface concept. The final title and About window will use the approved Velocity NetTools branding.*
+*Interface concept with the Velocity V mark and velocity-eu.com branding; not a running application.*
 
 ## The application we are designing
 
