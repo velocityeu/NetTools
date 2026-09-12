@@ -1,11 +1,11 @@
 {
   "configuration_kind": "github-app-registration-form",
-  "status": "not_registered",
+  "status": "registered_and_installed",
   "owner": "velocityeu",
-  "registration_url": "https://github.com/organizations/velocityeu/settings/apps/new?name=VEU&description=Velocity%20EU%20Inc%20publisher%20for%20NetTools&url=https%3A%2F%2Fwww.velocity-eu.com%2F&public=false&webhook_active=false&request_oauth_on_install=false&contents=write&workflows=write",
+  "registration_url": "https://github.com/organizations/velocityeu/settings/apps/veu-nettools",
   "registration": {
-    "name": "VEU",
-    "name_availability": "unverified_global_uniqueness_required",
+    "name": "VEU-NetTools",
+    "name_availability": "registered",
     "description": "Velocity EU Inc publisher for NetTools",
     "url": "https://www.velocity-eu.com/",
     "public": false,
@@ -25,7 +25,9 @@
   "installation": {
     "account": "velocityeu",
     "repository_selection": "selected",
-    "repositories": ["NetTools"]
+    "repositories": [
+      "NetTools"
+    ]
   },
   "git_metadata": {
     "author_name": "VEU",
@@ -38,10 +40,10 @@
     "mode": "installation_access_token",
     "personal_credential_fallback": false,
     "repository": "velocityeu/NetTools",
-    "app_id": null,
-    "client_id": null,
-    "installation_id": null,
-    "app_slug": null,
+    "app_id": 4924807,
+    "client_id": "Iv23liCPYfquh6BtQ15Y",
+    "installation_id": 161243647,
+    "app_slug": "veu-nettools",
     "private_key_variable_name": "VEU_APP_PRIVATE_KEY"
   },
   "conditional_permissions_excluded_from_registration": {

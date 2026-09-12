@@ -1,6 +1,6 @@
 # Release pipeline and download design
 
-Status: application release architecture remains a design; no executable or application build/release workflow exists. GitHub Pages publishing is prepared separately for the current learning centre; activation is pending VEU App setup.
+Status: native build/release and Pages workflows are implemented. VEU-NetTools publishes previews under an explicit unsigned policy; stable publication is blocked pending signing and clean-machine tests. Release immutability is enabled.
 
 ## Desired result
 
@@ -94,7 +94,7 @@ The [site preparation script](../../scripts/prepare_site.py) reads public GitHub
 
 The selected publisher is a velocityeu-owned GitHub App, with installation-token publication attributed to the organisation App. Its published release events can trigger Pages directly. If a future publication step instead uses GITHUB_TOKEN, it must explicitly dispatch this Pages workflow after verified publication, or call the same website build/deploy jobs. Merely creating a release with GITHUB_TOKEN does not trigger another workflow. Grant actions write only to that trusted dispatch step if chosen; do not give it to build or PR jobs. Automated website refresh then needs no manual edit of the download button.
 
-Public publishing identities must follow [the VEU identity contract](publishing-identity.md); never use personal credentials as a fallback. First deployment remains pending App registration, restricted installation and secure key provisioning.
+Public publishing identities must follow [the VEU identity contract](publishing-identity.md); never use personal credentials as a fallback. The App registration, restricted installation and encrypted Actions key are provisioned.
 
 ## Bugs, fixes and rollback
 

@@ -1,0 +1,11 @@
+{\rtf1\ansi\ansicpg1252\deff0\uc1{\fonttbl{\f0 Segoe UI;}{\f1 Consolas;}}{\colortbl;\red0\green0\blue0;\red0\green102\blue180;}
+\viewkind4\pard\cf1\fs32\b Understand IPv6 prefixes\b0\fs22\par\par
+\pard\sa120 IPv6 addresses are 128 bits wide. IPv6 has no broadcast address, so its capacity display must not subtract two as though it were IPv4.\par
+\pard\sa180\sb120\b\fs28 Example: divide a /48 into /64s\b0\fs22\par
+\pard\li240\ri240\sa120\f1 Parent = 2001:db8:1234::/48\par
+Child prefix = /64\par
+Number of child prefixes = 2\u185?\u8310? = 65,536\par
+Addresses in each /64 = 2\u8310?\u8308?\f0\par
+\pard\sa120 This is address-space capacity, not a count of discovered devices or a promise that every address has the same assignability. Link roles and reserved addresses matter. The 2001:db8::/32 prefix is used for documentation.\par
+\pard\sa120 Online references: \cf2\ul IPv6 addressing\ul0\cf1  (online: \cf2\ul https://www.rfc-editor.org/rfc/rfc4291.html\ul0\cf1 ) and \cf2\ul IPv6 text formatting\ul0\cf1  (online: \cf2\ul https://www.rfc-editor.org/rfc/rfc5952.html\ul0\cf1 ).\par
+}

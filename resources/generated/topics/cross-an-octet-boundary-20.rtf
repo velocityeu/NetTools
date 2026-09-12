@@ -1,0 +1,15 @@
+{\rtf1\ansi\ansicpg1252\deff0\uc1{\fonttbl{\f0 Segoe UI;}{\f1 Consolas;}}{\colortbl;\red0\green0\blue0;\red0\green102\blue180;}
+\viewkind4\pard\cf1\fs32\b Cross an octet boundary: /20\b0\fs22\par\par
+\pard\sa120 Take \f1 172.16.37.19/20\f0 . The same method works, but the boundary is in the third octet.\par
+\pard\li360\fi-240\sa80 1. \b Host bits:\b0  32 \u8722? 20 = 12.\par
+\pard\li360\fi-240\sa80 2. \b Addresses:\b0  2\u185?\u178? = 4,096.\par
+\pard\li360\fi-240\sa80 3. \b Mask:\b0  255.255.240.0. In the third octet, four network bits give 128 + 64 + 32 + 16 = 240.\par
+\pard\li360\fi-240\sa80 4. \b Block step:\b0  256 \u8722? 240 = 16 in the third octet.\par
+\pard\li360\fi-240\sa80 5. \b Locate 37:\b0  the third-octet blocks start at 0, 16, 32, 48\u8230? so 37 belongs to 32\u8211?47.\par
+\pard\li240\ri240\sa120\f1 Network:   172.16.32.0/20\par
+Next block: 172.16.48.0/20\par
+Broadcast: 172.16.47.255\par
+Hosts:     172.16.32.1\u8211?172.16.47.254\par
+Usable:    4,096 \u8722? 2 = 4,094\f0\par
+\pard\sa120 The last octet varies from 0 to 255 inside this block. An address ending in .0 or .255 is not automatically a network or broadcast address; the prefix determines its role.\par
+}

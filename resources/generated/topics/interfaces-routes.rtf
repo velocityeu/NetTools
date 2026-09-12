@@ -1,0 +1,12 @@
+{\rtf1\ansi\ansicpg1252\deff0\uc1{\fonttbl{\f0 Segoe UI;}{\f1 Consolas;}}{\colortbl;\red0\green0\blue0;\red0\green102\blue180;}
+\viewkind4\pard\cf1\fs32\b Read adapters, routes and neighbours\b0\fs22\par\par
+\pard\sa120 Start with the adapter: check whether it is operational and has a usable address and prefix. Then inspect the route to the actual destination. The first adapter or first default route in a list is not necessarily the path Windows will choose.\par
+\pard\li240\ri240\sa120\f1 Local address: 192.168.10.42/26\par
+Local prefix: 192.168.10.0/26\par
+192.168.10.50 is inside that prefix.\par
+192.168.10.100 is outside it and needs another applicable route.\f0\par
+\pard\sa120 Route selection also depends on routes, metrics, source and interface context. Use Route to target to ask Windows about a particular destination. A routing snapshot describes current configuration; it does not prove that the next hop will answer.\par
+\pard\sa120 The neighbour cache maps locally relevant IP addresses to link-layer information and state. An incomplete or stale entry is not proof that a device is permanently absent. The cache is not a complete network inventory.\par
+\pard\sa120 The proposed interface, route and neighbour views are read-only. Refresh does not change routes, clear caches or scan the network.\par
+\pard\sa120 \cf2\ul Microsoft \u8212? GetBestRoute2\ul0\cf1  (online: \cf2\ul https://learn.microsoft.com/en-us/windows/win32/api/netioapi/nf-netioapi-getbestroute2\ul0\cf1 )\par
+}

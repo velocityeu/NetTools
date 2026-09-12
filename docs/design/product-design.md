@@ -1,6 +1,6 @@
 # Velocity NetTools — product design
 
-Status: expanded design submitted for development approval. No Windows application implementation is authorised until the user approves starting development.
+Status: development approved on 12 September 2026; native preview implemented. See [validation status](../preview-status.md) for tested behavior and remaining gates.
 
 ## Confirmed requirements
 
@@ -98,7 +98,7 @@ Use system UI typography and colours in the app; use the website's blue, white a
 
 ## Delivery and remaining gates
 
-The learning centre and GitHub manual share one source. The [Pages/release design](release-pipeline.md) provides automatic site updates, verified versioned downloads, preview/stable separation and immutable application releases. Website preparation exists locally; activation is pending the [VEU GitHub App setup](publishing-identity.md).
+The learning centre and GitHub manual share one source. The [Pages/release design](release-pipeline.md) provides automatic site updates, verified versioned downloads, preview/stable separation and immutable application releases. Website preparation exists locally; publication uses the installed [VEU-NetTools App](publishing-identity.md).
 
 Starting development approves the expanded tool scope, native architecture, documented defaults and compatibility target. Signing credentials, clean-machine test infrastructure and secure App key provisioning remain prerequisites for their respective release steps. A design review cannot guarantee a bug-free executable; each module needs implementation tests and Windows validation before release.
 

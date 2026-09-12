@@ -1,0 +1,13 @@
+{\rtf1\ansi\ansicpg1252\deff0\uc1{\fonttbl{\f0 Segoe UI;}{\f1 Consolas;}}{\colortbl;\red0\green0\blue0;\red0\green102\blue180;}
+\viewkind4\pard\cf1\fs32\b Subnetting by hand: five steps\b0\fs22\par\par
+\pard\sa120 Start here \u183? Worked example \u183? IPv4\par
+\pard\sa120 Let\u8217?s work out \f1 192.168.10.42/26\f0  without a calculator. We want the network address, broadcast address and usable host range.\par
+\pard\sa120 1Count the bits left for hostsAn IPv4 address has 32 bits. The prefix /26 uses 26 for the network. That leaves \b 32 \u8722? 26 = 6 host bits\b0 .\par
+\pard\sa120 2Turn the bits into an address countEach bit has two choices: 0 or 1. Six bits give 2 \u215? 2 \u215? 2 \u215? 2 \u215? 2 \u215? 2 = \b 64 addresses\b0 . You can count by doubling: 2, 4, 8, 16, 32, 64.\par
+\pard\sa120 3Find the block containing 42For this /26, the first three octets stay fixed. The last octet is divided into blocks of 64: \b 0\u8211?63, 64\u8211?127, 128\u8211?191, 192\u8211?255\b0 . The number 42 is in 0\u8211?63, so the network is \b 192.168.10.0\b0 .\par
+\pard\sa120 4Find the broadcast addressThe next network starts at .64. Step back one address: \b 192.168.10.63\b0  is the broadcast address of this block.\par
+\pard\sa120 5Leave the endpoints out of the host rangeFor this conventional subnet, .0 identifies the network and .63 is broadcast. Hosts run from \b 192.168.10.1 to 192.168.10.62\b0 . That gives \b 64 \u8722? 2 = 62 usable hosts\b0 .\par
+\pard\sa120 Network\b .0\b0 First host\b .1\b0 Last host\b .62\b0 Broadcast\b .63\b0 \par
+\pard\sa120 The block-size shortcut must follow the octet where the mask changes. A /20 changes in the third octet, not the fourth. And /31, /32 and IPv6 need their own host-count rules.\par
+\pard\sa120 Standard behind the method: \cf2\ul RFC 4632 \u8212? CIDR\ul0\cf1  (online: \cf2\ul https://www.rfc-editor.org/info/rfc4632/\ul0\cf1 ).\par
+}

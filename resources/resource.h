@@ -1,0 +1,7 @@
+#pragma once
+
+#define IDI_VEU_NETTOOLS 101
+#define IDR_HELP_INDEX 200
+#define IDR_LICENSE 201
+#define IDR_CORPORATE_LOGO 202
+#define IDR_HELP_TOPIC_FIRST 1000

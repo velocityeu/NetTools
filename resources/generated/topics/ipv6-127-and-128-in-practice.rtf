@@ -1,0 +1,13 @@
+{\rtf1\ansi\ansicpg1252\deff0\uc1{\fonttbl{\f0 Segoe UI;}{\f1 Consolas;}}{\colortbl;\red0\green0\blue0;\red0\green102\blue180;}
+\viewkind4\pard\cf1\fs32\b IPv6 /127 and /128 in practice\b0\fs22\par\par
+\pard\sa120 IPv6 has no broadcast address. On inter-router point-to-point links, a /127 contains two endpoint addresses. RFC 6164 specifies this use and disables Subnet-Router anycast for the /127 link.\par
+\pard\sa180\sb120\b\fs28 Example: two router interfaces\b0\fs22\par
+\pard\li240\ri240\sa120\f1 Network: 2001:db8::10/127\par
+Endpoint A: 2001:db8::10\par
+Endpoint B: 2001:db8::11\par
+Total addresses: 2\par
+Broadcast: Not applicable\f0\par
+\pard\sa120 A /128 identifies one address, such as \f1 2001:db8::10/128\f0 . Neither case uses IPv4\u8217?s minus-two formula.\par
+\pard\sa120 This is a point-to-point link example, not advice to replace ordinary IPv6 LAN /64s with /127s. The prefix math and the link\u8217?s configuration requirements are different questions.\par
+\pard\sa120 \cf2\ul RFC 6164 \u8212? IPv6 /127 inter-router links\ul0\cf1  (online: \cf2\ul https://www.rfc-editor.org/rfc/rfc6164.html\ul0\cf1 )\par
+}

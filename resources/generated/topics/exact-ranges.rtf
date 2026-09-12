@@ -1,0 +1,14 @@
+{\rtf1\ansi\ansicpg1252\deff0\uc1{\fonttbl{\f0 Segoe UI;}{\f1 Consolas;}}{\colortbl;\red0\green0\blue0;\red0\green102\blue180;}
+\viewkind4\pard\cf1\fs32\b Turn an address range into exact CIDRs\b0\fs22\par\par
+\pard\sa120 Suppose the required range is 192.0.2.5 through 192.0.2.14, including both endpoints. Subtract the start from the end and add one: 14 \u8722? 5 + 1 = 10 addresses.\par
+\pard\sa120 Begin at the first address. Choose the largest aligned power-of-two block that stays inside the remaining range, then advance to the address immediately after it. Repeat until nothing remains.\par
+\pard\li240\ri240\sa120\f1 192.0.2.5/32    covers .5\par
+192.0.2.6/31    covers .6\u8211?.7\par
+192.0.2.8/30    covers .8\u8211?.11\par
+192.0.2.12/31   covers .12\u8211?.13\par
+192.0.2.14/32   covers .14\par
+Total: 1 + 2 + 4 + 2 + 1 = 10 addresses\f0\par
+\pard\sa120 Here /31 is an exact set of two addresses. Turning a range into prefixes does not configure point-to-point links or change which addresses may be assigned.\par
+\pard\sa120 A single covering prefix is 192.0.2.0/28, which contains 16 addresses. It adds six addresses outside the requested range: .0\u8211?.4 and .15. Exact conversion and a covering supernet answer different questions; review extra coverage before using a summary route or access rule.\par
+\pard\sa120 \cf2\ul CIDR and route aggregation \u8212? RFC 4632\ul0\cf1  (online: \cf2\ul https://www.rfc-editor.org/rfc/rfc4632.html\ul0\cf1 )\par
+}

@@ -1,0 +1,10 @@
+{\rtf1\ansi\ansicpg1252\deff0\uc1{\fonttbl{\f0 Segoe UI;}{\f1 Consolas;}}{\colortbl;\red0\green0\blue0;\red0\green102\blue180;}
+\viewkind4\pard\cf1\fs32\b Interpret a DNS lookup\b0\fs22\par\par
+\pard\sa120 DNS translates names into records. A records contain IPv4 addresses; AAAA records contain IPv6 addresses. MX records identify mail exchangers, and PTR records are used for reverse lookup.\par
+\pard\sa180\sb120\b\fs28 Illustrative response\b0\fs22\par
+\pard\li240\ri240\sa120\f1 Query: host.example \u8212? A\par
+Answer: 192.0.2.20\par
+TTL: 300 seconds\f0\par
+\pard\sa120 The TTL controls how long a response may be cached. Two resolvers can temporarily return different answers because their caches were filled at different times. Distinguish an empty answer, a nonexistent name, a server failure, and a timeout.\par
+\pard\sa120 Online reference: \cf2\ul RFC 1035 \u8212? DNS records and messages\ul0\cf1  (online: \cf2\ul https://www.rfc-editor.org/info/rfc1035/\ul0\cf1 )\par
+}

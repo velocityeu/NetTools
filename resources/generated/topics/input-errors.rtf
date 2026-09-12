@@ -1,0 +1,13 @@
+{\rtf1\ansi\ansicpg1252\deff0\uc1{\fonttbl{\f0 Segoe UI;}{\f1 Consolas;}}{\colortbl;\red0\green0\blue0;\red0\green102\blue180;}
+\viewkind4\pard\cf1\fs32\b Read and correct address input errors\b0\fs22\par\par
+\pard\sa120 An address tells us where; a prefix tells us how much of the address identifies the network. The proposed calculator requires both. It never guesses a prefix from an old address class or looks up a hostname.\par
+\pard\li240\ri240\sa120\f1 Accepted: 192.168.10.42/26\par
+Also accepted: address 192.168.10.42 with mask 255.255.255.192\par
+Correct 192.168.010.42 to 192.168.10.42\par
+Correct 255.0.255.0 to an intended contiguous mask\par
+192.168.10.42 alone still needs a prefix or mask\f0\par
+\pard\sa120 IPv4 uses four decimal octets from 0 to 255. Leading zeros, hexadecimal and shortened forms are rejected to avoid disagreement between parsers. Mask bits must be consecutive ones followed by consecutive zeros. A wildcard is a different kind of mask and does not belong in the subnet-mask field.\par
+\pard\sa120 For prefix calculations, enter a plain IPv6 address such as fe80::1 and an explicit prefix. A zone such as %12 identifies an interface for communication; it is not part of subnet arithmetic. The first calculator rejects scoped or bracketed endpoints and ports with an explanation. IPv4-mapped IPv6 remains an IPv6 address.\par
+\pard\sa120 In the proposed app, incomplete or invalid input makes derived results unavailable. Correct the field before copying or exporting; an old answer must never appear current.\par
+\pard\sa120 \cf2\ul IPv6 addressing syntax \u8212? RFC 4291\ul0\cf1  (online: \cf2\ul https://www.rfc-editor.org/rfc/rfc4291.html\ul0\cf1 )\par
+}

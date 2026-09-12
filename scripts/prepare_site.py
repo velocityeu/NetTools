@@ -191,7 +191,7 @@ def render_site(document, downloads):
     fallback, after = remaining.split(END)
     stable, preview = downloads['stable'], downloads['preview']
     if not stable and not preview:
-        return document  # Keep the current design-phase copy exactly as authored.
+        return document  # Keep the current no-release copy exactly as authored.
     status = 'Verified Windows x64 builds are available on GitHub Releases.' if stable else 'Preview available; no stable release yet.'
     cards = (release_card(stable) if stable else '') + (release_card(preview, True) if preview else '')
     block = ('<section id="download" class="download-strip"><div class="wrap download-strip-inner">'

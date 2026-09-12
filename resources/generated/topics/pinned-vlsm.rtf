@@ -1,0 +1,12 @@
+{\rtf1\ansi\ansicpg1252\deff0\uc1{\fonttbl{\f0 Segoe UI;}{\f1 Consolas;}}{\colortbl;\red0\green0\blue0;\red0\green102\blue180;}
+\viewkind4\pard\cf1\fs32\b Plan around pinned networks and gaps\b0\fs22\par\par
+\pard\sa120 A free-address total does not guarantee a requested subnet will fit. The space must also form one correctly aligned block. Existing assignments and pins must remain stable while new requirements are added.\par
+\pard\li240\ri240\sa120\f1 Parent: 192.0.2.0/24\par
+Pinned: 192.0.2.64/26\par
+New LAN for 100 hosts: 192.0.2.128/25 (126 conventional hosts)\par
+New LAN for 50 hosts: 192.0.2.0/26 (62 conventional hosts)\f0\par
+\pard\sa120 Now pin both .64/26 and .192/26. The free space is .0/26 plus .128/26: 128 addresses in total. A 100-host LAN needs a /25, but neither gap holds one. The correct outcome is an unallocated request with a fragmentation explanation. Moving a pin would change an existing network and is never automatic.\par
+\pard\sa120 The proposed planner handles larger requests first and uses the lowest aligned free location. Equal-size requests use stored insertion order, so sorting the table or renaming a row does not move networks. Ordinary Allocate preserves existing assignments; a separate reallocation preview is needed to repack movable rows.\par
+\pard\sa120 If only some requests fit, show the full proposal and every unallocated reason. Applying a partial proposal requires an explicit action. Cancelling leaves the last completed plan intact.\par
+\pard\sa120 \cf2\ul Prefix aggregation and alignment \u8212? RFC 4632\ul0\cf1  (online: \cf2\ul https://www.rfc-editor.org/rfc/rfc4632.html\ul0\cf1 )\par
+}

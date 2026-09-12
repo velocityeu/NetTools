@@ -25,7 +25,7 @@ Read [the worked lessons](lessons.md). Begin with **Subnetting by hand: five ste
 | Separate connection layers | Separate TCP connectivity from service health; Inspect HTTP and TLS without hiding failures |
 | Use network utilities accurately | Understand what Wake-on-LAN can prove; Calculate MTU probe sizes and interpret silence |
 
-The [learning centre](https://velocityeu.github.io/NetTools/) presents the same 28 lessons with search, navigation, a prefix reference table and a practice question. Both outputs are generated from [topics.json](topics.json) using [build_help.py](../../scripts/build_help.py). Edit that source and regenerate; do not maintain the webpage and Markdown lessons separately. The native embedded renderer will consume this same content during application development.
+The [learning centre](https://velocityeu.github.io/NetTools/) presents the same 28 lessons with search, navigation, a prefix reference table and a practice question. Both outputs are generated from [topics.json](topics.json) using [build_help.py](../../scripts/build_help.py). Edit that source and regenerate; do not maintain the webpage and Markdown lessons separately. The executable embeds these same lessons as searchable native help. Press F1 for the current tool, or browse Help for examples and online references.
 
 ## The pocket method
 

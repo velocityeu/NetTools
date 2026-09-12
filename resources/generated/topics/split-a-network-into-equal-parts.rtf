@@ -1,0 +1,11 @@
+{\rtf1\ansi\ansicpg1252\deff0\uc1{\fonttbl{\f0 Segoe UI;}{\f1 Consolas;}}{\colortbl;\red0\green0\blue0;\red0\green102\blue180;}
+\viewkind4\pard\cf1\fs32\b Split a network into equal parts\b0\fs22\par\par
+\pard\sa120 Every extra prefix bit cuts a block in half. One extra bit gives two child blocks; two extra bits give four.\par
+\pard\sa180\sb120\b\fs28 Example: split 192.168.10.0/24 into four\b0\fs22\par
+\pard\sa120 Four = 2\u178?, so borrow 2 more bits for the network. The child prefix is \b 24 + 2 = /26\b0 . Each child has 64 addresses.\par
+\pard\li240\ri240\sa120\f1 192.168.10.0/26   \u8594? .0\u8211?.63\par
+192.168.10.64/26  \u8594? .64\u8211?.127\par
+192.168.10.128/26 \u8594? .128\u8211?.191\par
+192.168.10.192/26 \u8594? .192\u8211?.255\f0\par
+\pard\sa120 Each has 62 conventional usable host addresses. You keep the same total address space, but splitting introduces additional network/broadcast endpoints. Check that your applications have enough host capacity after the split.\par
+}

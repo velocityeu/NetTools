@@ -1,0 +1,12 @@
+{\rtf1\ansi\ansicpg1252\deff0\uc1{\fonttbl{\f0 Segoe UI;}{\f1 Consolas;}}{\colortbl;\red0\green0\blue0;\red0\green102\blue180;}
+\viewkind4\pard\cf1\fs32\b Inspect HTTP and TLS without hiding failures\b0\fs22\par\par
+\pard\sa120 Inspect an explicit URL and method. HEAD requests response headers without a response body; a bounded GET is useful when the server does not implement HEAD as expected. Show the method used, HTTP status, final URL and available timing information.\par
+\pard\li240\ri240\sa120\f1 200: HTTP success for this request; inspect what was actually returned.\par
+301 or 302: a redirect; inspect its destination before following.\par
+401: origin authentication is required.\par
+407: proxy authentication is required.\f0\par
+\pard\sa120 HTTP success is different from successful TLS validation. The certificate must match the host and satisfy validity and trust checks. Show certificate or revocation errors instead of silently ignoring them.\par
+\pard\sa120 Redirect following is explicit and bounded. HTTPS-to-HTTP downgrade is rejected. Credentials and cookies are not automatically sent during an unauthenticated diagnostic, and credentials must never follow a redirect to another origin.\par
+\pard\sa120 Windows versions expose different levels of TLS and phase-timing detail. When a detail is unavailable, the tool should say so rather than infer a protocol or cipher from unrelated settings.\par
+\pard\sa120 \cf2\ul Microsoft \u8212? WinHTTP\ul0\cf1  (online: \cf2\ul https://learn.microsoft.com/en-us/windows/win32/winhttp/about-winhttp\ul0\cf1 )\par
+}

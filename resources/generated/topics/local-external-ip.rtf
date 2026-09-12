@@ -1,0 +1,12 @@
+{\rtf1\ansi\ansicpg1252\deff0\uc1{\fonttbl{\f0 Segoe UI;}{\f1 Consolas;}}{\colortbl;\red0\green0\blue0;\red0\green102\blue180;}
+\viewkind4\pard\cf1\fs32\b Read local and external IP addresses\b0\fs22\par\par
+\pard\sa120 A PC may have several local addresses at the same time: Ethernet, Wi-Fi, a VPN and virtual adapters can each have IPv4 and IPv6 addresses. There is no single address that describes every connection.\par
+\pard\li240\ri240\sa120\f1 Example local address: 192.168.10.42/26\par
+Network: 192.168.10.0/26\par
+Example scoped endpoint: fe80::42%12\par
+The %12 identifies the interface; it is not a subnet prefix.\f0\par
+\pard\sa120 The planned My PC & IP view reads addresses and prefix lengths directly from Windows. It keeps address scope separate from assignment states such as preferred, tentative or duplicate. Opening an address in the subnet calculator transfers its address and known prefix, without treating a scope identifier as arithmetic.\par
+\pard\sa120 Check external IP will contact api.ipify.org for IPv4 and api6.ipify.org for IPv6 over HTTPS, only when requested. The page shows ipify as the provider, separate family results and the observation time. The value means the address seen by that service for that request.\par
+\pard\sa120 NAT, VPNs and proxies can change the observed external address. It does not prove incoming connections can reach the PC. IPv4 may work while IPv6 fails; a lookup-service failure alone does not prove the Internet is disconnected.\par
+\pard\sa120 \cf2\ul ipify \u8212? official API documentation\ul0\cf1  (online: \cf2\ul https://www.ipify.org/\ul0\cf1 )\par
+}

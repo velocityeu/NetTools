@@ -1,0 +1,11 @@
+{\rtf1\ansi\ansicpg1252\deff0\uc1{\fonttbl{\f0 Segoe UI;}{\f1 Consolas;}}{\colortbl;\red0\green0\blue0;\red0\green102\blue180;}
+\viewkind4\pard\cf1\fs32\b Calculate MTU probe sizes and interpret silence\b0\fs22\par\par
+\pard\sa120 MTU measures an IP packet, including its IP header. Ping's data size is only part of that packet. Account for the headers before comparing a probe with an MTU.\par
+\pard\li240\ri240\sa120\f1 Plain IPv4: 1,472 data + 8 ICMP + 20 IPv4 = 1,500 bytes.\par
+Plain IPv6: 1,452 data + 8 ICMPv6 + 40 IPv6 = 1,500 bytes.\par
+IPv4 options or IPv6 extension headers add more bytes.\f0\par
+\pard\sa120 An IPv4 path-size test must set Don't Fragment and verify the actual behaviour. IPv6 routers do not fragment packets, but the source can: a large Echo Reply alone does not prove an unfragmented packet of that size crossed the path.\par
+\pard\sa120 If an unfragmented 1,500-byte test succeeds and a 1,501-byte test times out, the result is only a tested lower bound of 1,500. Silence is inconclusive; it is not an exact MTU measurement. A matched packet-too-big response provides different evidence.\par
+\pard\sa120 The planned tool distinguishes interface MTU, Windows-reported path MTU, tested successful sizes and an observed path estimate. If the backend cannot establish IPv6 source-fragmentation behaviour, it reports that limitation instead of a false exact number.\par
+\pard\sa120 \cf2\ul RFC 8201 \u8212? IPv6 Path MTU Discovery\ul0\cf1  (online: \cf2\ul https://www.rfc-editor.org/rfc/rfc8201.html\ul0\cf1 )\par
+}

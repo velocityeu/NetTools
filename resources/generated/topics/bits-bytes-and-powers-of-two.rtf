@@ -1,0 +1,18 @@
+{\rtf1\ansi\ansicpg1252\deff0\uc1{\fonttbl{\f0 Segoe UI;}{\f1 Consolas;}}{\colortbl;\red0\green0\blue0;\red0\green102\blue180;}
+\viewkind4\pard\cf1\fs32\b Bits, bytes and powers of two\b0\fs22\par\par
+\pard\sa120 A \b bit\b0  is a single 0 or 1. Eight bits form a byte. In an IPv4 address, each of the four dotted numbers is an 8-bit group, also called an \b octet\b0 .\par
+\pard\sa180\sb120\b\fs28 Why does an octet stop at 255?\b0\fs22\par
+\pard\sa120 Eight bits give 2\u8312? = 256 different combinations. Counting starts at zero, so the values are 0 through 255.\par
+\pard\li240\ri240\sa120\f1 Bit weights: 128  64  32  16   8   4   2   1\par
+Binary:        0   0   1   0   1   0   1   0\par
+Value:                   32 + 8 + 2 = 42\f0\par
+\pard\sa180\sb120\b\fs28 Convert 42 to binary by hand\b0\fs22\par
+\pard\li360\fi-240\sa80 1. 128 and 64 are too large: write 0, 0.\par
+\pard\li360\fi-240\sa80 2. Take 32, leaving 10: write 1.\par
+\pard\li360\fi-240\sa80 3. 16 is too large: write 0.\par
+\pard\li360\fi-240\sa80 4. Take 8, leaving 2: write 1.\par
+\pard\li360\fi-240\sa80 5. 4 is too large: write 0.\par
+\pard\li360\fi-240\sa80 6. Take 2, leaving 0: write 1.\par
+\pard\li360\fi-240\sa80 7. No 1 remains: write 0.\par
+\pard\sa120 The result is \f1 00101010\f0 . To read binary, add the weights under the 1s. To count combinations, double once per bit.\par
+}

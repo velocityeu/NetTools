@@ -1,0 +1,15 @@
+{\rtf1\ansi\ansicpg1252\deff0\uc1{\fonttbl{\f0 Segoe UI;}{\f1 Consolas;}}{\colortbl;\red0\green0\blue0;\red0\green102\blue180;}
+\viewkind4\pard\cf1\fs32\b From prefix to subnet mask\b0\fs22\par\par
+\pard\sa120 A subnet mask marks network bits with 1 and host bits with 0. A /26 means 26 leading 1s, followed by 6 zeros.\par
+\pard\li240\ri240\sa120\f1 11111111.11111111.11111111.11000000\par
+   255  .   255  .   255  .   192\f0\par
+\pard\sa120 The last octet is 128 + 64 = 192. The mask is \b 255.255.255.192\b0 . Its wildcard is the per-octet complement: 255 minus each mask octet, giving \b 0.0.0.63\b0 .\par
+\pard\sa180\sb120\b\fs28 The quick boundary trick\b0\fs22\par
+\pard\sa120 Subtract the changing mask octet from 256: \b 256 \u8722? 192 = 64\b0 . Network boundaries occur every 64 in that octet.\par
+\pard\sa180\sb120\b\fs28 Why does address AND mask work?\b0\fs22\par
+\pard\sa120 AND returns 1 only when both input bits are 1. The mask keeps network bits and clears host bits. For .42 in this example:\par
+\pard\li240\ri240\sa120\f1 Address: 00101010  (42)\par
+Mask:    11000000  (192)\par
+AND:     00000000  (0)\f0\par
+\pard\sa120 A valid CIDR mask has a continuous run of 1s, then only 0s. You cannot put another network bit after the host bits start.\par
+}

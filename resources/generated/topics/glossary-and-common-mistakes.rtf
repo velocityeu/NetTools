@@ -1,0 +1,17 @@
+{\rtf1\ansi\ansicpg1252\deff0\uc1{\fonttbl{\f0 Segoe UI;}{\f1 Consolas;}}{\colortbl;\red0\green0\blue0;\red0\green102\blue180;}
+\viewkind4\pard\cf1\fs32\b Glossary and common mistakes\b0\fs22\par\par
+\pard\sa180\sb120\b\fs28 Subnet / prefix\b0\fs22\par
+\pard\sa120 A contiguous, aligned address block. The number after / says how many leading bits identify it.\par
+\pard\sa180\sb120\b\fs28 Network address\b0\fs22\par
+\pard\sa120 The start of the block, found by setting all host bits to zero.\par
+\pard\sa180\sb120\b\fs28 Broadcast\b0\fs22\par
+\pard\sa120 For a conventional IPv4 subnet, the address with every host bit set to one. IPv6 has no broadcast.\par
+\pard\sa180\sb120\b\fs28 Gateway\b0\fs22\par
+\pard\sa120 A router used to reach destinations via another network. A subnet calculator cannot infer the configured gateway from the address and prefix alone. It is not necessarily the first host.\par
+\pard\sa180\sb120\b\fs28 Common mistakes\b0\fs22\par
+\pard\li360\fi-240\sa80 \u8226? Subtracting two from every address count, including IPv6 and /31.\par
+\pard\li360\fi-240\sa80 \u8226? Treating every .0 as a network address and every .255 as broadcast.\par
+\pard\li360\fi-240\sa80 \u8226? Guessing a prefix from an old class A/B/C label.\par
+\pard\li360\fi-240\sa80 \u8226? Calling a covering supernet an exact aggregation.\par
+\pard\li360\fi-240\sa80 \u8226? Assuming an ICMP timeout means the device is offline.\par
+}

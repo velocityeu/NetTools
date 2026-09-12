@@ -1,0 +1,9 @@
+{\rtf1\ansi\ansicpg1252\deff0\uc1{\fonttbl{\f0 Segoe UI;}{\f1 Consolas;}}{\colortbl;\red0\green0\blue0;\red0\green102\blue180;}
+\viewkind4\pard\cf1\fs32\b The /0 boundary and exact counts\b0\fs22\par\par
+\pard\sa120 A /0 prefix fixes no network bits, so it describes the entire address family. In routing it can be used as a default route. It does not mean that every address can be assigned to hosts.\par
+\pard\sa180\sb120\b\fs28 Exact capacity\b0\fs22\par
+\pard\li240\ri240\sa120\f1 IPv4 0.0.0.0/0: 2^32 = 4,294,967,296 addresses\par
+IPv6 ::/0: 2^128 = 340,282,366,920,938,463,463,374,607,431,768,211,456 addresses\f0\par
+\pard\sa120 A count includes the number of values, not just the highest address. IPv6\u8217?s highest address fits in 128 bits; the count 2^128 needs one more bit. The tool must display it exactly and must never try to list every host.\par
+\pard\sa120 The default route has no previous or next same-size subnet. Arithmetic bounds are not proof of reachability or assignability; the full range includes special-purpose addresses.\par
+}

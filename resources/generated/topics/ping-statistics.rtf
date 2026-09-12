@@ -1,0 +1,15 @@
+{\rtf1\ansi\ansicpg1252\deff0\uc1{\fonttbl{\f0 Segoe UI;}{\f1 Consolas;}}{\colortbl;\red0\green0\blue0;\red0\green102\blue180;}
+\viewkind4\pard\cf1\fs32\b Read ping statistics without counting gaps as zero\b0\fs22\par\par
+\pard\sa120 Use completed eligible probes when calculating Echo reply loss. Pending probes, cancelled work and local send failures must remain visible, but are not evidence of missing network replies.\par
+\pard\li240\ri240\sa120\f1 Four Echo Replies + one timeout + one matched network error = six completed probes.\par
+Echo reply loss = 2 \u247? 6 \u215? 100 = 33.33%.\par
+Pending, cancelled and local errors are listed separately.\f0\par
+\pard\sa120 Calculate RTT statistics from successful Echo Replies only. A timeout is a gap, never 0 ms or an RTT equal to the timeout setting. Distinguish DNS resolution time from measured Echo RTT.\par
+\pard\li240\ri240\sa120\f1 Successful RTTs: 10, 14, 22, 18 ms.\par
+Minimum 10; mean 16; maximum 22 ms.\par
+Population standard deviation = \u8730?20 \u8776? 4.47 ms.\par
+Nearest-rank p95 = 22 ms.\f0\par
+\pard\sa120 RTT variation measures the mean absolute change between successful consecutive probe sequence numbers. A timeout, pause or configuration change breaks the pair. It is not RTP interarrival jitter, which uses a different measurement.\par
+\pard\sa120 Graph compression must retain timeout/error counts. Resizing or zooming the graph must not change statistics for the same observation window. Intermediate traceroute silence is missing hop responses, not proof of forwarding loss at that router.\par
+\pard\sa120 \cf2\ul RFC 3550 \u8212? the distinct RTP jitter definition\ul0\cf1  (online: \cf2\ul https://www.rfc-editor.org/rfc/rfc3550.html#section-6.4.1\ul0\cf1 )\par
+}

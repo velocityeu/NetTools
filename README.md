@@ -6,118 +6,79 @@
 
 **Clarity for every connection.**
 
-A portable native Windows network toolkit, with an engineer’s field guide that explains the numbers behind the answers.
+A portable native Windows toolkit and an engineer’s field guide.
 
 **By [Velocity EU Inc](https://www.velocity-eu.com/)**
 
-**[velocity-eu.com](https://www.velocity-eu.com/)**
-
-[Learning centre](https://velocityeu.github.io/NetTools/) · [Help on GitHub](docs/help/README.md) · [Design & roadmap](docs/design/product-design.md) · [Releases](https://github.com/velocityeu/NetTools/releases) · [Report an issue](https://github.com/velocityeu/NetTools/issues)
+[Download previews](https://github.com/velocityeu/NetTools/releases) · [Learning centre](https://velocityeu.github.io/NetTools/) · [Help](docs/help/README.md) · [Report an issue](https://github.com/velocityeu/NetTools/issues)
 
 </div>
 
-> **Design phase.** This repository currently contains product designs, learning material and a working webpage preview. The Windows application has not been implemented and no executable is available yet.
+> **Development preview.** The native application is implemented and undergoing validation. Previews are explicitly unsigned. No stable release is available; read the [validation status and limitations](docs/preview-status.md).
 
-## Understand it. Then use it.
+![Velocity NetTools native subnet calculator](docs/screenshots/subnet-calculator.png)
 
-Velocity NetTools is being designed for engineers who need accurate answers without installing a large tool suite. The reviewed toolkit includes subnet planning, local and external IP information, visual ping, traceroute, DNS and practical connection diagnostics. The companion learning centre teaches the same operations by hand, with worked examples and practical guidance.
+*Actual native Windows development build, using the official corporate icon.*
 
-![Native toolkit interface concept — not a running application](docs/design/nettools-concept-01.png)
+## One executable, practical tools
 
-*Interface concept with the Velocity V mark and velocity-eu.com branding; not a running application.*
-
-## The application we are designing
-
-| Area | Proposed scope |
+| Area | Included |
 | --- | --- |
-| Subnet calculator | IPv4/IPv6, masks, bounds, exact address counts, binary details and address classification |
-| Subnet planning | Equal splits, VLSM requirements, pinned allocations and free space |
-| Aggregation and comparison | Exact unions, covering supernets, range-to-CIDR, overlap and containment |
-| Help | Embedded, searchable manual; F1 context help; examples; glossary; online references |
-| My PC & IP | Local IPv4/IPv6 and interface details; explicit external IPv4/IPv6 lookup through ipify |
-| Diagnostics | Visual ping, traceroute, DNS, adapters/routes/neighbours and TCP connectivity |
-| Utilities | HTTP/TLS inspection, Wake-on-LAN and MTU probing |
+| Subnet calculator | Strict IPv4/IPv6 input, exact counts, masks, ranges, binary/hex details and embedded IANA classification |
+| Planning | Indexed equal splits, VLSM requirements, pins/reservations, stable ordering, Apply/Undo/Redo |
+| Address sets | Exact aggregation, covering supernets with added coverage, range conversion and directional comparison |
+| My PC & IP | Local addresses/interfaces; explicit separate ipify IPv4/IPv6 checks |
+| Diagnostics | Multi-target visual ping, continuous/pause/rolling views, repeated traceroute, DNS and TCP |
+| Network information | Read-only adapter, route and neighbour snapshots |
+| Utilities | HTTP/TLS inspection, Wake-on-LAN and bounded MTU observations |
+| Help and files | Searchable embedded manual, F1, examples, About, JSON plans and CSV reports |
 
-**Compatibility target for approval:** Windows 10 x64 (build 10240 onward), Windows 11 x64, and Windows Server 2016 onward with Desktop Experience. Server Core is outside the first GUI release. Compatibility will be verified on clean machines during implementation; it has not been tested yet.
+One portable x64 executable, with a statically linked C++ runtime and Windows-supplied APIs. No installer, driver, browser runtime or separately installed application runtime. Settings/history are session-only unless explicitly saved. Opening a plan never starts probes.
 
-**Distribution:** one portable executable, with no separately installed application runtime. C++20, Win32 controls, MSVC and a statically linked C++ runtime. Windows-supplied APIs provide controls, networking and graph rendering.
+**Compatibility target:** Windows 10 x64 build 10240 onward, Windows 11, and Windows Server 2016 onward with Desktop Experience. The oldest Windows/Server images still require clean-machine validation. Server Core is outside this GUI release.
 
-## Learn or refresh
+## Learn the method
 
-Start with [the engineer’s field guide](docs/help/README.md). It covers:
-
-- Bits, octets and powers of two.
-- Subnetting by hand in five steps.
-- Prefixes, masks and the block-size shortcut.
-- A /20 example that crosses an octet boundary.
-- Host-capacity planning, equal splits and VLSM.
-- /31, /32, IPv6 /127 and /128, and exact /0 counts.
-- Input errors, exact ranges, directional comparisons and fragmented VLSM.
-- Exact aggregation, DNS and diagnostic interpretation.
-
-### One example, explained
+The [field guide](docs/help/README.md) and [learning centre](https://velocityeu.github.io/NetTools/) share the app’s 28 lessons: subnetting by hand, binary arithmetic, masks, VLSM, IPv6, address sets and diagnostic interpretation.
 
 For **192.168.10.42/26**:
 
-1. IPv4 has 32 bits. Subtract the prefix: **32 − 26 = 6 host bits**.
+1. IPv4 has 32 bits; **32 − 26 = 6 host bits**.
 2. Six bits give **2⁶ = 64 addresses**.
-3. In this /26, last-octet blocks are 0–63, 64–127, 128–191 and 192–255. **42 belongs to 0–63**.
-4. Network: **192.168.10.0**. Broadcast: **192.168.10.63**.
-5. Conventional host range: **192.168.10.1–192.168.10.62**, giving **62 usable hosts**.
+3. Last-octet blocks are 0–63, 64–127, 128–191 and 192–255. **42 is in 0–63**.
+4. Network: **192.168.10.0**; broadcast: **192.168.10.63**.
+5. Conventional hosts: **192.168.10.1–192.168.10.62**, giving **62 usable hosts**.
 
-This host-count rule does not apply unchanged to /31, /32 or IPv6. See the [complete worked lessons](docs/help/lessons.md).
+The conventional “subtract two” rule changes for /31, /32 and IPv6. See the [worked lessons](docs/help/lessons.md).
 
-## Webpage preview
+## Build and validate
 
-The [learning-centre preview](website-preview/dist/index.html) includes 28 searchable lessons, a quick-reference table, a practice question and an About-dialog concept. It is static HTML/CSS/JavaScript with no package dependencies or live probes.
+Install Visual Studio 2022 Build Tools with **Desktop development with C++**, the Windows SDK, CMake and Python 3. These are development tools; users only need the executable.
 
-To view locally from the repository root, with Python installed:
+~~~powershell
+./scripts/build.ps1 -Configuration Release
+~~~
 
-```text
+Output: out/native/Release/VelocityNetTools.exe.
+
+Checks cover exact maths and classification, saved-file recovery, native networking, embedded resources, native panes, the complete frame and local loopback fixtures. The [release workflow](.github/workflows/native.yml) additionally verifies imports, manifest/version identity, checksums and provenance.
+
+## Releases and website
+
+Main-branch changes automatically build tested, versioned previews. Publication uses the velocityeu-owned **VEU-NetTools** GitHub App. Public author/committer identity is **VEU**. The private key is never tracked.
+
+Releases are immutable. SHA-256, a release manifest and build provenance accompany each executable. GitHub Pages refreshes the website and verifies the download bytes before displaying versioned links. Stable publication requires signing and a clean-machine compatibility check on the exact source commit.
+
+The app does not silently update itself. A new release becomes available on [GitHub Releases](https://github.com/velocityeu/NetTools/releases).
+
+To preview the educational website locally:
+
+~~~text
 python -m http.server 8765 --bind 127.0.0.1 --directory website-preview/dist
-```
+~~~
 
-Open `http://127.0.0.1:8765/`. This is a preview of the educational website, not the Windows application. Prepared hosting target: **https://velocityeu.github.io/NetTools/**. Publication is pending authentication through the VEU GitHub App. The Pages workflow validates shared lesson content and publishes website/help updates from main.
+## Documentation
 
-The canonical lesson source is [topics.json](docs/help/topics.json). After editing it, run:
+[Product design](docs/design/product-design.md) · [Maths contract](docs/design/math-contract.md) · [Windows APIs](docs/design/windows-api-contract.md) · [Release pipeline](docs/design/release-pipeline.md) · [Publishing identity](docs/design/publishing-identity.md)
 
-```text
-python scripts/build_help.py
-python scripts/build_seo.py
-python scripts/build_help.py --check
-python scripts/build_seo.py --check
-```
-
-This generates the web lessons, the GitHub manual, static lesson pages and a sitemap; native embedded-help generation will be added with the Windows app.
-
-## Downloads and releases
-
-**No executable has been released.** [GitHub Releases](https://github.com/velocityeu/NetTools/releases) will be the official download source.
-
-The [release-pipeline design](docs/design/release-pipeline.md) defines tested x64 builds, automatic prereleases from `main`, stable version-tag releases, SHA-256 checksums, build provenance and a consistent download filename. No application release workflow is active during the design phase. The prepared Pages workflow is awaiting the VEU App setup before its first publication. See [publishing identity](docs/design/publishing-identity.md) and [search discovery](docs/design/search-discovery.md).
-
-## Project map
-
-```text
-docs/help/                 Learning material and manual design
-docs/design/               Product, branding, About and release designs
-website-preview/dist/      Training webpage source
-scripts/                   Shared help and website preparation
-.github/workflows/pages.yml Automatic GitHub Pages publishing
-README.md                  Project overview
-LICENSE                    MIT licence
-```
-
-## Feedback and contributions
-
-[Open an issue](https://github.com/velocityeu/NetTools/issues) for a calculation concern, unclear lesson, accessibility issue or feature suggestion. Include the example input, expected result and reasoning. For future application bugs, include the version and Windows build. Use anonymised network examples; avoid posting credentials or confidential network inventories.
-
-Application implementation begins after the feature and UI design is finalised. Design and documentation improvements are welcome now.
-
-The [final readiness review](docs/design/final-readiness-review.md), [maths contract](docs/design/math-contract.md) and [Windows API contract](docs/design/windows-api-contract.md) record the corrected design, acceptance checks and scope submitted for development approval.
-
-## Licence and publisher
-
-[MIT](LICENSE). Copyright © 2026 Velocity EU Inc.
-
-Corporate website: **[www.velocity-eu.com](https://www.velocity-eu.com/)**.
+MIT licensed. [Velocity EU Inc](https://www.velocity-eu.com/).

@@ -1,0 +1,13 @@
+{\rtf1\ansi\ansicpg1252\deff0\uc1{\fonttbl{\f0 Segoe UI;}{\f1 Consolas;}}{\colortbl;\red0\green0\blue0;\red0\green102\blue180;}
+\viewkind4\pard\cf1\fs32\b Choose a prefix for host capacity\b0\fs22\par\par
+\pard\sa120 For a conventional IPv4 LAN, choose the smallest power of two that covers the requested hosts plus the network and broadcast addresses.\par
+\pard\sa180\sb120\b\fs28 Example: 50 host addresses\b0\fs22\par
+\pard\li360\fi-240\sa80 1. Add the two reserved endpoints: 50 + 2 = 52.\par
+\pard\li360\fi-240\sa80 2. Count powers of two: 2, 4, 8, 16, 32, 64.\par
+\pard\li360\fi-240\sa80 3. 32 is too small; 64 fits. 64 = 2\u8310?, so you need 6 host bits.\par
+\pard\li360\fi-240\sa80 4. Prefix = 32 \u8722? 6 = \b /26\b0 .\par
+\pard\li240\ri240\sa120\f1 /27 \u8594? 32 total \u8594? 30 usable \u8594? too small\par
+/26 \u8594? 64 total \u8594? 62 usable \u8594? fits 50\f0\par
+\pard\sa120 Include router interfaces, printers and other devices in the host requirement. If growth needs 75 hosts, 64 total is insufficient; choose /25 for 126 conventional usable hosts.\par
+\pard\sa120 This is ordinary IPv4 LAN planning. /31 point-to-point links and cloud-provider reservation policies need different capacity rules.\par
+}

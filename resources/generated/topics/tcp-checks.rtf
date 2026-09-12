@@ -1,0 +1,12 @@
+{\rtf1\ansi\ansicpg1252\deff0\uc1{\fonttbl{\f0 Segoe UI;}{\f1 Consolas;}}{\colortbl;\red0\green0\blue0;\red0\green102\blue180;}
+\viewkind4\pard\cf1\fs32\b Separate TCP connectivity from service health\b0\fs22\par\par
+\pard\sa120 A TCP connection test answers a narrow question: could a handshake complete with this address and port? It does not prove that TLS, authentication or the application protocol will succeed.\par
+\pard\li240\ri240\sa120\f1 Example target: 192.0.2.10, TCP port 443\par
+Connected: the TCP handshake succeeded.\par
+Refused: the connection was explicitly rejected.\par
+Timeout: no successful completion within the deadline.\f0\par
+\pard\sa120 Refusal can come from a host or network policy; it is not a full application diagnosis. A timeout cannot by itself distinguish filtering, loss, an unreachable path or a silent destination.\par
+\pard\sa120 If the input is a hostname, show the resolved address and DNS duration separately from TCP connection duration. IPv4 and IPv6 are separate attempts. Do not silently change destination while presenting the run as one measurement.\par
+\pard\sa120 The proposed test sends no arbitrary application data after connecting. Continue to HTTP/TLS inspection when that is the service being investigated.\par
+\pard\sa120 \cf2\ul Microsoft \u8212? TCP connection semantics\ul0\cf1  (online: \cf2\ul https://learn.microsoft.com/en-us/windows/win32/api/winsock2/nf-winsock2-connect\ul0\cf1 )\par
+}

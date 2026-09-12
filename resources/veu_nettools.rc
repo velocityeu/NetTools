@@ -1,0 +1,62 @@
+#include <windows.h>
+#include "resource.h"
+
+#ifndef VEU_APP_VERSION_MAJOR
+#define VEU_APP_VERSION_MAJOR 0
+#endif
+#ifndef VEU_APP_VERSION_MINOR
+#define VEU_APP_VERSION_MINOR 1
+#endif
+#ifndef VEU_APP_VERSION_PATCH
+#define VEU_APP_VERSION_PATCH 0
+#endif
+#ifndef VEU_APP_VERSION_BUILD
+#define VEU_APP_VERSION_BUILD 0
+#endif
+#ifndef VEU_APP_VERSION_STRING
+#define VEU_APP_VERSION_STRING "0.1.0-dev"
+#endif
+#ifndef VEU_BUILD_ID
+#define VEU_BUILD_ID "local"
+#endif
+
+1 RT_MANIFEST "veu_nettools.manifest"
+IDI_VEU_NETTOOLS ICON "generated/velocity-nettools.ico"
+IDR_LICENSE RCDATA "generated/license.txt"
+IDR_CORPORATE_LOGO RCDATA "generated/velocity-corporate-logo.png"
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION VEU_APP_VERSION_MAJOR,VEU_APP_VERSION_MINOR,VEU_APP_VERSION_PATCH,VEU_APP_VERSION_BUILD
+ PRODUCTVERSION VEU_APP_VERSION_MAJOR,VEU_APP_VERSION_MINOR,VEU_APP_VERSION_PATCH,VEU_APP_VERSION_BUILD
+ FILEFLAGSMASK VS_FFI_FILEFLAGSMASK
+#ifdef _DEBUG
+ FILEFLAGS VS_FF_DEBUG | VS_FF_PRERELEASE
+#else
+ FILEFLAGS VS_FF_PRERELEASE
+#endif
+ FILEOS VOS_NT_WINDOWS32
+ FILETYPE VFT_APP
+ FILESUBTYPE VFT2_UNKNOWN
+BEGIN
+  BLOCK "StringFileInfo"
+  BEGIN
+    BLOCK "040904B0"
+    BEGIN
+      VALUE "CompanyName", "VEU\0"
+      VALUE "FileDescription", "Velocity NetTools\0"
+      VALUE "FileVersion", VEU_APP_VERSION_STRING "\0"
+      VALUE "InternalName", "VelocityNetTools\0"
+      VALUE "LegalCopyright", "Copyright (c) VEU\0"
+      VALUE "OriginalFilename", "VelocityNetTools-x64.exe\0"
+      VALUE "ProductName", "Velocity NetTools\0"
+      VALUE "ProductVersion", VEU_APP_VERSION_STRING "\0"
+      VALUE "BuildId", VEU_BUILD_ID "\0"
+    END
+  END
+  BLOCK "VarFileInfo"
+  BEGIN
+    VALUE "Translation", 0x0409, 1200
+  END
+END
+
+#include "generated/help_resources.rcinc"

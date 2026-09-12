@@ -1,0 +1,13 @@
+{\rtf1\ansi\ansicpg1252\deff0\uc1{\fonttbl{\f0 Segoe UI;}{\f1 Consolas;}}{\colortbl;\red0\green0\blue0;\red0\green102\blue180;}
+\viewkind4\pard\cf1\fs32\b Understand an IPv4 subnet\b0\fs22\par\par
+\pard\sa120 A prefix tells you how many bits identify the network. An IPv4 address has 32 bits. With \f1 /26\f0 , 26 identify the network and 6 remain for addresses inside it.\par
+\pard\sa180\sb120\b\fs28 Example: 192.168.10.42/26\b0\fs22\par
+\pard\li240\ri240\sa120\f1 Address count = 2\u8310? = 64\par
+Network = 192.168.10.0/26\par
+Broadcast = 192.168.10.63\par
+Host range = 192.168.10.1\u8211?192.168.10.62\par
+Conventional usable hosts = 64 \u8722? 2 = 62\f0\par
+\pard\sa180\sb120\b\fs28 Read the result\b0\fs22\par
+\pard\sa120 The entered address is 42 addresses after the network boundary. The next /26 begins at \f1 192.168.10.64\f0 . The /31 and /32 cases follow different rules.\par
+\pard\sa120 Online reference: \cf2\ul RFC 4632 \u8212? CIDR\ul0\cf1  (online: \cf2\ul https://www.rfc-editor.org/info/rfc4632/\ul0\cf1 )\par
+}

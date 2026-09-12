@@ -1,0 +1,10 @@
+{\rtf1\ansi\ansicpg1252\deff0\uc1{\fonttbl{\f0 Segoe UI;}{\f1 Consolas;}}{\colortbl;\red0\green0\blue0;\red0\green102\blue180;}
+\viewkind4\pard\cf1\fs32\b Aggregate without extra coverage\b0\fs22\par\par
+\pard\sa120 Exact aggregation combines blocks without adding addresses. A covering supernet may also include addresses that were not in the original selection.\par
+\pard\sa180\sb120\b\fs28 Example: adjacent sibling networks\b0\fs22\par
+\pard\li240\ri240\sa120\f1 192.168.10.0/25 + 192.168.10.128/25\par
+= 192.168.10.0/24\par
+Extra addresses = 0\f0\par
+\pard\sa120 By contrast, the smallest single prefix covering \f1 192.168.10.0/26\f0  and \f1 192.168.10.128/26\f0  is a /24. That covering block includes 128 additional addresses. Keep the two /26s for an exact result.\par
+\pard\sa120 Online reference: \cf2\ul CIDR aggregation\ul0\cf1  (online: \cf2\ul https://www.rfc-editor.org/info/rfc4632/\ul0\cf1 )\par
+}

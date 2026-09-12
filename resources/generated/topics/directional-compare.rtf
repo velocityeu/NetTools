@@ -1,0 +1,11 @@
+{\rtf1\ansi\ansicpg1252\deff0\uc1{\fonttbl{\f0 Segoe UI;}{\f1 Consolas;}}{\colortbl;\red0\green0\blue0;\red0\green102\blue180;}
+\viewkind4\pard\cf1\fs32\b Compare two networks in both directions\b0\fs22\par\par
+\pard\sa120 Let A be 192.0.2.0/24 and B be 192.0.2.64/26. A has 256 addresses; B has 64. B is entirely inside A.\par
+\pard\li240\ri240\sa120\f1 In both A and B: 192.0.2.64/26 \u8212? 64 addresses\par
+In A but not B: 192.0.2.0/26 and 192.0.2.128/25 \u8212? 192 addresses\par
+In B but not A: empty \u8212? 0 addresses\par
+Check: 64 + 192 = 256\f0\par
+\pard\sa120 The intersection means addresses shared by both sets. A minus B means what remains after removing B from A. Reversing the inputs reverses the two differences, but leaves the intersection unchanged.\par
+\pard\sa120 Do not add overlapping input counts before removing duplicates. The union of A and B here is still A, with 256 addresses, not 320. Empty results are valid; a malformed input row is an error and must not silently disappear.\par
+\pard\sa120 \cf2\ul CIDR prefix notation \u8212? RFC 4632\ul0\cf1  (online: \cf2\ul https://www.rfc-editor.org/rfc/rfc4632.html\ul0\cf1 )\par
+}

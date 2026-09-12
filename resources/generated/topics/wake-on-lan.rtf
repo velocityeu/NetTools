@@ -1,0 +1,10 @@
+{\rtf1\ansi\ansicpg1252\deff0\uc1{\fonttbl{\f0 Segoe UI;}{\f1 Consolas;}}{\colortbl;\red0\green0\blue0;\red0\green102\blue180;}
+\viewkind4\pard\cf1\fs32\b Understand what Wake-on-LAN can prove\b0\fs22\par\par
+\pard\sa120 Wake-on-LAN sends a magic-packet pattern for a specific network adapter's MAC address. The target must already support and be configured for wake-up; the application cannot enable firmware or operating-system power settings remotely.\par
+\pard\li240\ri240\sa120\f1 Magic payload: six FF bytes, followed by the target MAC repeated 16 times.\par
+Each MAC is 6 bytes.\par
+Payload length = 6 + 16 \u215? 6 = 102 bytes.\f0\par
+\pard\sa120 Choose the destination address, sending interface and UDP port explicitly. The proposed default port is 9. Broadcast forwarding and wake behaviour depend on the network and device configuration; do not assume the packet can cross a router.\par
+\pard\sa120 A successful send means Windows accepted the datagram for sending. It does not acknowledge receipt or prove the PC woke up. A follow-up ping or connection check is a separate action.\par
+\pard\sa120 \cf2\ul Microsoft \u8212? UDP sendto behaviour\ul0\cf1  (online: \cf2\ul https://learn.microsoft.com/en-us/windows/win32/api/winsock2/nf-winsock2-sendto\ul0\cf1 )\par
+}

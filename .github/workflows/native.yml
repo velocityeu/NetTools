@@ -1,0 +1,263 @@
+name: Native Windows
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+    tags:
+      - "v*"
+      - "!v*-dev.*"
+      - "!v*-ci.*"
+
+concurrency:
+  group: native-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: windows-2022
+    timeout-minutes: 35
+    outputs:
+      version: ${{ steps.meta.outputs.version }}
+      channel: ${{ steps.meta.outputs.channel }}
+      date: ${{ steps.meta.outputs.date }}
+      artifact: ${{ steps.meta.outputs.artifact }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with: {fetch-depth: 0, persist-credentials: false}
+      - name: Validate immutable metadata
+        id: meta
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = "Stop"
+          $m = Select-String CMakeLists.txt 'project\(VelocityNetTools VERSION ([0-9]+\.[0-9]+\.[0-9]+)' | Select-Object -First 1
+          if (-not $m) { throw "CMake project version is unavailable." }
+          $base = $m.Matches[0].Groups[1].Value
+          $sha = "$env:GITHUB_SHA".ToLowerInvariant(); $short = $sha.Substring(0,7)
+          $run = [uint32]$env:GITHUB_RUN_NUMBER; $ref = $env:GITHUB_REF
+          if ($ref -eq "refs/heads/main") { $channel = "preview"; $version = "$base-dev.$run+$short" }
+          elseif ($ref -match '^refs/pull/[1-9][0-9]*/merge$') { $channel = "ci"; $version = "$base-ci.$run+$short" }
+          elseif ($ref -match '^refs/tags/v([0-9]+\.[0-9]+\.[0-9]+)$') { $channel = "stable"; $version = $Matches[1] }
+          elseif ($ref -match '^refs/tags/v([0-9]+\.[0-9]+\.[0-9]+-rc\.[1-9][0-9]*)$') { $channel = "rc"; $version = $Matches[1] }
+          else { throw "Accepted refs are pull-request merges, main, vX.Y.Z, and vX.Y.Z-rc.N." }
+          $date = ([DateTimeOffset]::Parse((git show -s --format=%cI HEAD).Trim())).UtcDateTime.ToString("yyyy-MM-dd'T'HH:mm:ss'Z'")
+          $a = @{MetadataOnly=$true;Version=$version;Channel=$channel;Commit=$sha;BuildDateUtc=$date;Repository=$env:GITHUB_REPOSITORY;SourceRef=$ref;RunNumber=$run}
+          ./scripts/verify_binary.ps1 @a
+          "version=$version" >> $env:GITHUB_OUTPUT; "channel=$channel" >> $env:GITHUB_OUTPUT
+          "date=$date" >> $env:GITHUB_OUTPUT; "artifact=VelocityNetTools-$version-windows-x64" >> $env:GITHUB_OUTPUT
+      - name: Enforce VEU publication history
+        if: github.event_name == 'push'
+        shell: pwsh
+        run: |
+          if ((git show -s --format=%an HEAD).Trim() -cne "VEU" -or (git show -s --format=%cn HEAD).Trim() -cne "VEU") {
+            throw "Publishing commit author and committer names must both be VEU."
+          }
+          if ("${{ steps.meta.outputs.channel }}" -in @("stable","rc")) {
+            git fetch --no-tags origin main
+            git merge-base --is-ancestor $env:GITHUB_SHA origin/main
+            if ($LASTEXITCODE) { throw "Release tag is not in main history." }
+            $tagger = (git for-each-ref --format='%(taggername)' $env:GITHUB_REF).Trim()
+            if ($tagger -and $tagger -cne "VEU") { throw "Annotated release tagger must be VEU." }
+          }
+      - name: Check generated help and website resources
+        shell: pwsh
+        run: |
+          python scripts/build_native_resources.py --check
+          python scripts/build_help.py --check
+          python scripts/build_seo.py --check
+      - name: Test pipeline policy
+        shell: pwsh
+        run: ./tests/pipeline_tests.ps1
+      - name: Configure Release MT build
+        shell: pwsh
+        run: |
+          $a = @("-S",".","-B","out/native","-G","Visual Studio 17 2022","-A","x64","-DVEU_VERSION=${{ steps.meta.outputs.version }}","-DVEU_BUILD_ID=$($env:GITHUB_SHA.Substring(0,7).ToLowerInvariant())","-DVEU_VERSION_BUILD=$env:GITHUB_RUN_NUMBER")
+          cmake @a
+      - name: Compile and run CTest including frame smoke and loopback
+        shell: pwsh
+        run: |
+          cmake --build out/native --config Release --parallel 4
+          ctest --test-dir out/native -C Release --output-on-failure
+      - name: Verify and package exact executable
+        shell: pwsh
+        env:
+          POLICY: ${{ vars.VEU_PREVIEW_SIGNING_POLICY }}
+          SUBJECT: ${{ vars.VEU_AUTHENTICODE_SUBJECT }}
+        run: |
+          $channel = "${{ steps.meta.outputs.channel }}"
+          $a = @{Executable="out/native/Release/VelocityNetTools.exe";OutputDirectory="out/package";Version="${{ steps.meta.outputs.version }}";Channel=$channel;Commit="$env:GITHUB_SHA".ToLowerInvariant();BuildDateUtc="${{ steps.meta.outputs.date }}";Repository=$env:GITHUB_REPOSITORY;SourceRef=$env:GITHUB_REF;RunNumber=[uint32]$env:GITHUB_RUN_NUMBER}
+          $signed = $channel -eq "stable" -or ($channel -in @("preview","rc") -and $env:POLICY -eq "authenticode")
+          if ($channel -in @("preview","rc") -and $env:POLICY -notin @("unsigned","authenticode")) { throw "VEU_PREVIEW_SIGNING_POLICY must be unsigned or authenticode." }
+          if ($signed) {
+            if (-not $env:SUBJECT) { throw "VEU_AUTHENTICODE_SUBJECT is required for signed publication." }
+            $a.RequireSignature=$true; $a.ExpectedSignerSubject=$env:SUBJECT
+          }
+          ./scripts/verify_binary.ps1 @a
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: ${{ steps.meta.outputs.artifact }}
+          path: out/package/*
+          if-no-files-found: error
+          retention-days: 30
+
+  attest:
+    if: github.event_name == 'push' && github.repository == 'velocityeu/NetTools'
+    needs: build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions: {contents: read, id-token: write, attestations: write, artifact-metadata: write}
+    steps:
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: ${{ needs.build.outputs.artifact }}
+          path: package
+      - working-directory: package
+        run: sha256sum --check SHA256SUMS.txt
+      - uses: actions/attest@508db95dd578ae2727ebd6217d5ba78e4fbda05d # v4.2.1
+        with:
+          subject-path: |
+            package/VelocityNetTools-x64.exe
+            package/SHA256SUMS.txt
+            package/release-manifest.json
+            package/LICENSE.txt
+            package/THIRD-PARTY-NOTICES.txt
+            package/pe-imports.txt
+
+  publish:
+    if: github.event_name == 'push' && github.repository == 'velocityeu/NetTools'
+    needs: [build, attest]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    concurrency: {group: nettools-native-publish, cancel-in-progress: false}
+    permissions: {contents: read, checks: read}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with: {fetch-depth: 0, persist-credentials: false}
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: ${{ needs.build.outputs.artifact }}
+          path: package
+      - name: Verify publication gates
+        shell: pwsh
+        env:
+          CHANNEL: ${{ needs.build.outputs.channel }}
+          IMMUTABLE: ${{ vars.VEU_RELEASE_IMMUTABILITY_ENABLED }}
+          STABLE: ${{ vars.VEU_STABLE_RELEASE_ENABLED }}
+          POLICY: ${{ vars.VEU_PREVIEW_SIGNING_POLICY }}
+          SUBJECT: ${{ vars.VEU_AUTHENTICODE_SUBJECT }}
+          APP_ID: ${{ vars.VEU_APP_ID }}
+          APP_CLIENT_ID: ${{ vars.VEU_APP_CLIENT_ID }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          Push-Location package
+          try {
+            Get-Content SHA256SUMS.txt | ForEach-Object {
+              if ($_ -notmatch '^([0-9a-f]{64}) \*(.+)$') { throw "Malformed checksum line." }
+              if ((Get-FileHash -Algorithm SHA256 $Matches[2]).Hash.ToLowerInvariant() -cne $Matches[1]) { throw "Checksum mismatch for $($Matches[2])." }
+            }
+          } finally { Pop-Location }
+          if ($env:IMMUTABLE -cne "true") { throw "Enable immutable GitHub releases, then set VEU_RELEASE_IMMUTABILITY_ENABLED=true." }
+          if ($env:APP_ID -cne "4924807" -or $env:APP_CLIENT_ID -cne "Iv23liCPYfquh6BtQ15Y") { throw "Publisher IDs do not match VEU-NetTools." }
+          if ($env:CHANNEL -eq "stable") {
+            if ($env:STABLE -cne "true" -or -not $env:SUBJECT) { throw "Stable release is disabled pending signing and clean-machine provisioning." }
+            $uri = "/repos/velocityeu/NetTools/commits/$env:GITHUB_SHA/check-runs?per_page=100"
+            $checks = gh api -H "Accept: application/vnd.github+json" $uri | ConvertFrom-Json
+            if (-not ($checks.check_runs | Where-Object {$_.name -ceq "VEU clean-machine compatibility" -and $_.conclusion -ceq "success"})) {
+              throw "Stable release requires a successful VEU clean-machine compatibility check on this SHA."
+            }
+          } elseif ($env:POLICY -notin @("unsigned","authenticode")) { throw "Preview signing policy is absent." }
+      - name: Create repository-scoped VEU App token
+        id: app
+        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
+        with:
+          client-id: ${{ vars.VEU_APP_CLIENT_ID }}
+          private-key: ${{ secrets.VEU_APP_PRIVATE_KEY }}
+          owner: velocityeu
+          repositories: NetTools
+          permission-contents: write
+      - name: Publish audited immutable release
+        shell: pwsh
+        env:
+          TOKEN: ${{ steps.app.outputs.token }}
+          SLUG: ${{ steps.app.outputs.app-slug }}
+          VERSION: ${{ needs.build.outputs.version }}
+          CHANNEL: ${{ needs.build.outputs.channel }}
+          DATE: ${{ needs.build.outputs.date }}
+        run: |
+          $ErrorActionPreference="Stop"
+          if ($env:SLUG -cne "veu-nettools") { throw "Unexpected publisher App slug." }
+          $h=@{Authorization="Bearer $env:TOKEN";Accept="application/vnd.github+json";"X-GitHub-Api-Version"="2022-11-28"}
+          $downloadHeaders=@{}+$h; $downloadHeaders.Accept="application/octet-stream"
+          $repos=Invoke-RestMethod -Headers $h -Uri "https://api.github.com/installation/repositories?per_page=100"
+          if ($repos.total_count -ne 1 -or $repos.repositories[0].full_name -cne "velocityeu/NetTools") { throw "App token is not NetTools-only." }
+          $manifest=Get-Content package/release-manifest.json -Raw | ConvertFrom-Json
+          if ($manifest.version -cne $env:VERSION -or $manifest.commit -cne "$env:GITHUB_SHA".ToLowerInvariant()) { throw "Manifest identity mismatch." }
+          $api="https://api.github.com/repos/velocityeu/NetTools"
+          $all=@(); $page=1
+          do {
+            $response=Invoke-RestMethod -Headers $h -Uri "${api}/releases?per_page=100&page=$page"
+            $batch=@($response)
+            $all+=$batch; $page++
+          } while ($batch.Count -eq 100)
+          $tag="v$env:VERSION"; $found=@($all | Where-Object {$_.tag_name -ceq $tag})
+          if ($found.Count -gt 1 -or ($found.Count -eq 1 -and -not $found[0].draft)) { throw "Published version cannot be reused." }
+          if ($env:CHANNEL -eq "preview" -and $env:VERSION -match '^([0-9]+\.[0-9]+\.[0-9]+)-dev\.([1-9][0-9]*)\+') {
+            $base=[version]$Matches[1]; $run=[uint64]$Matches[2]
+            foreach($r in $all) {
+              if ($r.tag_name -ceq $tag) { continue }
+              if ($r.tag_name -match '^v([0-9]+\.[0-9]+\.[0-9]+)-dev\.([1-9][0-9]*)\+') {
+                $otherBase=[version]$Matches[1]; $otherRun=[uint64]$Matches[2]
+                if ($otherBase -gt $base -or ($otherBase -eq $base -and $otherRun -gt $run)) { throw "A newer preview already exists." }
+              }
+            }
+          } elseif ($env:CHANNEL -eq "stable") {
+            $candidate=[version]$env:VERSION
+            foreach($r in $all) {
+              if ($r.tag_name -ceq $tag) { continue }
+              if ($r.tag_name -match '^v([0-9]+\.[0-9]+\.[0-9]+)$') {
+                if ([version]$Matches[1] -ge $candidate) { throw "An equal or newer stable release already exists; refusing to promote an older version." }
+              }
+            }
+          } elseif ($env:CHANNEL -eq "rc" -and $env:VERSION -match '^([0-9]+\.[0-9]+\.[0-9]+)-rc\.([1-9][0-9]*)$') {
+            $base=[version]$Matches[1]; $candidateRc=[uint64]$Matches[2]
+            foreach($r in $all) {
+              if ($r.tag_name -ceq $tag) { continue }
+              if ($r.tag_name -match '^v([0-9]+\.[0-9]+\.[0-9]+)$') {
+                if ([version]$Matches[1] -ge $base) { throw "A stable release at this or a newer version already exists." }
+              }
+              if ($r.tag_name -match '^v([0-9]+\.[0-9]+\.[0-9]+)-rc\.([1-9][0-9]*)$') {
+                $otherBase=[version]$Matches[1]; $otherRc=[uint64]$Matches[2]
+                if ($otherBase -gt $base -or ($otherBase -eq $base -and $otherRc -gt $candidateRc)) { throw "A newer release candidate already exists." }
+              }
+            }
+          }
+          $pre=$env:CHANNEL -ne "stable"
+          if (-not $found) {
+            $notice=if($manifest.signing.result -ceq "unsigned"){"This preview is explicitly unsigned. Verify SHA256SUMS.txt."}else{""}
+            $body=@("Velocity NetTools $env:VERSION by VEU","","Source commit: $env:GITHUB_SHA","Build date: $env:DATE","Channel: $env:CHANNEL","Platform: Windows x64","",$notice)-join [Environment]::NewLine
+            $json=@{tag_name=$tag;target_commitish="$env:GITHUB_SHA".ToLowerInvariant();name="Velocity NetTools $env:VERSION";body=$body.Trim();draft=$true;prerelease=$pre;make_latest="false"}|ConvertTo-Json
+            $release=Invoke-RestMethod -Method Post -Headers $h -ContentType "application/json" -Body $json -Uri "$api/releases"
+          } else {
+            $release=$found[0]
+            if ($release.target_commitish -cne "$env:GITHUB_SHA".ToLowerInvariant()) { throw "Existing draft targets different source." }
+          }
+          $names=@("VelocityNetTools-x64.exe","SHA256SUMS.txt","release-manifest.json","LICENSE.txt","THIRD-PARTY-NOTICES.txt","pe-imports.txt")
+          $upload=$release.upload_url -replace '\{\?name,label\}$',''
+          foreach($asset in @($release.assets)) {
+            if($asset.name -notin $names){throw "Unexpected draft asset."}
+            $tmp=Join-Path ([IO.Path]::GetTempPath()) ([guid]::NewGuid())
+            try{Invoke-WebRequest -Headers $downloadHeaders -Uri $asset.url -OutFile $tmp;if((Get-FileHash $tmp -Algorithm SHA256).Hash -cne (Get-FileHash "package/$($asset.name)" -Algorithm SHA256).Hash){throw "Draft asset bytes differ."}}finally{Remove-Item $tmp -Force -ErrorAction SilentlyContinue}
+          }
+          foreach($name in $names){if($name -notin @($release.assets.name)){Invoke-RestMethod -Method Post -Headers $h -ContentType "application/octet-stream" -InFile "package/$name" -Uri "${upload}?name=$([Uri]::EscapeDataString($name))"|Out-Null}}
+          $release=Invoke-RestMethod -Headers $h -Uri "$api/releases/$($release.id)"
+          if(@($release.assets).Count -ne $names.Count){throw "Draft asset set incomplete."}
+          foreach($name in $names){
+            $asset=$release.assets|Where-Object name -CEQ $name;if(-not $asset){throw "Draft asset missing."}
+            $tmp=Join-Path ([IO.Path]::GetTempPath()) ([guid]::NewGuid())
+            try{Invoke-WebRequest -Headers $downloadHeaders -Uri $asset.url -OutFile $tmp;if((Get-FileHash $tmp -Algorithm SHA256).Hash -cne (Get-FileHash "package/$name" -Algorithm SHA256).Hash){throw "Uploaded asset audit failed."}}finally{Remove-Item $tmp -Force -ErrorAction SilentlyContinue}
+          }
+          $json=@{draft=$false;prerelease=$pre;make_latest=$(if($pre){"false"}else{"true"})}|ConvertTo-Json
+          Invoke-RestMethod -Method Patch -Headers $h -ContentType "application/json" -Body $json -Uri "$api/releases/$($release.id)"|Out-Null

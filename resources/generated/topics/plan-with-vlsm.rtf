@@ -1,0 +1,12 @@
+{\rtf1\ansi\ansicpg1252\deff0\uc1{\fonttbl{\f0 Segoe UI;}{\f1 Consolas;}}{\colortbl;\red0\green0\blue0;\red0\green102\blue180;}
+\viewkind4\pard\cf1\fs32\b Plan with VLSM\b0\fs22\par\par
+\pard\sa120 Variable Length Subnet Masking assigns differently sized blocks to networks with different capacity needs. Start with the largest requirement so that small allocations do not fragment the available space.\par
+\pard\sa180\sb120\b\fs28 Example: three networks inside 192.168.10.0/24\b0\fs22\par
+\pard\li240\ri240\sa120\f1 Office: 100 hosts \u8594? 192.168.10.0/25 (126 usable)\par
+Voice: 50 hosts \u8594? 192.168.10.128/26 (62 usable)\par
+Lab: 20 hosts \u8594? 192.168.10.192/27 (30 usable)\par
+Remaining: 192.168.10.224/27\f0\par
+\pard\sa180\sb120\b\fs28 Check before allocating\b0\fs22\par
+\pard\sa120 These counts use conventional IPv4 network and broadcast reservations. Include gateways and any spare capacity in your requirement. A cloud provider may reserve additional addresses.\par
+\pard\sa120 Background: \cf2\ul CIDR address allocation and aggregation\ul0\cf1  (online: \cf2\ul https://www.rfc-editor.org/info/rfc4632/\ul0\cf1 )\par
+}
