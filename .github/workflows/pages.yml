@@ -1,0 +1,74 @@
+name: Publish learning centre
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'website-preview/dist/**'
+      - 'docs/help/**'
+      - 'scripts/build_help.py'
+      - 'scripts/build_seo.py'
+      - 'scripts/prepare_site.py'
+      - '.github/workflows/pages.yml'
+  workflow_dispatch:
+  # A future publisher using GITHUB_TOKEN must explicitly dispatch this workflow
+  # on main after publishing; token-created release events do not trigger it.
+  release:
+    types: [published]
+
+permissions:
+  contents: read
+
+# Serialize the complete build/deploy transaction. Pending runs may coalesce;
+# every surviving run checks out current main and refreshes current release data.
+# Never cancel an active Pages deployment halfway through publication.
+concurrency:
+  group: nettools-pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    if: github.repository == 'velocityeu/NetTools' && (github.event_name == 'release' || github.ref == 'refs/heads/main')
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      pages: read
+    steps:
+      - name: Check out current website source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: main
+          persist-credentials: false
+      - name: Check shared help generation
+        run: python3 scripts/build_help.py --check
+      - name: Check crawlable lesson pages and sitemap
+        run: python3 scripts/build_seo.py --check
+      - name: Prepare site and verify release downloads
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python3 scripts/prepare_site.py --output _site
+      - name: Read Pages configuration
+        uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6.0.0
+        with:
+          enablement: false
+      - name: Upload complete static site
+        uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
+        with:
+          path: _site
+          include-hidden-files: true
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1

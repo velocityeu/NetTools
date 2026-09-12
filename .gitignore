@@ -23,3 +23,8 @@ node_modules/
 *.pem
 # Local environment inventory is not public project documentation.
 docs/research/2026-09-12-network-toolkit.md
+
+# Local review output and publishing credentials
+.playwright-mcp/
+_site/
+.private/

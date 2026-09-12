@@ -1,6 +1,6 @@
 <div align="center">
 
-![Velocity V symbol](docs/design/velocity-mark.svg)
+<img src="docs/design/velocity-corporate-favicon.png" width="64" height="64" alt="Official VEU corporate icon">
 
 # Velocity NetTools
 
@@ -12,7 +12,7 @@ A portable native Windows network toolkit, with an engineer’s field guide that
 
 **[velocity-eu.com](https://www.velocity-eu.com/)**
 
-[Learn subnetting](docs/help/README.md) · [Design & roadmap](docs/design/product-design.md) · [Releases](https://github.com/velocityeu/NetTools/releases) · [Report an issue](https://github.com/velocityeu/NetTools/issues)
+[Learning centre](https://velocityeu.github.io/NetTools/) · [Help on GitHub](docs/help/README.md) · [Design & roadmap](docs/design/product-design.md) · [Releases](https://github.com/velocityeu/NetTools/releases) · [Report an issue](https://github.com/velocityeu/NetTools/issues)
 
 </div>
 
@@ -20,9 +20,9 @@ A portable native Windows network toolkit, with an engineer’s field guide that
 
 ## Understand it. Then use it.
 
-Velocity NetTools is being designed for engineers who need accurate answers without installing a large tool suite. The first application release will focus on subnet calculation and planning. The companion learning centre teaches the same operations by hand, with worked examples and practical guidance.
+Velocity NetTools is being designed for engineers who need accurate answers without installing a large tool suite. The reviewed toolkit includes subnet planning, local and external IP information, visual ping, traceroute, DNS and practical connection diagnostics. The companion learning centre teaches the same operations by hand, with worked examples and practical guidance.
 
-![Subnet calculator interface concept — not a running application](docs/design/subnet-concept-02.png)
+![Native toolkit interface concept — not a running application](docs/design/nettools-concept-01.png)
 
 *Interface concept with the Velocity V mark and velocity-eu.com branding; not a running application.*
 
@@ -34,7 +34,9 @@ Velocity NetTools is being designed for engineers who need accurate answers with
 | Subnet planning | Equal splits, VLSM requirements, pinned allocations and free space |
 | Aggregation and comparison | Exact unions, covering supernets, range-to-CIDR, overlap and containment |
 | Help | Embedded, searchable manual; F1 context help; examples; glossary; online references |
-| Diagnostics, later | Visual ping, traceroute, DNS lookup, adapters, routes and TCP connectivity |
+| My PC & IP | Local IPv4/IPv6 and interface details; explicit external IPv4/IPv6 lookup through ipify |
+| Diagnostics | Visual ping, traceroute, DNS, adapters/routes/neighbours and TCP connectivity |
+| Utilities | HTTP/TLS inspection, Wake-on-LAN and MTU probing |
 
 **Compatibility target for approval:** Windows 10 x64 (build 10240 onward), Windows 11 x64, and Windows Server 2016 onward with Desktop Experience. Server Core is outside the first GUI release. Compatibility will be verified on clean machines during implementation; it has not been tested yet.
 
@@ -49,7 +51,8 @@ Start with [the engineer’s field guide](docs/help/README.md). It covers:
 - Prefixes, masks and the block-size shortcut.
 - A /20 example that crosses an octet boundary.
 - Host-capacity planning, equal splits and VLSM.
-- /31, /32 and IPv6 exceptions.
+- /31, /32, IPv6 /127 and /128, and exact /0 counts.
+- Input errors, exact ranges, directional comparisons and fragmented VLSM.
 - Exact aggregation, DNS and diagnostic interpretation.
 
 ### One example, explained
@@ -66,7 +69,7 @@ This host-count rule does not apply unchanged to /31, /32 or IPv6. See the [comp
 
 ## Webpage preview
 
-The [learning-centre preview](website-preview/dist/index.html) includes 15 searchable lessons, a quick-reference table, a practice question and an About-dialog concept. It is static HTML/CSS/JavaScript with no package dependencies or live probes.
+The [learning-centre preview](website-preview/dist/index.html) includes 28 searchable lessons, a quick-reference table, a practice question and an About-dialog concept. It is static HTML/CSS/JavaScript with no package dependencies or live probes.
 
 To view locally from the repository root, with Python installed:
 
@@ -74,20 +77,33 @@ To view locally from the repository root, with Python installed:
 python -m http.server 8765 --bind 127.0.0.1 --directory website-preview/dist
 ```
 
-Open `http://127.0.0.1:8765/`. This is a preview of the educational website, not the Windows application. The website is not publicly hosted yet.
+Open `http://127.0.0.1:8765/`. This is a preview of the educational website, not the Windows application. Prepared hosting target: **https://velocityeu.github.io/NetTools/**. Publication is pending authentication through the VEU GitHub App. The Pages workflow validates shared lesson content and publishes website/help updates from main.
+
+The canonical lesson source is [topics.json](docs/help/topics.json). After editing it, run:
+
+```text
+python scripts/build_help.py
+python scripts/build_seo.py
+python scripts/build_help.py --check
+python scripts/build_seo.py --check
+```
+
+This generates the web lessons, the GitHub manual, static lesson pages and a sitemap; native embedded-help generation will be added with the Windows app.
 
 ## Downloads and releases
 
 **No executable has been released.** [GitHub Releases](https://github.com/velocityeu/NetTools/releases) will be the official download source.
 
-The [release-pipeline design](docs/design/release-pipeline.md) defines tested x64 builds, automatic prereleases from `main`, stable version-tag releases, SHA-256 checksums, build provenance and a consistent download filename. No application release workflow is active during the design phase.
+The [release-pipeline design](docs/design/release-pipeline.md) defines tested x64 builds, automatic prereleases from `main`, stable version-tag releases, SHA-256 checksums, build provenance and a consistent download filename. No application release workflow is active during the design phase. The prepared Pages workflow is awaiting the VEU App setup before its first publication. See [publishing identity](docs/design/publishing-identity.md) and [search discovery](docs/design/search-discovery.md).
 
 ## Project map
 
 ```text
 docs/help/                 Learning material and manual design
 docs/design/               Product, branding, About and release designs
-website-preview/dist/      Reviewable training webpage
+website-preview/dist/      Training webpage source
+scripts/                   Shared help and website preparation
+.github/workflows/pages.yml Automatic GitHub Pages publishing
 README.md                  Project overview
 LICENSE                    MIT licence
 ```
@@ -98,7 +114,7 @@ LICENSE                    MIT licence
 
 Application implementation begins after the feature and UI design is finalised. Design and documentation improvements are welcome now.
 
-The [design review](docs/design/design-review.md) records the corrected interaction and release issues and the scope submitted for development approval.
+The [final readiness review](docs/design/final-readiness-review.md), [maths contract](docs/design/math-contract.md) and [Windows API contract](docs/design/windows-api-contract.md) record the corrected design, acceptance checks and scope submitted for development approval.
 
 ## Licence and publisher
 

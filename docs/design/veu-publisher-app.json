@@ -1,0 +1,58 @@
+{
+  "configuration_kind": "github-app-registration-form",
+  "status": "not_registered",
+  "owner": "velocityeu",
+  "registration_url": "https://github.com/organizations/velocityeu/settings/apps/new?name=VEU&description=Velocity%20EU%20Inc%20publisher%20for%20NetTools&url=https%3A%2F%2Fwww.velocity-eu.com%2F&public=false&webhook_active=false&request_oauth_on_install=false&contents=write&workflows=write",
+  "registration": {
+    "name": "VEU",
+    "name_availability": "unverified_global_uniqueness_required",
+    "description": "Velocity EU Inc publisher for NetTools",
+    "url": "https://www.velocity-eu.com/",
+    "public": false,
+    "webhook_active": false,
+    "events": [],
+    "callback_urls": [],
+    "request_oauth_on_install": false,
+    "device_flow_enabled": false,
+    "repository_permissions": {
+      "contents": "write",
+      "workflows": "write",
+      "metadata": "read"
+    },
+    "organization_permissions": {},
+    "account_permissions": {}
+  },
+  "installation": {
+    "account": "velocityeu",
+    "repository_selection": "selected",
+    "repositories": ["NetTools"]
+  },
+  "git_metadata": {
+    "author_name": "VEU",
+    "committer_name": "VEU",
+    "email": "noreply@velocity-eu.com",
+    "email_status": "nonpersonal_placeholder_not_verified",
+    "scope": "repository_local"
+  },
+  "authentication": {
+    "mode": "installation_access_token",
+    "personal_credential_fallback": false,
+    "repository": "velocityeu/NetTools",
+    "app_id": null,
+    "client_id": null,
+    "installation_id": null,
+    "app_slug": null,
+    "private_key_variable_name": "VEU_APP_PRIVATE_KEY"
+  },
+  "conditional_permissions_excluded_from_registration": {
+    "actions_write": "Only if explicit workflow dispatch or rerun is selected",
+    "pages_write": "Pages deployment uses the workflow platform token",
+    "administration_write": "One-time Pages configuration is performed separately by an authorised administrator"
+  },
+  "identity_boundary": {
+    "app_bot_suffix": "GitHub generates the app-slug[bot] identity",
+    "pages_platform_identity": "GitHub Actions and Pages retain platform service attribution",
+    "literal_veu_everywhere_guaranteed": false,
+    "existing_public_history": "unchanged"
+  }
+}

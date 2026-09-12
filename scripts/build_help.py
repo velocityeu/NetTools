@@ -1,0 +1,141 @@
+"""Generate the static lesson data and GitHub manual from one restricted topic tree.
+
+This documentation tool has no third-party Python dependencies. It does not build
+the Windows application. Run with --check to detect stale generated files.
+"""
+from pathlib import Path
+import argparse
+import html
+import json
+import re
+from urllib.parse import urlparse
+
+ROOT = Path(__file__).resolve().parents[1]
+SOURCE = ROOT / 'docs/help/topics.json'
+TAGS = {
+    'paragraph': 'p', 'heading': 'h4', 'strong': 'strong', 'inline-code': 'code',
+    'link': 'a', 'list': 'ul', 'ordered-list': 'ol', 'item': 'li',
+    'group': 'div', 'span': 'span', 'break': 'br',
+}
+VARIANTS = {'calculation', 'reference', 'lesson-meta', 'note', 'lesson-step',
+            'step-number', 'answer-strip'}
+
+
+def validate(node):
+    if isinstance(node, str):
+        return
+    if not isinstance(node, dict) or node.get('type') not in TAGS:
+        raise ValueError(f'Unsupported content node: {node!r}')
+    if set(node) - {'type', 'variant', 'href', 'children'}:
+        raise ValueError('Unexpected content attributes')
+    if 'variant' in node and node['variant'] not in VARIANTS:
+        raise ValueError('Unsupported content variant')
+    if node['type'] == 'link':
+        url = urlparse(node.get('href', ''))
+        if url.scheme != 'https' or not url.hostname or url.username or url.password:
+            raise ValueError('Reference links must be plain HTTPS URLs')
+    elif 'href' in node:
+        raise ValueError('Only links may carry URLs')
+    if not isinstance(node.get('children'), list):
+        raise ValueError('Every content node needs a children list')
+    for child in node['children']:
+        validate(child)
+
+
+def render_html(node):
+    if isinstance(node, str):
+        return html.escape(node)
+    tag = TAGS[node['type']]
+    attrs = ''
+    if 'variant' in node:
+        attrs += f' class="{node["variant"]}"'
+    if tag == 'a':
+        attrs += f' href="{html.escape(node["href"], quote=True)}" target="_blank" rel="noopener noreferrer"'
+    if tag == 'br':
+        return '<br>'
+    return f'<{tag}{attrs}>' + ''.join(map(render_html, node['children'])) + f'</{tag}>'
+
+
+def render_markdown(node):
+    if isinstance(node, str):
+        return node
+    kind, children = node['type'], node['children']
+    body = ''.join(map(render_markdown, children))
+    variant = node.get('variant')
+    if variant == 'calculation':
+        return '\n\n```text\n' + body.strip() + '\n```\n\n'
+    if variant == 'step-number':
+        return '\n\nStep ' + body.strip() + '\n\n'
+    if variant == 'answer-strip':
+        return '\n\n' + '\n'.join('- ' + render_markdown(child).strip() for child in children) + '\n\n'
+    if kind == 'strong':
+        return '**' + body + '**'
+    if kind == 'inline-code':
+        return '`' + body + '`'
+    if kind == 'link':
+        return '[' + body + '](' + node['href'] + ')'
+    if kind == 'heading':
+        return '\n\n### ' + body.strip() + '\n\n'
+    if kind in {'list', 'ordered-list'}:
+        lines = []
+        for index, child in enumerate(children):
+            if isinstance(child, str) and not child.strip():
+                continue
+            prefix = f'{index + 1}. ' if kind == 'ordered-list' else '- '
+            lines.append(prefix + render_markdown(child).strip())
+        return '\n\n' + '\n'.join(lines) + '\n\n'
+    if kind == 'span':
+        return body.replace('**', ' **', 1).strip() + '\n'
+    if kind in {'paragraph', 'group'}:
+        return '\n\n' + body.strip() + '\n\n'
+    if kind == 'break':
+        return '\n'
+    return body
+
+
+def outputs(data):
+    if data.get('schemaVersion') != 1 or not isinstance(data.get('topics'), list):
+        raise ValueError('Unsupported topic schema')
+    articles, sections, ids = [], [], set()
+    for topic in data['topics']:
+        if not isinstance(topic, dict) or set(topic) != {'id', 'title', 'keywords', 'blocks'}:
+            raise ValueError('A topic needs exactly id, title, keywords and blocks')
+        if any(not isinstance(topic[key], str) or not topic[key].strip() for key in ('id', 'title', 'keywords')):
+            raise ValueError('Topic identifiers, titles and keywords must be nonempty text')
+        if not isinstance(topic['blocks'], list) or not topic['blocks']:
+            raise ValueError('A topic needs content blocks')
+        if not re.fullmatch(r'[a-z0-9]+(?:-[a-z0-9]+)*', topic['id']) or topic['id'] in ids:
+            raise ValueError('Topic IDs must be unique stable slugs')
+        ids.add(topic['id'])
+        for block in topic['blocks']:
+            validate(block)
+        articles.append({'id': topic['id'], 'title': topic['title'], 'keywords': topic['keywords'],
+                         'body': ''.join(map(render_html, topic['blocks']))})
+        body = re.sub(r'\n{3,}', '\n\n', ''.join(map(render_markdown, topic['blocks']))).strip()
+        sections.append(f'## {len(sections) + 1}. {topic["title"]}\n\n{body}')
+    javascript = "'use strict';\n// Generated by scripts/build_help.py. Edit docs/help/topics.json.\nconst articles = "
+    javascript += json.dumps(articles, ensure_ascii=False, indent=2).replace('\u2028', '\\u2028').replace('\u2029', '\\u2029') + ';\n'
+    manual = '# Velocity NetTools — Worked lessons\n\n'
+    manual += 'By [Velocity EU Inc](https://www.velocity-eu.com/). [Help index](README.md).\n\n'
+    manual += 'Generated from [the shared topic source](topics.json); do not edit this file separately. '
+    manual += 'The webpage uses these same lessons. Application-specific behaviour is proposed where labelled.\n\n'
+    manual += '\n\n---\n\n'.join(sections) + '\n'
+    return {ROOT / 'website-preview/dist/lessons-data.js': javascript,
+            ROOT / 'docs/help/lessons.md': manual}
+
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--check', action='store_true')
+    args = parser.parse_args()
+    results = outputs(json.loads(SOURCE.read_text(encoding='utf-8')))
+    stale = []
+    for path, content in results.items():
+        if args.check:
+            if not path.exists() or path.read_text(encoding='utf-8') != content:
+                stale.append(str(path.relative_to(ROOT)))
+        else:
+            path.write_text(content, encoding='utf-8')
+    if stale:
+        raise SystemExit('Generated help is stale: ' + ', '.join(stale))
+    print('Help and webpage content match the shared source.' if args.check else 'Generated webpage lessons and GitHub help.')

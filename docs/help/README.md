@@ -15,11 +15,17 @@ Read [the worked lessons](lessons.md). Begin with **Subnetting by hand: five ste
 | Choose a subnet for 50 hosts | Choose a prefix for host capacity |
 | Divide a /24 into four networks | Split a network into equal parts |
 | Allocate several different-sized networks | Plan with VLSM |
-| Handle unusual prefixes | Use /31 and /32 correctly; Understand IPv6 prefixes |
-| Avoid adding unintended addresses | Aggregate without extra coverage |
-| Interpret diagnostic results | Read ping and traceroute results; Interpret a DNS lookup |
+| Handle unusual prefixes | Use /31 and /32 correctly; IPv6 /127 and /128 in practice; The /0 boundary and exact counts |
+| Avoid adding unintended addresses | Aggregate without extra coverage; Turn an address range into exact CIDRs |
+| Understand overlap and missing coverage | Compare two networks in both directions |
+| Diagnose a plan that will not fit | Plan around pinned networks and gaps |
+| Correct ambiguous input | Read and correct address input errors |
+| Interpret diagnostic results | Read ping and traceroute results; Read ping statistics without counting gaps as zero; Interpret a DNS lookup |
+| Check PC addressing and paths | Read local and external IP addresses; Read adapters, routes and neighbours |
+| Separate connection layers | Separate TCP connectivity from service health; Inspect HTTP and TLS without hiding failures |
+| Use network utilities accurately | Understand what Wake-on-LAN can prove; Calculate MTU probe sizes and interpret silence |
 
-The [web preview](../../website-preview/dist/index.html) presents the same lessons with search, navigation, a prefix reference table and a practice question. For this design iteration, the Markdown lessons are an exported snapshot of the webpage content. The production documentation design calls for one canonical source shared by the web manual and embedded Windows help.
+The [learning centre](https://velocityeu.github.io/NetTools/) presents the same 28 lessons with search, navigation, a prefix reference table and a practice question. Both outputs are generated from [topics.json](topics.json) using [build_help.py](../../scripts/build_help.py). Edit that source and regenerate; do not maintain the webpage and Markdown lessons separately. The native embedded renderer will consume this same content during application development.
 
 ## The pocket method
 

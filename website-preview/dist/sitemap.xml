@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://velocityeu.github.io/NetTools/</loc></url>
+  <url><loc>https://velocityeu.github.io/NetTools/help/</loc></url>
+  <url><loc>https://velocityeu.github.io/NetTools/help/subnetting-by-hand-five-steps/</loc></url>
+  <url><loc>https://velocityeu.github.io/NetTools/help/bits-bytes-and-powers-of-two/</loc></url>
+  <url><loc>https://velocityeu.github.io/NetTools/help/from-prefix-to-subnet-mask/</loc></url>
+  <url><loc>https://velocityeu.github.io/NetTools/help/cross-an-octet-boundary-20/</loc></url>
+  <url><loc>https://velocityeu.github.io/NetTools/help/choose-a-prefix-for-host-capacity/</loc></url>
+  <url><loc>https://velocityeu.github.io/NetTools/help/split-a-network-into-equal-parts/</loc></url>
+  <url><loc>https://velocityeu.github.io/NetTools/help/glossary-and-common-mistakes/</loc></url>
+  <url><loc>https://velocityeu.github.io/NetTools/help/understand-an-ipv4-subnet/</loc></url>
+  <url><loc>https://velocityeu.github.io/NetTools/help/plan-with-vlsm/</loc></url>
+  <url><loc>https://velocityeu.github.io/NetTools/help/use-31-and-32-correctly/</loc></url>
+  <url><loc>https://velocityeu.github.io/NetTools/help/understand-ipv6-prefixes/</loc></url>
+  <url><loc>https://velocityeu.github.io/NetTools/help/aggregate-without-extra-coverage/</loc></url>
+  <url><loc>https://velocityeu.github.io/NetTools/help/read-ping-and-traceroute-results/</loc></url>
+  <url><loc>https://velocityeu.github.io/NetTools/help/interpret-a-dns-lookup/</loc></url>
+  <url><loc>https://velocityeu.github.io/NetTools/help/help-portability-and-shortcuts/</loc></url>
+  <url><loc>https://velocityeu.github.io/NetTools/help/ipv6-127-and-128-in-practice/</loc></url>
+  <url><loc>https://velocityeu.github.io/NetTools/help/the-0-boundary-and-exact-counts/</loc></url>
+  <url><loc>https://velocityeu.github.io/NetTools/help/input-errors/</loc></url>
+  <url><loc>https://velocityeu.github.io/NetTools/help/exact-ranges/</loc></url>
+  <url><loc>https://velocityeu.github.io/NetTools/help/directional-compare/</loc></url>
+  <url><loc>https://velocityeu.github.io/NetTools/help/pinned-vlsm/</loc></url>
+  <url><loc>https://velocityeu.github.io/NetTools/help/local-external-ip/</loc></url>
+  <url><loc>https://velocityeu.github.io/NetTools/help/interfaces-routes/</loc></url>
+  <url><loc>https://velocityeu.github.io/NetTools/help/tcp-checks/</loc></url>
+  <url><loc>https://velocityeu.github.io/NetTools/help/http-tls/</loc></url>
+  <url><loc>https://velocityeu.github.io/NetTools/help/wake-on-lan/</loc></url>
+  <url><loc>https://velocityeu.github.io/NetTools/help/mtu-basics/</loc></url>
+  <url><loc>https://velocityeu.github.io/NetTools/help/ping-statistics/</loc></url>
+</urlset>

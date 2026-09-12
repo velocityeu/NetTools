@@ -15,3 +15,9 @@
 @media print{.download-strip{display:none}}
 
 .clear-search{border:0;background:none;padding:9px 0;color:var(--blue);font-size:.85rem;text-decoration:underline;text-underline-offset:3px}.help-nav #search-status{margin:8px 0 18px}.help-article #lesson-title:focus-visible{outline:2px solid var(--blue);outline-offset:6px}.hero-actions{flex-wrap:wrap}.brand{min-width:0}.brand-mark{flex-shrink:0}dialog{max-height:calc(100dvh - 32px);overflow:auto}
+
+/* Original corporate artwork, preserved on a dark surface. */
+.corporate-logo-panel{display:flex;align-items:center;background:#202020;padding:12px 14px;border-radius:4px;flex-shrink:0}.corporate-logo-panel img{display:block;width:148px;height:auto}.brand.large{flex-wrap:wrap}.release-downloads{display:flex;flex-wrap:wrap;gap:24px}.release-card{min-width:0;max-width:640px}.release-checksum{overflow-wrap:anywhere;word-break:break-word;font-size:.75rem}.release-card a{margin-right:12px}.release-card h3{font-size:1.1rem}.release-card p{margin-top:10px}.brand{letter-spacing:-.025em}.brand.large .corporate-logo-panel img{width:180px}
+@media(max-width:760px){.corporate-logo-panel img{width:132px}.brand.large .corporate-logo-panel img{width:145px}.release-downloads{display:block}.release-card+.release-card{margin-top:26px}}
+
+.planned-toolkit{padding-block:32px}.planned-toolkit h2{font-size:1.45rem;letter-spacing:-.02em}.planned-toolkit p{max-width:1000px;color:var(--muted)}
