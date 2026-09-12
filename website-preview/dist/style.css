@@ -15,4 +15,3 @@
 @media print{.download-strip{display:none}}
 
 .clear-search{border:0;background:none;padding:9px 0;color:var(--blue);font-size:.85rem;text-decoration:underline;text-underline-offset:3px}.help-nav #search-status{margin:8px 0 18px}.help-article #lesson-title:focus-visible{outline:2px solid var(--blue);outline-offset:6px}.hero-actions{flex-wrap:wrap}.brand{min-width:0}.brand-mark{flex-shrink:0}dialog{max-height:calc(100dvh - 32px);overflow:auto}
-
