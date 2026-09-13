@@ -99,7 +99,7 @@ async function publicChecks(browser, base) {
 }
 async function integration(browser, base, browserName) {
   const useServerOutage =
-    process.platform === "win32" && browserName === "WebKit";
+    browserName === "WebKit";
   const context = await browser.newContext(),
     page = await context.newPage();
   try {
