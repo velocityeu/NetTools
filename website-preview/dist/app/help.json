@@ -1,0 +1,1235 @@
+{
+  "schemaVersion": 1,
+  "topics": [
+    {
+      "id": "subnetting-by-hand-five-steps",
+      "title": "Subnetting by hand: five steps",
+      "keywords": "start beginner maths math calculate network /26 block size",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "children": [
+            "Start here · Worked example · IPv4"
+          ],
+          "variant": "lesson-meta"
+        },
+        {
+          "type": "paragraph",
+          "children": [
+            "Let’s work out ",
+            {
+              "type": "inline-code",
+              "children": [
+                "192.168.10.42/26"
+              ]
+            },
+            " without a calculator. We want the network address, broadcast address and usable host range."
+          ]
+        },
+        {
+          "type": "group",
+          "children": [
+            {
+              "type": "span",
+              "children": [
+                "1"
+              ],
+              "variant": "step-number"
+            },
+            {
+              "type": "group",
+              "children": [
+                {
+                  "type": "heading",
+                  "children": [
+                    "Count the bits left for hosts"
+                  ]
+                },
+                {
+                  "type": "paragraph",
+                  "children": [
+                    "An IPv4 address has 32 bits. The prefix /26 uses 26 for the network. That leaves ",
+                    {
+                      "type": "strong",
+                      "children": [
+                        "32 − 26 = 6 host bits"
+                      ]
+                    },
+                    "."
+                  ]
+                }
+              ]
+            }
+          ],
+          "variant": "lesson-step"
+        },
+        {
+          "type": "group",
+          "children": [
+            {
+              "type": "span",
+              "children": [
+                "2"
+              ],
+              "variant": "step-number"
+            },
+            {
+              "type": "group",
+              "children": [
+                {
+                  "type": "heading",
+                  "children": [
+                    "Turn the bits into an address count"
+                  ]
+                },
+                {
+                  "type": "paragraph",
+                  "children": [
+                    "Each bit has two choices: 0 or 1. Six bits give 2 × 2 × 2 × 2 × 2 × 2 = ",
+                    {
+                      "type": "strong",
+                      "children": [
+                        "64 addresses"
+                      ]
+                    },
+                    ". You can count by doubling: 2, 4, 8, 16, 32, 64."
+                  ]
+                }
+              ]
+            }
+          ],
+          "variant": "lesson-step"
+        },
+        {
+          "type": "group",
+          "children": [
+            {
+              "type": "span",
+              "children": [
+                "3"
+              ],
+              "variant": "step-number"
+            },
+            {
+              "type": "group",
+              "children": [
+                {
+                  "type": "heading",
+                  "children": [
+                    "Find the block containing 42"
+                  ]
+                },
+                {
+                  "type": "paragraph",
+                  "children": [
+                    "For this /26, the first three octets stay fixed. The last octet is divided into blocks of 64: ",
+                    {
+                      "type": "strong",
+                      "children": [
+                        "0–63, 64–127, 128–191, 192–255"
+                      ]
+                    },
+                    ". The number 42 is in 0–63, so the network is ",
+                    {
+                      "type": "strong",
+                      "children": [
+                        "192.168.10.0"
+                      ]
+                    },
+                    "."
+                  ]
+                }
+              ]
+            }
+          ],
+          "variant": "lesson-step"
+        },
+        {
+          "type": "group",
+          "children": [
+            {
+              "type": "span",
+              "children": [
+                "4"
+              ],
+              "variant": "step-number"
+            },
+            {
+              "type": "group",
+              "children": [
+                {
+                  "type": "heading",
+                  "children": [
+                    "Find the broadcast address"
+                  ]
+                },
+                {
+                  "type": "paragraph",
+                  "children": [
+                    "The next network starts at .64. Step back one address: ",
+                    {
+                      "type": "strong",
+                      "children": [
+                        "192.168.10.63"
+                      ]
+                    },
+                    " is the broadcast address of this block."
+                  ]
+                }
+              ]
+            }
+          ],
+          "variant": "lesson-step"
+        },
+        {
+          "type": "group",
+          "children": [
+            {
+              "type": "span",
+              "children": [
+                "5"
+              ],
+              "variant": "step-number"
+            },
+            {
+              "type": "group",
+              "children": [
+                {
+                  "type": "heading",
+                  "children": [
+                    "Leave the endpoints out of the host range"
+                  ]
+                },
+                {
+                  "type": "paragraph",
+                  "children": [
+                    "For this conventional subnet, .0 identifies the network and .63 is broadcast. Hosts run from ",
+                    {
+                      "type": "strong",
+                      "children": [
+                        "192.168.10.1 to 192.168.10.62"
+                      ]
+                    },
+                    ". That gives ",
+                    {
+                      "type": "strong",
+                      "children": [
+                        "64 − 2 = 62 usable hosts"
+                      ]
+                    },
+                    "."
+                  ]
+                }
+              ]
+            }
+          ],
+          "variant": "lesson-step"
+        },
+        {
+          "type": "group",
+          "children": [
+            {
+              "type": "span",
+              "children": [
+                "Network",
+                {
+                  "type": "strong",
+                  "children": [
+                    ".0"
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "span",
+              "children": [
+                "First host",
+                {
+                  "type": "strong",
+                  "children": [
+                    ".1"
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "span",
+              "children": [
+                "Last host",
+                {
+                  "type": "strong",
+                  "children": [
+                    ".62"
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "span",
+              "children": [
+                "Broadcast",
+                {
+                  "type": "strong",
+                  "children": [
+                    ".63"
+                  ]
+                }
+              ]
+            }
+          ],
+          "variant": "answer-strip"
+        },
+        {
+          "type": "paragraph",
+          "children": [
+            "The block-size shortcut must follow the octet where the mask changes. A /20 changes in the third octet, not the fourth. And /31, /32 and IPv6 need their own host-count rules."
+          ],
+          "variant": "note"
+        },
+        {
+          "type": "paragraph",
+          "children": [
+            "Standard behind the method: ",
+            {
+              "type": "link",
+              "children": [
+                "RFC 4632 — CIDR"
+              ],
+              "href": "https://www.rfc-editor.org/info/rfc4632/"
+            },
+            "."
+          ],
+          "variant": "reference"
+        }
+      ]
+    },
+    {
+      "id": "bits-bytes-and-powers-of-two",
+      "title": "Bits, bytes and powers of two",
+      "keywords": "binary beginner maths octet 128 64 32",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "children": [
+            "A ",
+            {
+              "type": "strong",
+              "children": [
+                "bit"
+              ]
+            },
+            " is a single 0 or 1. Eight bits form a byte. In an IPv4 address, each of the four dotted numbers is an 8-bit group, also called an ",
+            {
+              "type": "strong",
+              "children": [
+                "octet"
+              ]
+            },
+            "."
+          ]
+        },
+        {
+          "type": "heading",
+          "children": [
+            "Why does an octet stop at 255?"
+          ]
+        },
+        {
+          "type": "paragraph",
+          "children": [
+            "Eight bits give 2⁸ = 256 different combinations. Counting starts at zero, so the values are 0 through 255."
+          ]
+        },
+        {
+          "type": "group",
+          "children": [
+            "Bit weights: 128  64  32  16   8   4   2   1\nBinary:        0   0   1   0   1   0   1   0\nValue:                   32 + 8 + 2 = 42"
+          ],
+          "variant": "calculation"
+        },
+        {
+          "type": "heading",
+          "children": [
+            "Convert 42 to binary by hand"
+          ]
+        },
+        {
+          "type": "ordered-list",
+          "children": [
+            {
+              "type": "item",
+              "children": [
+                "128 and 64 are too large: write 0, 0."
+              ]
+            },
+            {
+              "type": "item",
+              "children": [
+                "Take 32, leaving 10: write 1."
+              ]
+            },
+            {
+              "type": "item",
+              "children": [
+                "16 is too large: write 0."
+              ]
+            },
+            {
+              "type": "item",
+              "children": [
+                "Take 8, leaving 2: write 1."
+              ]
+            },
+            {
+              "type": "item",
+              "children": [
+                "4 is too large: write 0."
+              ]
+            },
+            {
+              "type": "item",
+              "children": [
+                "Take 2, leaving 0: write 1."
+              ]
+            },
+            {
+              "type": "item",
+              "children": [
+                "No 1 remains: write 0."
+              ]
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "children": [
+            "The result is ",
+            {
+              "type": "inline-code",
+              "children": [
+                "00101010"
+              ]
+            },
+            ". To read binary, add the weights under the 1s. To count combinations, double once per bit."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "from-prefix-to-subnet-mask",
+      "title": "From prefix to subnet mask",
+      "keywords": "binary AND wildcard dotted decimal /26",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "children": [
+            "A subnet mask marks network bits with 1 and host bits with 0. A /26 means 26 leading 1s, followed by 6 zeros."
+          ]
+        },
+        {
+          "type": "group",
+          "children": [
+            "11111111.11111111.11111111.11000000\n   255  .   255  .   255  .   192"
+          ],
+          "variant": "calculation"
+        },
+        {
+          "type": "paragraph",
+          "children": [
+            "The last octet is 128 + 64 = 192. The mask is ",
+            {
+              "type": "strong",
+              "children": [
+                "255.255.255.192"
+              ]
+            },
+            ". Its wildcard is the per-octet complement: 255 minus each mask octet, giving ",
+            {
+              "type": "strong",
+              "children": [
+                "0.0.0.63"
+              ]
+            },
+            "."
+          ]
+        },
+        {
+          "type": "heading",
+          "children": [
+            "The quick boundary trick"
+          ]
+        },
+        {
+          "type": "paragraph",
+          "children": [
+            "Subtract the changing mask octet from 256: ",
+            {
+              "type": "strong",
+              "children": [
+                "256 − 192 = 64"
+              ]
+            },
+            ". Network boundaries occur every 64 in that octet."
+          ]
+        },
+        {
+          "type": "heading",
+          "children": [
+            "Why does address AND mask work?"
+          ]
+        },
+        {
+          "type": "paragraph",
+          "children": [
+            "AND returns 1 only when both input bits are 1. The mask keeps network bits and clears host bits. For .42 in this example:"
+          ]
+        },
+        {
+          "type": "group",
+          "children": [
+            "Address: 00101010  (42)\nMask:    11000000  (192)\nAND:     00000000  (0)"
+          ],
+          "variant": "calculation"
+        },
+        {
+          "type": "paragraph",
+          "children": [
+            "A valid CIDR mask has a continuous run of 1s, then only 0s. You cannot put another network bit after the host bits start."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cross-an-octet-boundary-20",
+      "title": "Cross an octet boundary: /20",
+      "keywords": "third octet 172.16 4096 larger network calculate",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "children": [
+            "Take ",
+            {
+              "type": "inline-code",
+              "children": [
+                "172.16.37.19/20"
+              ]
+            },
+            ". The same method works, but the boundary is in the third octet."
+          ]
+        },
+        {
+          "type": "ordered-list",
+          "children": [
+            {
+              "type": "item",
+              "children": [
+                {
+                  "type": "strong",
+                  "children": [
+                    "Host bits:"
+                  ]
+                },
+                " 32 − 20 = 12."
+              ]
+            },
+            {
+              "type": "item",
+              "children": [
+                {
+                  "type": "strong",
+                  "children": [
+                    "Addresses:"
+                  ]
+                },
+                " 2¹² = 4,096."
+              ]
+            },
+            {
+              "type": "item",
+              "children": [
+                {
+                  "type": "strong",
+                  "children": [
+                    "Mask:"
+                  ]
+                },
+                " 255.255.240.0. In the third octet, four network bits give 128 + 64 + 32 + 16 = 240."
+              ]
+            },
+            {
+              "type": "item",
+              "children": [
+                {
+                  "type": "strong",
+                  "children": [
+                    "Block step:"
+                  ]
+                },
+                " 256 − 240 = 16 in the third octet."
+              ]
+            },
+            {
+              "type": "item",
+              "children": [
+                {
+                  "type": "strong",
+                  "children": [
+                    "Locate 37:"
+                  ]
+                },
+                " the third-octet blocks start at 0, 16, 32, 48… so 37 belongs to 32–47."
+              ]
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "children": [
+            "Network:   172.16.32.0/20\nNext block: 172.16.48.0/20\nBroadcast: 172.16.47.255\nHosts:     172.16.32.1–172.16.47.254\nUsable:    4,096 − 2 = 4,094"
+          ],
+          "variant": "calculation"
+        },
+        {
+          "type": "paragraph",
+          "children": [
+            "The last octet varies from 0 to 255 inside this block. An address ending in .0 or .255 is not automatically a network or broadcast address; the prefix determines its role."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "choose-a-prefix-for-host-capacity",
+      "title": "Choose a prefix for host capacity",
+      "keywords": "required hosts 50 100 size growth gateway",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "children": [
+            "For a conventional IPv4 LAN, choose the smallest power of two that covers the requested hosts plus the network and broadcast addresses."
+          ]
+        },
+        {
+          "type": "heading",
+          "children": [
+            "Example: 50 host addresses"
+          ]
+        },
+        {
+          "type": "ordered-list",
+          "children": [
+            {
+              "type": "item",
+              "children": [
+                "Add the two reserved endpoints: 50 + 2 = 52."
+              ]
+            },
+            {
+              "type": "item",
+              "children": [
+                "Count powers of two: 2, 4, 8, 16, 32, 64."
+              ]
+            },
+            {
+              "type": "item",
+              "children": [
+                "32 is too small; 64 fits. 64 = 2⁶, so you need 6 host bits."
+              ]
+            },
+            {
+              "type": "item",
+              "children": [
+                "Prefix = 32 − 6 = ",
+                {
+                  "type": "strong",
+                  "children": [
+                    "/26"
+                  ]
+                },
+                "."
+              ]
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "children": [
+            "/27 → 32 total → 30 usable → too small\n/26 → 64 total → 62 usable → fits 50"
+          ],
+          "variant": "calculation"
+        },
+        {
+          "type": "paragraph",
+          "children": [
+            "Include router interfaces, printers and other devices in the host requirement. If growth needs 75 hosts, 64 total is insufficient; choose /25 for 126 conventional usable hosts."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "children": [
+            "This is ordinary IPv4 LAN planning. /31 point-to-point links and cloud-provider reservation policies need different capacity rules."
+          ],
+          "variant": "note"
+        }
+      ]
+    },
+    {
+      "id": "split-a-network-into-equal-parts",
+      "title": "Split a network into equal parts",
+      "keywords": "FLSM subdivision four subnets /24 /26",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "children": [
+            "Every extra prefix bit cuts a block in half. One extra bit gives two child blocks; two extra bits give four."
+          ]
+        },
+        {
+          "type": "heading",
+          "children": [
+            "Example: split 192.168.10.0/24 into four"
+          ]
+        },
+        {
+          "type": "paragraph",
+          "children": [
+            "Four = 2², so borrow 2 more bits for the network. The child prefix is ",
+            {
+              "type": "strong",
+              "children": [
+                "24 + 2 = /26"
+              ]
+            },
+            ". Each child has 64 addresses."
+          ]
+        },
+        {
+          "type": "group",
+          "children": [
+            "192.168.10.0/26   → .0–.63\n192.168.10.64/26  → .64–.127\n192.168.10.128/26 → .128–.191\n192.168.10.192/26 → .192–.255"
+          ],
+          "variant": "calculation"
+        },
+        {
+          "type": "paragraph",
+          "children": [
+            "Each has 62 conventional usable host addresses. You keep the same total address space, but splitting introduces additional network/broadcast endpoints. Check that your applications have enough host capacity after the split."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "glossary-and-common-mistakes",
+      "title": "Glossary and common mistakes",
+      "keywords": "CIDR subnet prefix gateway broadcast netmask notation errors",
+      "blocks": [
+        {
+          "type": "heading",
+          "children": [
+            "Subnet / prefix"
+          ]
+        },
+        {
+          "type": "paragraph",
+          "children": [
+            "A contiguous, aligned address block. The number after / says how many leading bits identify it."
+          ]
+        },
+        {
+          "type": "heading",
+          "children": [
+            "Network address"
+          ]
+        },
+        {
+          "type": "paragraph",
+          "children": [
+            "The start of the block, found by setting all host bits to zero."
+          ]
+        },
+        {
+          "type": "heading",
+          "children": [
+            "Broadcast"
+          ]
+        },
+        {
+          "type": "paragraph",
+          "children": [
+            "For a conventional IPv4 subnet, the address with every host bit set to one. IPv6 has no broadcast."
+          ]
+        },
+        {
+          "type": "heading",
+          "children": [
+            "Gateway"
+          ]
+        },
+        {
+          "type": "paragraph",
+          "children": [
+            "A router used to reach destinations via another network. A subnet calculator cannot infer the configured gateway from the address and prefix alone. It is not necessarily the first host."
+          ]
+        },
+        {
+          "type": "heading",
+          "children": [
+            "Common mistakes"
+          ]
+        },
+        {
+          "type": "list",
+          "children": [
+            {
+              "type": "item",
+              "children": [
+                "Subtracting two from every address count, including IPv6 and /31."
+              ]
+            },
+            {
+              "type": "item",
+              "children": [
+                "Treating every .0 as a network address and every .255 as broadcast."
+              ]
+            },
+            {
+              "type": "item",
+              "children": [
+                "Guessing a prefix from an old class A/B/C label."
+              ]
+            },
+            {
+              "type": "item",
+              "children": [
+                "Calling a covering supernet an exact aggregation."
+              ]
+            },
+            {
+              "type": "item",
+              "children": [
+                "Assuming an ICMP timeout means the device is offline."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "understand-an-ipv4-subnet",
+      "title": "Understand an IPv4 subnet",
+      "keywords": "calculator mask broadcast CIDR hosts",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "children": [
+            "A prefix tells you how many bits identify the network. An IPv4 address has 32 bits. With ",
+            {
+              "type": "inline-code",
+              "children": [
+                "/26"
+              ]
+            },
+            ", 26 identify the network and 6 remain for addresses inside it."
+          ]
+        },
+        {
+          "type": "heading",
+          "children": [
+            "Example: 192.168.10.42/26"
+          ]
+        },
+        {
+          "type": "group",
+          "children": [
+            "Address count = 2⁶ = 64\nNetwork = 192.168.10.0/26\nBroadcast = 192.168.10.63\nHost range = 192.168.10.1–192.168.10.62\nConventional usable hosts = 64 − 2 = 62"
+          ],
+          "variant": "calculation"
+        },
+        {
+          "type": "heading",
+          "children": [
+            "Read the result"
+          ]
+        },
+        {
+          "type": "paragraph",
+          "children": [
+            "The entered address is 42 addresses after the network boundary. The next /26 begins at ",
+            {
+              "type": "inline-code",
+              "children": [
+                "192.168.10.64"
+              ]
+            },
+            ". The /31 and /32 cases follow different rules."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "children": [
+            "Online reference: ",
+            {
+              "type": "link",
+              "children": [
+                "RFC 4632 — CIDR"
+              ],
+              "href": "https://www.rfc-editor.org/info/rfc4632/"
+            }
+          ],
+          "variant": "reference"
+        }
+      ]
+    },
+    {
+      "id": "plan-with-vlsm",
+      "title": "Plan with VLSM",
+      "keywords": "split allocation host requirements",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "children": [
+            "Variable Length Subnet Masking assigns differently sized blocks to networks with different capacity needs. Start with the largest requirement so that small allocations do not fragment the available space."
+          ]
+        },
+        {
+          "type": "heading",
+          "children": [
+            "Example: three networks inside 192.168.10.0/24"
+          ]
+        },
+        {
+          "type": "group",
+          "children": [
+            "Office: 100 hosts → 192.168.10.0/25 (126 usable)\nVoice: 50 hosts → 192.168.10.128/26 (62 usable)\nLab: 20 hosts → 192.168.10.192/27 (30 usable)\nRemaining: 192.168.10.224/27"
+          ],
+          "variant": "calculation"
+        },
+        {
+          "type": "heading",
+          "children": [
+            "Check before allocating"
+          ]
+        },
+        {
+          "type": "paragraph",
+          "children": [
+            "These counts use conventional IPv4 network and broadcast reservations. Include gateways and any spare capacity in your requirement. A cloud provider may reserve additional addresses."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "children": [
+            "Background: ",
+            {
+              "type": "link",
+              "children": [
+                "CIDR address allocation and aggregation"
+              ],
+              "href": "https://www.rfc-editor.org/info/rfc4632/"
+            }
+          ],
+          "variant": "reference"
+        }
+      ]
+    },
+    {
+      "id": "use-31-and-32-correctly",
+      "title": "Use /31 and /32 correctly",
+      "keywords": "point to point host route edge cases",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "children": [
+            "The usual “subtract two” formula is not universal. A /31 on a point-to-point link uses both addresses. A /32 identifies one address, commonly as a host route."
+          ]
+        },
+        {
+          "type": "heading",
+          "children": [
+            "Example: a point-to-point link"
+          ]
+        },
+        {
+          "type": "group",
+          "children": [
+            "192.0.2.10/31\nEndpoint A = 192.0.2.10\nEndpoint B = 192.0.2.11\nDirected broadcast = Not applicable"
+          ],
+          "variant": "calculation"
+        },
+        {
+          "type": "paragraph",
+          "children": [
+            "Both ends must support /31 operation. A calculator describes the address block; it does not verify how the actual link is configured."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "children": [
+            "Online reference: ",
+            {
+              "type": "link",
+              "children": [
+                "RFC 3021 — IPv4 point-to-point links"
+              ],
+              "href": "https://www.rfc-editor.org/info/rfc3021/"
+            }
+          ],
+          "variant": "reference"
+        }
+      ]
+    },
+    {
+      "id": "understand-ipv6-prefixes",
+      "title": "Understand IPv6 prefixes",
+      "keywords": "128 127 64 address format",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "children": [
+            "IPv6 addresses are 128 bits wide. IPv6 has no broadcast address, so its capacity display must not subtract two as though it were IPv4."
+          ]
+        },
+        {
+          "type": "heading",
+          "children": [
+            "Example: divide a /48 into /64s"
+          ]
+        },
+        {
+          "type": "group",
+          "children": [
+            "Parent = 2001:db8:1234::/48\nChild prefix = /64\nNumber of child prefixes = 2¹⁶ = 65,536\nAddresses in each /64 = 2⁶⁴"
+          ],
+          "variant": "calculation"
+        },
+        {
+          "type": "paragraph",
+          "children": [
+            "This is address-space capacity, not a count of discovered devices or a promise that every address has the same assignability. Link roles and reserved addresses matter. The 2001:db8::/32 prefix is used for documentation."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "children": [
+            "Online references: ",
+            {
+              "type": "link",
+              "children": [
+                "IPv6 addressing"
+              ],
+              "href": "https://www.rfc-editor.org/rfc/rfc4291.html"
+            },
+            " and ",
+            {
+              "type": "link",
+              "children": [
+                "IPv6 text formatting"
+              ],
+              "href": "https://www.rfc-editor.org/rfc/rfc5952.html"
+            },
+            "."
+          ],
+          "variant": "reference"
+        }
+      ]
+    },
+    {
+      "id": "ipv6-127-and-128-in-practice",
+      "title": "IPv6 /127 and /128 in practice",
+      "keywords": "RFC 6164 point to point single address endpoint",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "children": [
+            "IPv6 has no broadcast address. On inter-router point-to-point links, a /127 contains two endpoint addresses. RFC 6164 specifies this use and disables Subnet-Router anycast for the /127 link."
+          ]
+        },
+        {
+          "type": "heading",
+          "children": [
+            "Example: two router interfaces"
+          ]
+        },
+        {
+          "type": "group",
+          "children": [
+            "Network: 2001:db8::10/127\nEndpoint A: 2001:db8::10\nEndpoint B: 2001:db8::11\nTotal addresses: 2\nBroadcast: Not applicable"
+          ],
+          "variant": "calculation"
+        },
+        {
+          "type": "paragraph",
+          "children": [
+            "A /128 identifies one address, such as ",
+            {
+              "type": "inline-code",
+              "children": [
+                "2001:db8::10/128"
+              ]
+            },
+            ". Neither case uses IPv4’s minus-two formula."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "children": [
+            "This is a point-to-point link example, not advice to replace ordinary IPv6 LAN /64s with /127s. The prefix math and the link’s configuration requirements are different questions."
+          ],
+          "variant": "note"
+        },
+        {
+          "type": "paragraph",
+          "children": [
+            {
+              "type": "link",
+              "children": [
+                "RFC 6164 — IPv6 /127 inter-router links"
+              ],
+              "href": "https://www.rfc-editor.org/rfc/rfc6164.html"
+            }
+          ],
+          "variant": "reference"
+        }
+      ]
+    },
+    {
+      "id": "the-0-boundary-and-exact-counts",
+      "title": "The /0 boundary and exact counts",
+      "keywords": "default route overflow address capacity large IPv6 128",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "children": [
+            "A /0 prefix fixes no network bits, so it describes the entire address family. In routing it can be used as a default route. It does not mean that every address can be assigned to hosts."
+          ]
+        },
+        {
+          "type": "heading",
+          "children": [
+            "Exact capacity"
+          ]
+        },
+        {
+          "type": "group",
+          "children": [
+            "IPv4 0.0.0.0/0: 2^32 = 4,294,967,296 addresses\nIPv6 ::/0: 2^128 = 340,282,366,920,938,463,463,374,607,431,768,211,456 addresses"
+          ],
+          "variant": "calculation"
+        },
+        {
+          "type": "paragraph",
+          "children": [
+            "A count includes the number of values, not just the highest address. IPv6’s highest address fits in 128 bits; the count 2^128 needs one more bit. The tool must display it exactly and must never try to list every host."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "children": [
+            "The default route has no previous or next same-size subnet. Arithmetic bounds are not proof of reachability or assignability; the full range includes special-purpose addresses."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "input-errors",
+      "title": "Read and correct address input errors",
+      "keywords": "validation leading zeros literal mask scope zone port CIDR prefix input errors",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "children": [
+            "An address tells us where; a prefix tells us how much of the address identifies the network. The proposed calculator requires both. It never guesses a prefix from an old address class or looks up a hostname."
+          ]
+        },
+        {
+          "type": "group",
+          "children": [
+            "Accepted: 192.168.10.42/26\nAlso accepted: address 192.168.10.42 with mask 255.255.255.192\nCorrect 192.168.010.42 to 192.168.10.42\nCorrect 255.0.255.0 to an intended contiguous mask\n192.168.10.42 alone still needs a prefix or mask"
+          ],
+          "variant": "calculation"
+        },
+        {
+          "type": "paragraph",
+          "children": [
+            "IPv4 uses four decimal octets from 0 to 255. Leading zeros, hexadecimal and shortened forms are rejected to avoid disagreement between parsers. Mask bits must be consecutive ones followed by consecutive zeros. A wildcard is a different kind of mask and does not belong in the subnet-mask field."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "children": [
+            "For prefix calculations, enter a plain IPv6 address such as fe80::1 and an explicit prefix. A zone such as %12 identifies an interface for communication; it is not part of subnet arithmetic. The first calculator rejects scoped or bracketed endpoints and ports with an explanation. IPv4-mapped IPv6 remains an IPv6 address."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "children": [
+            "In the proposed app, incomplete or invalid input makes derived results unavailable. Correct the field before copying or exporting; an old answer must never appear current."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "children": [
+            {
+              "type": "link",
+              "children": [
+                "IPv6 addressing syntax — RFC 4291"
+              ],
+              "href": "https://www.rfc-editor.org/rfc/rfc4291.html"
+            }
+          ],
+          "variant": "reference"
+        }
+      ]
+    },
+    {
+      "id": "pinned-vlsm",
+      "title": "Plan around pinned networks and gaps",
+      "keywords": "VLSM pinned reserved fragmentation contiguous aligned deterministic allocation partial",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "children": [
+            "A free-address total does not guarantee a requested subnet will fit. The space must also form one correctly aligned block. Existing assignments and pins must remain stable while new requirements are added."
+          ]
+        },
+        {
+          "type": "group",
+          "children": [
+            "Parent: 192.0.2.0/24\nPinned: 192.0.2.64/26\nNew LAN for 100 hosts: 192.0.2.128/25 (126 conventional hosts)\nNew LAN for 50 hosts: 192.0.2.0/26 (62 conventional hosts)"
+          ],
+          "variant": "calculation"
+        },
+        {
+          "type": "paragraph",
+          "children": [
+            "Now pin both .64/26 and .192/26. The free space is .0/26 plus .128/26: 128 addresses in total. A 100-host LAN needs a /25, but neither gap holds one. The correct outcome is an unallocated request with a fragmentation explanation. Moving a pin would change an existing network and is never automatic."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "children": [
+            "The proposed planner handles larger requests first and uses the lowest aligned free location. Equal-size requests use stored insertion order, so sorting the table or renaming a row does not move networks. Ordinary Allocate preserves existing assignments; a separate reallocation preview is needed to repack movable rows."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "children": [
+            "If only some requests fit, show the full proposal and every unallocated reason. Applying a partial proposal requires an explicit action. Cancelling leaves the last completed plan intact."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "children": [
+            {
+              "type": "link",
+              "children": [
+                "Prefix aggregation and alignment — RFC 4632"
+              ],
+              "href": "https://www.rfc-editor.org/rfc/rfc4632.html"
+            }
+          ],
+          "variant": "reference"
+        }
+      ]
+    }
+  ]
+}

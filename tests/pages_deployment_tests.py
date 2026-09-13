@@ -29,6 +29,16 @@ class DeploymentTests(unittest.TestCase):
         verify_deployment(SITE_URL, digest, timeout, 5, fetch, now, wait)
         return requests, clock[0]
 
+    def test_pwa_artifact_is_verified_independently(self):
+        requested=[]
+        def fetch(url, timeout):
+            requested.append(url)
+            return b'worker'
+        verify_deployment(SITE_URL, hashlib.sha256(b'worker').hexdigest(), fetch=fetch, asset='app/sw.js')
+        self.assertTrue(requested[0].startswith(SITE_URL+'app/sw.js?verify='))
+        with self.assertRaises(ValueError):
+            verify_deployment(SITE_URL, '0'*64, fetch=fetch, asset='../other')
+
     def test_current_artifact_passes_without_wait(self):
         requests, elapsed = self.run_responses([b"current"])
         self.assertEqual((len(requests), elapsed), (1, 0))

@@ -4,16 +4,22 @@ on:
   push:
     branches: [main]
     paths:
-      - 'website-preview/dist/**'
-      - 'docs/help/**'
-      - 'scripts/build_help.py'
-      - 'scripts/build_seo.py'
-      - 'scripts/prepare_site.py'
-      - 'scripts/verify_deployed_site.py'
-      - 'tests/pages_deployment_tests.py'
-      - 'tests/distribution_tests.py'
-      - 'scripts/build_portable_zip.py'
-      - '.github/workflows/pages.yml'
+      - "website-preview/dist/**"
+      - "docs/help/**"
+      - "scripts/build_help.py"
+      - "scripts/build_seo.py"
+      - "scripts/prepare_site.py"
+      - "scripts/verify_deployed_site.py"
+      - "tests/pages_deployment_tests.py"
+      - "tests/distribution_tests.py"
+      - "scripts/build_portable_zip.py"
+      - "scripts/build_pwa.py"
+      - "scripts/package_pwa.py"
+      - "src/core/**"
+      - "src/web/**"
+      - "include/**"
+      - "tests/pwa/**"
+      - ".github/workflows/pages.yml"
   workflow_dispatch:
   # Release events only dispatch a main-branch run: direct release deployments
   # can report success while serving an old artifact (actions/deploy-pages#383).
@@ -47,10 +53,11 @@ jobs:
   build:
     if: github.repository == 'velocityeu/NetTools' && github.event_name != 'release' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-24.04
-    timeout-minutes: 15
+    timeout-minutes: 25
     outputs:
       source: ${{ steps.site.outputs.source }}
       release_sha256: ${{ steps.site.outputs.release_sha256 }}
+      pwa_sha256: ${{ steps.site.outputs.pwa_sha256 }}
     permissions:
       contents: read
       pages: read
@@ -62,6 +69,25 @@ jobs:
           persist-credentials: false
       - name: Check shared help generation
         run: python3 scripts/build_help.py --check
+      - name: Install pinned WebAssembly toolchain
+        run: |
+          git clone https://github.com/emscripten-core/emsdk.git "$RUNNER_TEMP/emsdk"
+          git -C "$RUNNER_TEMP/emsdk" checkout --detach 5eb0bde7585670252e8ba05e9d361627bffd08b5
+          "$RUNNER_TEMP/emsdk/emsdk" install 4.0.15
+          "$RUNNER_TEMP/emsdk/emsdk" activate 4.0.15
+          python3 -m pip install Pillow==12.3.0
+      - name: Build and test offline web app
+        run: |
+          source "$RUNNER_TEMP/emsdk/emsdk_env.sh"
+          python3 scripts/build_pwa.py
+          python3 tests/pwa/offline_packaging_tests.py
+          python3 scripts/package_pwa.py
+          node --test tests/pwa/*.test.mjs
+      - name: Verify Chromium and WebKit workflows
+        run: |
+          npm install --prefix out/pwa-test --save-exact playwright@1.63.0
+          node out/pwa-test/node_modules/playwright/cli.js install --with-deps chromium webkit
+          node tests/pwa/run-browser.cjs
       - name: Check crawlable lesson pages and sitemap
         run: python3 scripts/build_seo.py --check
       - name: Test deployed-site verification
@@ -75,6 +101,7 @@ jobs:
       - name: Record expected deployed release metadata
         id: site
         run: |
+          echo "pwa_sha256=$(sha256sum _site/app/sw.js | cut -d ' ' -f1)" >> "$GITHUB_OUTPUT"
           echo "source=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
           echo "release_sha256=$(sha256sum _site/release-data.json | cut -d ' ' -f1)" >> "$GITHUB_OUTPUT"
       - name: Read Pages configuration
@@ -112,3 +139,9 @@ jobs:
           SITE_URL: ${{ steps.deployment.outputs.page_url }}
           EXPECTED_SHA256: ${{ needs.build.outputs.release_sha256 }}
         run: python3 scripts/verify_deployed_site.py --url "$SITE_URL" --sha256 "$EXPECTED_SHA256" --timeout 600 --interval 15
+
+      - name: Verify the public PWA serves this app version
+        env:
+          SITE_URL: ${{ steps.deployment.outputs.page_url }}
+          EXPECTED_SHA256: ${{ needs.build.outputs.pwa_sha256 }}
+        run: python3 scripts/verify_deployed_site.py --url "$SITE_URL" --sha256 "$EXPECTED_SHA256" --asset app/sw.js --timeout 600 --interval 15

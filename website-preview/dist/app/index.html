@@ -1,0 +1,371 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width,initial-scale=1,viewport-fit=cover"
+    />
+    <meta name="theme-color" content="#f2f4f8" />
+    <meta
+      name="description"
+      content="Velocity NetTools: IPv4 and IPv6 subnet calculator, VLSM planner and public IP. Install for offline subnet calculations."
+    />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <link rel="canonical" href="https://velocityeu.github.io/NetTools/app/" />
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
+    <link rel="icon" href="icons/icon-192.png" />
+    <link rel="stylesheet" href="style.css" />
+    <title>Velocity NetTools — Web App</title>
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to workspace</a>
+    <header class="topbar">
+      <a href="../" class="brand"
+        ><img
+          src="icons/icon-192.png"
+          width="36"
+          height="36"
+          alt="Velocity EU"
+        /><span>Velocity <strong>NetTools</strong></span></a
+      ><span class="badge">Web app · Preview</span
+      ><button id="saved-top" class="quiet">Saved plans</button>
+    </header>
+    <aside class="sidebar">
+      <p class="eyebrow">YOUR NETWORK WORKSPACE</p>
+      <nav aria-label="Tools">
+        <button data-view="calculate" aria-current="page">
+          <span aria-hidden="true">⌗</span>Calculate</button
+        ><button data-view="plan"><span aria-hidden="true">▤</span>Plan</button
+        ><button data-view="public">
+          <span aria-hidden="true">◎</span>Public IP</button
+        ><button data-view="learn">
+          <span aria-hidden="true">▧</span>Learn
+        </button>
+      </nav>
+      <button id="saved-side" class="quiet">Saved plans</button
+      ><a href="https://www.velocity-eu.com/">By Velocity EU Inc</a>
+    </aside>
+    <main id="main">
+      <div id="notice" role="status" aria-live="polite"></div>
+      <div id="update-banner" class="banner" hidden>
+        <span
+          >A new version is ready. Your saved plans will remain on this
+          device.</span
+        ><button id="update-now">Update now</button
+        ><button id="update-later" class="quiet">Later</button>
+      </div>
+      <section id="view-calculate">
+        <div class="heading">
+          <div>
+            <p class="eyebrow">ADDRESS PLANNING</p>
+            <h1>Subnet calculator</h1>
+            <p>Understand every address in your network.</p>
+          </div>
+          <button id="calc-example" class="quiet">Load example</button>
+        </div>
+        <div class="workspace">
+          <form id="calc-form" class="card">
+            <h2>Network input</h2>
+            <div class="segmented" role="group" aria-label="Address family">
+              <button type="button" data-family="ipv4" aria-pressed="true">
+                IPv4</button
+              ><button type="button" data-family="ipv6" aria-pressed="false">
+                IPv6
+              </button>
+            </div>
+            <label for="address">IP address or CIDR</label
+            ><input
+              id="address"
+              placeholder="192.168.10.42/26"
+              autocomplete="off"
+              autocapitalize="none"
+              spellcheck="false"
+              maxlength="100"
+            />
+            <div class="field-pair">
+              <div>
+                <label for="prefix">Prefix length</label
+                ><input
+                  id="prefix"
+                  inputmode="numeric"
+                  placeholder="26"
+                  maxlength="3"
+                />
+              </div>
+              <span id="prefix-range" class="hint">0–32 network bits</span>
+            </div>
+            <details id="mask-details">
+              <summary>Use a subnet mask</summary>
+              <label for="mask">Contiguous IPv4 mask</label
+              ><input
+                id="mask"
+                placeholder="255.255.255.192"
+                autocomplete="off"
+                maxlength="15"
+              />
+            </details>
+            <p id="calc-error" class="error" role="alert"></p>
+            <div class="actions">
+              <button type="submit" class="primary">Calculate</button
+              ><button id="calc-clear" type="button" class="quiet">
+                Clear
+              </button>
+            </div>
+          </form>
+          <div class="card result-card">
+            <div class="result-heading">
+              <h2>Network result</h2>
+              <span id="calc-state" class="badge">Ready for input</span>
+            </div>
+            <div id="calc-results">
+              <p class="empty">
+                Enter an address and prefix, or load a worked example.
+              </p>
+            </div>
+            <div id="calc-actions" class="actions" hidden>
+              <button id="calc-copy">Copy result</button
+              ><button id="calc-share">Share</button
+              ><button id="calc-save">Save result</button>
+            </div>
+            <details id="maths" hidden>
+              <summary>Show the maths</summary>
+              <div id="maths-body"></div>
+            </details>
+          </div>
+        </div>
+      </section>
+      <section id="view-plan" hidden>
+        <div class="heading">
+          <div>
+            <p class="eyebrow">MAKE ROOM TO GROW</p>
+            <h1>Subnet planner</h1>
+            <p id="plan-state">New plan · Session only</p>
+          </div>
+          <button id="plan-new" class="quiet">New plan</button>
+        </div>
+        <div class="segmented plan-modes" role="group" aria-label="Plan mode">
+          <button data-mode="split" aria-pressed="true">Equal split</button
+          ><button data-mode="vlsm" aria-pressed="false">VLSM</button>
+        </div>
+        <div class="card">
+          <label for="parent">Parent network / prefix</label
+          ><input
+            id="parent"
+            placeholder="192.168.10.0/24"
+            autocomplete="off"
+            autocapitalize="none"
+            spellcheck="false"
+            maxlength="100"
+          />
+          <p class="hint">
+            For VLSM, enter an aligned network. IPv6 requirements use prefixes.
+          </p>
+          <div id="split-editor">
+            <label for="child">Child prefix</label
+            ><input
+              id="child"
+              inputmode="numeric"
+              placeholder="26"
+              maxlength="3"
+            />
+            <div class="actions">
+              <button id="split-run" class="primary">Split network</button
+              ><button id="split-example" class="quiet">
+                Load split example
+              </button>
+            </div>
+          </div>
+          <div id="vlsm-editor" hidden>
+            <div class="result-heading">
+              <h2>Requirements</h2>
+              <button id="add-request">Add requirement</button>
+            </div>
+            <p class="hint">
+              LAN host counts include router interfaces. Use point-to-point
+              explicitly for /31 links.
+            </p>
+            <div id="requirements"></div>
+            <button id="undo-delete" hidden>Undo removal</button>
+            <details id="advanced">
+              <summary>Advanced · pins and reservations</summary>
+              <p>
+                Set an assigned CIDR on a requirement to preserve it; pin it to
+                prevent movement. Reservations are excluded from allocation.
+              </p>
+              <div id="reservations"></div>
+              <button id="add-reservation">Add reservation</button>
+              <p>
+                <button id="reallocate">Reallocate unpinned</button>
+                <span class="hint">Review changes before applying.</span>
+              </p>
+            </details>
+            <div class="actions">
+              <button id="allocate" class="primary">Allocate preview</button
+              ><button id="vlsm-example" class="quiet">
+                Load VLSM example
+              </button>
+            </div>
+          </div>
+          <p id="plan-error" class="error" role="alert"></p>
+          <div class="actions">
+            <button id="save-draft" class="quiet">Save draft</button
+            ><button id="cancel-work" hidden>Cancel calculation</button>
+          </div>
+        </div>
+        <div id="plan-output" class="card" hidden>
+          <h2 id="plan-output-title">Allocation preview</h2>
+          <div id="plan-summary"></div>
+          <div id="plan-rows"></div>
+          <div id="split-pages" hidden>
+            <div class="actions">
+              <button id="split-first">First</button
+              ><button id="split-prev">Previous</button
+              ><button id="split-next">Next</button
+              ><button id="split-last">Last</button>
+            </div>
+            <label for="split-index">Jump to subnet (zero-based index)</label>
+            <div class="actions">
+              <input
+                id="split-index"
+                inputmode="numeric"
+                value="0"
+                maxlength="39"
+              /><button id="split-jump">Go</button>
+            </div>
+          </div>
+          <div class="actions">
+            <button id="apply" class="primary" hidden>Apply allocation</button
+            ><button id="plan-copy">Copy results</button
+            ><button id="plan-save">Save plan</button>
+          </div>
+        </div>
+      </section>
+      <section id="view-public" hidden>
+        <div class="heading">
+          <div>
+            <p class="eyebrow">YOUR CONNECTION</p>
+            <h1>Public IP</h1>
+            <p>
+              The address seen by ipify. VPNs, proxies and Private Relay can
+              affect it.
+            </p>
+          </div>
+        </div>
+        <div class="ip-grid">
+          <article class="card">
+            <p class="eyebrow">PUBLIC IPv4</p>
+            <div id="ip-ipv4"></div>
+          </article>
+          <article class="card">
+            <p class="eyebrow">PUBLIC IPv6</p>
+            <div id="ip-ipv6"></div>
+          </article>
+        </div>
+        <div class="actions">
+          <button id="ip-check" class="primary">Check both addresses</button
+          ><button id="ip-cancel" hidden>Cancel</button>
+        </div>
+        <div class="card">
+          <label class="switch-label"
+            ><input type="checkbox" id="ip-auto" />Check automatically on
+            launch</label
+          >
+          <p>
+            Optional. Each check sends an HTTPS request to
+            <a href="https://www.ipify.org/">ipify</a>, which sees your
+            connection’s public address. No background polling. Subnet
+            calculations remain on this device.
+          </p>
+          <p class="hint">
+            These are observations, not your PC’s local adapter addresses. A
+            failed IPv6 check does not prove IPv6 is unavailable.
+          </p>
+        </div>
+      </section>
+      <section id="view-learn" hidden>
+        <div class="heading">
+          <div>
+            <p class="eyebrow">LEARN. WORK IT OUT. CHECK IT.</p>
+            <h1>Field guide</h1>
+            <p>
+              Worked examples and a practical refresher, available offline after
+              caching.
+            </p>
+          </div>
+        </div>
+        <div class="card">
+          <label for="help-search">Find a lesson</label
+          ><input
+            id="help-search"
+            type="search"
+            placeholder="IPv6, VLSM, /31…"
+          />
+          <div id="help-topics"></div>
+        </div>
+        <div class="card">
+          <h2>Install &amp; updates</h2>
+          <p>
+            On iPhone or iPad, open this page in Safari, tap Share, then Add to
+            Home Screen. On supported desktop and Android browsers, use the
+            browser’s Install app option.
+          </p>
+          <p id="cache-status" role="status">Checking offline readiness…</p>
+          <p id="version">Web preview 0.1.0</p>
+          <p>
+            Updates are checked automatically on launch and when you return. A
+            downloaded update waits while you have unsaved work.
+          </p>
+          <button id="check-updates">Check for updates</button>
+          <button id="repair-cache">Repair offline cache</button>
+          <p>
+            Local storage can be cleared by the browser. Export important plans
+            as backups. This app has no cloud synchronisation.
+          </p>
+        </div>
+        <div class="card">
+          <h2>About Velocity NetTools</h2>
+          <p>
+            By <a href="https://www.velocity-eu.com/">Velocity EU Inc</a> · MIT
+            licence.
+          </p>
+          <p>One shared calculation core for Windows and the web.</p>
+          <div class="actions">
+            <a href="../">Learning centre &amp; Windows downloads</a
+            ><a href="../help/">Complete help</a
+            ><a href="https://github.com/velocityeu/NetTools">GitHub</a
+            ><a href="notices.txt">Licence &amp; runtime notices</a>
+          </div>
+        </div>
+      </section>
+    </main>
+    <dialog id="library">
+      <div class="result-heading">
+        <h2>Saved plans</h2>
+        <button id="library-close" aria-label="Close saved plans">Close</button>
+      </div>
+      <p>Saved on this device. Export a PWA backup to keep another copy.</p>
+      <label for="import-file">Import PWA plan backup</label
+      ><input id="import-file" type="file" accept=".json,application/json" />
+      <p id="library-error" class="error" role="alert"></p>
+      <div id="library-list"></div>
+    </dialog>
+    <dialog id="prompt-dialog">
+      <form method="dialog">
+        <h2 id="prompt-title"></h2>
+        <p id="prompt-text"></p>
+        <label for="prompt-name" id="prompt-label">Plan name</label
+        ><input id="prompt-name" maxlength="200" />
+        <div id="prompt-actions" class="actions"></div>
+      </form>
+    </dialog>
+    <noscript
+      ><p>
+        Enable JavaScript to use the calculator. The
+        <a href="../help/">complete help</a> remains available.
+      </p></noscript
+    >
+    <script type="module" src="app.mjs"></script>
+  </body>
+</html>

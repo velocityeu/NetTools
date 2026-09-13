@@ -95,3 +95,27 @@ python -m http.server 8765 --bind 127.0.0.1 --directory website-preview/dist
 [Product design](docs/design/product-design.md) · [Maths contract](docs/design/math-contract.md) · [Windows APIs](docs/design/windows-api-contract.md) · [Release pipeline](docs/design/release-pipeline.md) · [Publishing identity](docs/design/publishing-identity.md)
 
 MIT licensed. [Velocity EU Inc](https://www.velocity-eu.com/).
+
+## Installable web app
+
+[Open Velocity NetTools PWA](https://velocityeu.github.io/NetTools/app/) for IPv4/IPv6 calculation, equal splits, VLSM with pins/reservations, and optional ipify public-IP checks. Phone, tablet and desktop layouts share the native application's C++ arithmetic core compiled to WebAssembly.
+
+Add to Home Screen on iOS/iPadOS 17+; use Install app in supporting Android/desktop browsers. The first load requires internet. After Offline ready appears, calculations, planning and bundled help work offline. Plans are saved explicitly on this device; export PWA JSON backups for safekeeping. These backups are not Windows plan files.
+
+Updates are checked automatically on launch, foreground return and every 15 minutes while visible. All open app tabs must be idle with no unsaved changes before activation; otherwise an update prompt lets you continue working. No public-IP requests run until a manual check or explicit launch opt-in.
+
+### Web build and verification
+
+Install and activate Emscripten **4.0.15**, Python with **Pillow 12.3.0**, and Node.js. The SDK is a build dependency only.
+
+```sh
+python scripts/build_pwa.py
+python scripts/package_pwa.py
+node --test tests/pwa/*.test.mjs
+python tests/pwa/offline_packaging_tests.py
+npm install --prefix out/pwa-test --save-exact playwright@1.63.0
+node out/pwa-test/node_modules/playwright/cli.js install chromium webkit
+node tests/pwa/run-browser.cjs
+```
+
+Pages CI rebuilds the engine and offline cache, runs module and real-browser tests, and publishes the whole app alongside the learning centre. Native Windows compilation remains separate. Chromium/WebKit automation does not replace physical iPhone/iPad Home Screen testing; the web app is a preview while that device coverage is completed.

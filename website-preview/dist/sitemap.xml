@@ -2,6 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://velocityeu.github.io/NetTools/</loc></url>
   <url><loc>https://velocityeu.github.io/NetTools/help/</loc></url>
+  <url><loc>https://velocityeu.github.io/NetTools/app/</loc></url>
   <url><loc>https://velocityeu.github.io/NetTools/help/subnetting-by-hand-five-steps/</loc></url>
   <url><loc>https://velocityeu.github.io/NetTools/help/bits-bytes-and-powers-of-two/</loc></url>
   <url><loc>https://velocityeu.github.io/NetTools/help/from-prefix-to-subnet-mask/</loc></url>

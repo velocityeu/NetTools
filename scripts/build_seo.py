@@ -189,7 +189,7 @@ def outputs(data, output_dir=SITE):
     result[output_dir / 'help/index.html'] = shell(
         INDEX_TITLE, INDEX_DESCRIPTION, BASE + 'help/', body, crumbs, 1,
         graph(INDEX_TITLE, INDEX_DESCRIPTION, BASE + 'help/', crumbs, topics=topics))
-    locations = [BASE, BASE + 'help/'] + [topic_url(topic) for topic in topics]
+    locations = [BASE, BASE + 'help/', BASE + 'app/'] + [topic_url(topic) for topic in topics]
     result[output_dir / 'sitemap.xml'] = (
         '<?xml version="1.0" encoding="UTF-8"?>\n'
         '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
