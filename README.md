@@ -6,11 +6,11 @@
 
 **Clarity for every connection.**
 
-A portable native Windows toolkit and an engineer’s field guide.
+A portable native Windows toolkit, an installable web subnet planner and an engineer’s field guide.
 
 **By [Velocity EU Inc](https://www.velocity-eu.com/)**
 
-[Download previews](https://github.com/velocityeu/NetTools/releases) · [Learning centre](https://velocityeu.github.io/NetTools/) · [Help](docs/help/README.md) · [Report an issue](https://github.com/velocityeu/NetTools/issues)
+[Open web app](https://velocityeu.github.io/NetTools/app/) · [Download previews](https://github.com/velocityeu/NetTools/releases) · [Learning centre](https://velocityeu.github.io/NetTools/) · [Help](docs/help/README.md) · [Report an issue](https://github.com/velocityeu/NetTools/issues)
 
 </div>
 
@@ -19,6 +19,18 @@ A portable native Windows toolkit and an engineer’s field guide.
 ![Velocity NetTools native subnet calculator](docs/screenshots/subnet-calculator.png)
 
 *Actual native Windows development build, using the official corporate icon.*
+
+## Installable web app
+
+[Open Velocity NetTools PWA](https://velocityeu.github.io/NetTools/app/) for IPv4/IPv6 calculation, equal splits, VLSM with pins/reservations, and optional ipify public-IP checks. Phone, tablet and desktop layouts share the native application's C++ arithmetic core compiled to WebAssembly.
+
+Add to Home Screen on iOS/iPadOS 17+; use Install app in supporting Android/desktop browsers. The first load requires internet. After Offline ready appears, calculations, planning and bundled help work offline. Plans are saved explicitly on this device; export PWA JSON backups for safekeeping. These backups are not Windows plan files.
+
+Updates are checked automatically on launch, foreground return and every 15 minutes while visible. All open app tabs must be idle with no unsaved changes before activation; otherwise an update prompt lets you continue working. No public-IP requests run until a manual check or explicit launch opt-in.
+
+[Install and get started](https://velocityeu.github.io/NetTools/help/web-app-getting-started/) · [Worked examples and backups](https://velocityeu.github.io/NetTools/help/web-app-calculations-and-plans/) · [Offline, updates and public IP](https://velocityeu.github.io/NetTools/help/web-app-offline-updates-and-privacy/)
+
+For ping, traceroute, DNS lookup and local adapter inventory, use the Windows toolkit; these diagnostics are not included in the PWA.
 
 ## One executable, practical tools
 
@@ -52,7 +64,7 @@ is provisioned; archive packaging does not change Windows SmartScreen checks.
 
 ## Learn the method
 
-The [field guide](docs/help/README.md) and [learning centre](https://velocityeu.github.io/NetTools/) share the app’s 28 lessons: subnetting by hand, binary arithmetic, masks, VLSM, IPv6, address sets and diagnostic interpretation.
+The [field guide](docs/help/README.md) and [learning centre](https://velocityeu.github.io/NetTools/) share worked lessons: subnetting by hand, binary arithmetic, masks, VLSM, IPv6, address sets and diagnostic interpretation.
 
 For **192.168.10.42/26**:
 
@@ -82,7 +94,7 @@ Main-branch changes automatically build tested, versioned previews. Publication 
 
 Releases are immutable. SHA-256, a release manifest and build provenance accompany each executable. GitHub Pages refreshes the website and verifies the download bytes before displaying versioned links. Stable publication requires signing and a clean-machine compatibility check on the exact source commit.
 
-The app does not silently update itself. A new release becomes available on [GitHub Releases](https://github.com/velocityeu/NetTools/releases).
+The native Windows app does not silently update itself. A new release becomes available on [GitHub Releases](https://github.com/velocityeu/NetTools/releases).
 
 To preview the educational website locally:
 
@@ -93,16 +105,6 @@ python -m http.server 8765 --bind 127.0.0.1 --directory website-preview/dist
 ## Documentation
 
 [Product design](docs/design/product-design.md) · [Maths contract](docs/design/math-contract.md) · [Windows APIs](docs/design/windows-api-contract.md) · [Release pipeline](docs/design/release-pipeline.md) · [Publishing identity](docs/design/publishing-identity.md)
-
-MIT licensed. [Velocity EU Inc](https://www.velocity-eu.com/).
-
-## Installable web app
-
-[Open Velocity NetTools PWA](https://velocityeu.github.io/NetTools/app/) for IPv4/IPv6 calculation, equal splits, VLSM with pins/reservations, and optional ipify public-IP checks. Phone, tablet and desktop layouts share the native application's C++ arithmetic core compiled to WebAssembly.
-
-Add to Home Screen on iOS/iPadOS 17+; use Install app in supporting Android/desktop browsers. The first load requires internet. After Offline ready appears, calculations, planning and bundled help work offline. Plans are saved explicitly on this device; export PWA JSON backups for safekeeping. These backups are not Windows plan files.
-
-Updates are checked automatically on launch, foreground return and every 15 minutes while visible. All open app tabs must be idle with no unsaved changes before activation; otherwise an update prompt lets you continue working. No public-IP requests run until a manual check or explicit launch opt-in.
 
 ### Web build and verification
 
@@ -119,3 +121,5 @@ node tests/pwa/run-browser.cjs
 ```
 
 Pages CI rebuilds the engine and offline cache, runs module and real-browser tests, and publishes the whole app alongside the learning centre. Native Windows compilation remains separate. Chromium/WebKit automation does not replace physical iPhone/iPad Home Screen testing; the web app is a preview while that device coverage is completed.
+
+MIT licensed. [Velocity EU Inc](https://www.velocity-eu.com/).

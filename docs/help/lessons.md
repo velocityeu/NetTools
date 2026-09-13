@@ -625,3 +625,119 @@ RTT variation measures the mean absolute change between successful consecutive p
 Graph compression must retain timeout/error counts. Resizing or zooming the graph must not change statistics for the same observation window. Intermediate traceroute silence is missing hop responses, not proof of forwarding loss at that router.
 
 [RFC 3550 — the distinct RTP jitter definition](https://www.rfc-editor.org/rfc/rfc3550.html#section-6.4.1)
+
+---
+
+## 29. Web app: install and get started
+
+### Open or install
+
+Open https://velocityeu.github.io/NetTools/app/ while connected to the internet. Installation is optional: the tools also work in a regular browser tab. The web app is a development preview for iOS/iPadOS 17+ and current Android and desktop browsers.
+
+On iPhone or iPad, open the app in Safari, choose Share, then Add to Home Screen. On Android or desktop, use the browser’s Install app or Add to Home Screen option where available. Wording and location vary by browser.
+
+Open Learn and wait for Offline ready before relying on the app without a connection. Keep it open online until the complete offline files have downloaded.
+
+### Find your tools
+
+Calculate: enter an IPv4 or IPv6 address and prefix, inspect the network and follow the maths.
+
+Plan: divide a network equally or allocate different-sized networks with VLSM.
+
+Public IP: check the internet-facing IPv4 and IPv6 observations through the labelled ipify service.
+
+Learn: read bundled lessons, inspect offline status and check for updates.
+
+Saved plans: reopen named calculations and plans saved on this device.
+
+### Phone, tablet and desktop
+
+On a wide desktop the navigation sits beside the workspace; narrower windows use a horizontal or bottom navigation bar. Inputs and results adapt to the available width. Long result tables may scroll within their panel.
+
+### Choose web or Windows
+
+Use the PWA for subnet maths and planning. Use the portable Windows toolkit for local adapter addresses, ping, traceroute, DNS lookup, TCP checks, route and neighbour snapshots, HTTP/TLS inspection, Wake-on-LAN and MTU probing. These native diagnostics are not included in the PWA.
+
+[Open web app](https://velocityeu.github.io/NetTools/app/)
+
+[Web app: calculations and saved plans](https://velocityeu.github.io/NetTools/help/web-app-calculations-and-plans/)
+
+[Web app: offline, updates and public IP](https://velocityeu.github.io/NetTools/help/web-app-offline-updates-and-privacy/)
+
+---
+
+## 30. Web app: calculations and saved plans
+
+### Calculate an IPv4 subnet
+
+1. Open Calculate, select IPv4, enter 192.168.10.42/26 and choose Calculate.
+2. Check network 192.168.10.0/26, mask 255.255.255.192, broadcast 192.168.10.63 and conventional host range 192.168.10.1–192.168.10.62.
+3. There are 32 − 26 = 6 host bits, so 2^6 = 64 addresses and 62 conventional usable hosts. Expand the maths and additional details to follow the calculation.
+4. Use Save result to keep a named calculation, or Copy/Share to pass on its text. Unsaved inputs are session-only.
+
+### Calculate an IPv6 prefix
+
+Select IPv6 and calculate 2001:db8:1234:5678::abcd/64. The network is 2001:db8:1234:5678::/64, with 2^64 = 18,446,744,073,709,551,616 addresses. IPv6 has no broadcast address; do not apply the IPv4 subtract-two convention. The 2001:db8::/32 prefix is reserved for documentation.
+
+### Split a network equally
+
+1. Open Plan and choose Equal split. Use parent 192.168.10.0/24 and child prefix /26.
+2. The four networks are 192.168.10.0/26, 192.168.10.64/26, 192.168.10.128/26 and 192.168.10.192/26. Each has 64 addresses.
+3. For large splits, use the indexed pages and Jump control. Jump uses a zero-based subnet index.
+
+### Build a VLSM plan
+
+1. Choose VLSM with parent 192.168.10.0/24. Add conventional IPv4 LAN requirements for Office (50 hosts), Wi-Fi (25 hosts) and Lab (10 hosts).
+2. Choose Allocate preview. The required sizes are /26 (62 usable hosts), /27 (30) and /28 (14). They occupy 64 + 32 + 16 = 112 addresses before additional reservations.
+3. Review proposed networks and any movement, then choose Apply allocation. If requirements cannot fit, resolve the issue first; an incomplete allocation cannot be applied.
+4. Choose Save plan and supply a name. Use Save draft to keep incomplete requirements for later work.
+
+Pinned assignments retain a specific network; reservations exclude space from allocation. Preserve existing assignments when extending a plan, and review movement before reallocating unpinned networks. Choose point-to-point or host-route semantics explicitly for IPv4 /31 or /32. IPv6 requirements use prefix sizes rather than conventional IPv4 host counts.
+
+### Keep a backup
+
+Named plans are stored locally in this browser/device installation, with no account or cloud sync. Use JSON export/import to back them up and move them between PWA installations. Export before clearing browser data or changing devices: browser storage may be cleared or evicted. PWA JSON backups are not compatible with Windows application plan files.
+
+[Open web app](https://velocityeu.github.io/NetTools/app/)
+
+[Web app: install and get started](https://velocityeu.github.io/NetTools/help/web-app-getting-started/)
+
+[Web app: offline, updates and public IP](https://velocityeu.github.io/NetTools/help/web-app-offline-updates-and-privacy/)
+
+---
+
+## 31. Web app: offline, updates and public IP
+
+### Work offline
+
+After Learn shows Offline ready, subnet calculations, planning and bundled lessons work without internet. Public-IP checks and online reference links require a connection. The full website and Windows downloads are outside the app’s offline cache.
+
+### Automatic app updates
+
+The PWA checks for updates on launch, on returning to the foreground (checks are throttled to 15 minutes), and every 15 minutes while visible. New files download in the background. An update can activate automatically when all open app tabs are idle and have no unsaved changes.
+
+If work or a dialog prevents activation, the banner offers Update now or Later. Save your work first; Update now may ask you to discard changes or keep working. Save or close other app tabs with unsaved changes too. Learn → Check for updates requests a check manually. App-update checks do not periodically check your public IP.
+
+### Recover offline availability
+
+1. Reconnect and open Learn. Use Check for updates if a newer version may be available.
+2. Use Repair offline cache to verify and restore the complete offline files. If repair cannot finish, save your work, close other app tabs and reopen online.
+3. On the recovery page, try Retry online. Reset installation resets the service-worker registration without deleting saved plans. Browser Clear site data is different and can delete plans; export backups first.
+
+### Check your public IP
+
+1. Open Public IP. The provider is identified as ipify. Start a manual check, or explicitly opt in to checking on launch.
+2. Use Recheck for a fresh observation. IPv4 and IPv6 have separate outcomes and timestamps; there is no periodic public-IP polling.
+3. Read the status as well as the address. A failed refresh can leave a previous observation visible, labelled as previous. Failure of the IPv6 check does not prove your connection has no IPv6.
+
+Requests go over HTTPS to api.ipify.org and api6.ipify.org. The service sees the public address used for that connection. A VPN, proxy or Private Relay may change the observation. This is not your PC’s local adapter address.
+
+### Your data
+
+The app has no account, cloud plan sync, analytics or external fonts. Public-IP checks are optional. Copy/Share exports text; subnet inputs are not placed in share URLs.
+
+[Open web app](https://velocityeu.github.io/NetTools/app/)
+
+[Web app: install and get started](https://velocityeu.github.io/NetTools/help/web-app-getting-started/)
+
+[Web app: calculations and saved plans](https://velocityeu.github.io/NetTools/help/web-app-calculations-and-plans/)

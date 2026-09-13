@@ -23,3 +23,5 @@
 .planned-toolkit{padding-block:32px}.planned-toolkit h2{font-size:1.45rem;letter-spacing:-.02em}.planned-toolkit p{max-width:1000px;color:var(--muted)}
 
 .release-format-buttons{display:flex;flex-wrap:wrap;gap:10px;margin:14px 0}.release-card .release-format-buttons a{margin:0;white-space:normal;text-align:center;max-width:100%}
+
+.web-app-guide{padding-block:36px}.web-app-guide h2{font-size:1.8rem}.web-guide-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;margin-block:28px}.web-guide-grid article{padding:22px;background:var(--pale);border:1px solid var(--line);border-radius:6px;min-width:0}.web-guide-grid h3{font-size:1.15rem}.web-guide-grid p{font-size:.95rem}.web-guide-grid code{overflow-wrap:anywhere}@media(max-width:760px){.web-guide-grid{grid-template-columns:1fr;gap:14px}}

@@ -2,6 +2,16 @@
 
 Learn the method, follow an example, then check the answer. You do not need the Windows application to use these lessons.
 
+## Use the web app
+
+[Open the PWA](https://velocityeu.github.io/NetTools/app/) in a browser, or install it on your phone, tablet or desktop.
+
+- [Install and get started](https://velocityeu.github.io/NetTools/help/web-app-getting-started/)
+- [Calculate, split networks and save VLSM plans](https://velocityeu.github.io/NetTools/help/web-app-calculations-and-plans/)
+- [Offline use, automatic updates and public-IP privacy](https://velocityeu.github.io/NetTools/help/web-app-offline-updates-and-privacy/)
+
+These guides are also included in the [repository manual](lessons.md) and the PWA’s offline Learn section.
+
 ## Start here
 
 Read [the worked lessons](lessons.md). Begin with **Subnetting by hand: five steps**. If bits or powers of two are unfamiliar, read the next lesson before continuing.
@@ -25,7 +35,7 @@ Read [the worked lessons](lessons.md). Begin with **Subnetting by hand: five ste
 | Separate connection layers | Separate TCP connectivity from service health; Inspect HTTP and TLS without hiding failures |
 | Use network utilities accurately | Understand what Wake-on-LAN can prove; Calculate MTU probe sizes and interpret silence |
 
-The [learning centre](https://velocityeu.github.io/NetTools/) presents the same 28 lessons with search, navigation, a prefix reference table and a practice question. Both outputs are generated from [topics.json](topics.json) using [build_help.py](../../scripts/build_help.py). Edit that source and regenerate; do not maintain the webpage and Markdown lessons separately. The executable embeds these same lessons as searchable native help. Press F1 for the current tool, or browse Help for examples and online references.
+The [learning centre](https://velocityeu.github.io/NetTools/) presents the same shared lessons with search, navigation, a prefix reference table and a practice question. Both outputs are generated from [topics.json](topics.json) using [build_help.py](../../scripts/build_help.py). Edit that source and regenerate; do not maintain the webpage and Markdown lessons separately. The executable embeds these same lessons as searchable native help. Press F1 for the current tool, or browse Help for examples and online references.
 
 ## The pocket method
 
@@ -57,7 +67,7 @@ Find the network containing **192.168.5.77/27** before opening the answer.
 
 ## Documentation scope
 
-The tutorials are usable educational content. Application-specific command descriptions, error catalogues and F1 context mappings remain a design until the application behaviour is finalised. See [the complete help-system design](../design/help-and-about.md).
+The tutorials and web-app guides describe the current development preview. Windows-only tools and web-app features are identified separately; preview validation and device coverage are still in progress. See [the complete help-system design](../design/help-and-about.md).
 
 ## Primary references
 

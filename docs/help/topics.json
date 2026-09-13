@@ -1938,6 +1938,454 @@
           ]
         }
       ]
+    },
+    {
+      "id": "web-app-getting-started",
+      "title": "Web app: install and get started",
+      "keywords": "PWA install browser iPhone iPad Android desktop Home Screen quickstart Windows",
+      "blocks": [
+        {
+          "type": "heading",
+          "children": [
+            "Open or install"
+          ]
+        },
+        {
+          "type": "paragraph",
+          "children": [
+            "Open https://velocityeu.github.io/NetTools/app/ while connected to the internet. Installation is optional: the tools also work in a regular browser tab. The web app is a development preview for iOS/iPadOS 17+ and current Android and desktop browsers."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "children": [
+            "On iPhone or iPad, open the app in Safari, choose Share, then Add to Home Screen. On Android or desktop, use the browser’s Install app or Add to Home Screen option where available. Wording and location vary by browser."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "children": [
+            "Open Learn and wait for Offline ready before relying on the app without a connection. Keep it open online until the complete offline files have downloaded."
+          ]
+        },
+        {
+          "type": "heading",
+          "children": [
+            "Find your tools"
+          ]
+        },
+        {
+          "type": "paragraph",
+          "children": [
+            "Calculate: enter an IPv4 or IPv6 address and prefix, inspect the network and follow the maths."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "children": [
+            "Plan: divide a network equally or allocate different-sized networks with VLSM."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "children": [
+            "Public IP: check the internet-facing IPv4 and IPv6 observations through the labelled ipify service."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "children": [
+            "Learn: read bundled lessons, inspect offline status and check for updates."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "children": [
+            "Saved plans: reopen named calculations and plans saved on this device."
+          ]
+        },
+        {
+          "type": "heading",
+          "children": [
+            "Phone, tablet and desktop"
+          ]
+        },
+        {
+          "type": "paragraph",
+          "children": [
+            "On a wide desktop the navigation sits beside the workspace; narrower windows use a horizontal or bottom navigation bar. Inputs and results adapt to the available width. Long result tables may scroll within their panel."
+          ]
+        },
+        {
+          "type": "heading",
+          "children": [
+            "Choose web or Windows"
+          ]
+        },
+        {
+          "type": "paragraph",
+          "children": [
+            "Use the PWA for subnet maths and planning. Use the portable Windows toolkit for local adapter addresses, ping, traceroute, DNS lookup, TCP checks, route and neighbour snapshots, HTTP/TLS inspection, Wake-on-LAN and MTU probing. These native diagnostics are not included in the PWA."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "children": [
+            {
+              "type": "link",
+              "href": "https://velocityeu.github.io/NetTools/app/",
+              "children": [
+                "Open web app"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "children": [
+            {
+              "type": "link",
+              "href": "https://velocityeu.github.io/NetTools/help/web-app-calculations-and-plans/",
+              "children": [
+                "Web app: calculations and saved plans"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "children": [
+            {
+              "type": "link",
+              "href": "https://velocityeu.github.io/NetTools/help/web-app-offline-updates-and-privacy/",
+              "children": [
+                "Web app: offline, updates and public IP"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "web-app-calculations-and-plans",
+      "title": "Web app: calculations and saved plans",
+      "keywords": "PWA example IPv4 IPv6 equal split VLSM save draft apply allocation export import backup",
+      "blocks": [
+        {
+          "type": "heading",
+          "children": [
+            "Calculate an IPv4 subnet"
+          ]
+        },
+        {
+          "type": "ordered-list",
+          "children": [
+            {
+              "type": "item",
+              "children": [
+                "Open Calculate, select IPv4, enter 192.168.10.42/26 and choose Calculate."
+              ]
+            },
+            {
+              "type": "item",
+              "children": [
+                "Check network 192.168.10.0/26, mask 255.255.255.192, broadcast 192.168.10.63 and conventional host range 192.168.10.1–192.168.10.62."
+              ]
+            },
+            {
+              "type": "item",
+              "children": [
+                "There are 32 − 26 = 6 host bits, so 2^6 = 64 addresses and 62 conventional usable hosts. Expand the maths and additional details to follow the calculation."
+              ]
+            },
+            {
+              "type": "item",
+              "children": [
+                "Use Save result to keep a named calculation, or Copy/Share to pass on its text. Unsaved inputs are session-only."
+              ]
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "children": [
+            "Calculate an IPv6 prefix"
+          ]
+        },
+        {
+          "type": "paragraph",
+          "children": [
+            "Select IPv6 and calculate 2001:db8:1234:5678::abcd/64. The network is 2001:db8:1234:5678::/64, with 2^64 = 18,446,744,073,709,551,616 addresses. IPv6 has no broadcast address; do not apply the IPv4 subtract-two convention. The 2001:db8::/32 prefix is reserved for documentation."
+          ]
+        },
+        {
+          "type": "heading",
+          "children": [
+            "Split a network equally"
+          ]
+        },
+        {
+          "type": "ordered-list",
+          "children": [
+            {
+              "type": "item",
+              "children": [
+                "Open Plan and choose Equal split. Use parent 192.168.10.0/24 and child prefix /26."
+              ]
+            },
+            {
+              "type": "item",
+              "children": [
+                "The four networks are 192.168.10.0/26, 192.168.10.64/26, 192.168.10.128/26 and 192.168.10.192/26. Each has 64 addresses."
+              ]
+            },
+            {
+              "type": "item",
+              "children": [
+                "For large splits, use the indexed pages and Jump control. Jump uses a zero-based subnet index."
+              ]
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "children": [
+            "Build a VLSM plan"
+          ]
+        },
+        {
+          "type": "ordered-list",
+          "children": [
+            {
+              "type": "item",
+              "children": [
+                "Choose VLSM with parent 192.168.10.0/24. Add conventional IPv4 LAN requirements for Office (50 hosts), Wi-Fi (25 hosts) and Lab (10 hosts)."
+              ]
+            },
+            {
+              "type": "item",
+              "children": [
+                "Choose Allocate preview. The required sizes are /26 (62 usable hosts), /27 (30) and /28 (14). They occupy 64 + 32 + 16 = 112 addresses before additional reservations."
+              ]
+            },
+            {
+              "type": "item",
+              "children": [
+                "Review proposed networks and any movement, then choose Apply allocation. If requirements cannot fit, resolve the issue first; an incomplete allocation cannot be applied."
+              ]
+            },
+            {
+              "type": "item",
+              "children": [
+                "Choose Save plan and supply a name. Use Save draft to keep incomplete requirements for later work."
+              ]
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "children": [
+            "Pinned assignments retain a specific network; reservations exclude space from allocation. Preserve existing assignments when extending a plan, and review movement before reallocating unpinned networks. Choose point-to-point or host-route semantics explicitly for IPv4 /31 or /32. IPv6 requirements use prefix sizes rather than conventional IPv4 host counts."
+          ]
+        },
+        {
+          "type": "heading",
+          "children": [
+            "Keep a backup"
+          ]
+        },
+        {
+          "type": "paragraph",
+          "children": [
+            "Named plans are stored locally in this browser/device installation, with no account or cloud sync. Use JSON export/import to back them up and move them between PWA installations. Export before clearing browser data or changing devices: browser storage may be cleared or evicted. PWA JSON backups are not compatible with Windows application plan files."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "children": [
+            {
+              "type": "link",
+              "href": "https://velocityeu.github.io/NetTools/app/",
+              "children": [
+                "Open web app"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "children": [
+            {
+              "type": "link",
+              "href": "https://velocityeu.github.io/NetTools/help/web-app-getting-started/",
+              "children": [
+                "Web app: install and get started"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "children": [
+            {
+              "type": "link",
+              "href": "https://velocityeu.github.io/NetTools/help/web-app-offline-updates-and-privacy/",
+              "children": [
+                "Web app: offline, updates and public IP"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "web-app-offline-updates-and-privacy",
+      "title": "Web app: offline, updates and public IP",
+      "keywords": "PWA offline cache automatic update repair public IP ipify consent privacy recheck",
+      "blocks": [
+        {
+          "type": "heading",
+          "children": [
+            "Work offline"
+          ]
+        },
+        {
+          "type": "paragraph",
+          "children": [
+            "After Learn shows Offline ready, subnet calculations, planning and bundled lessons work without internet. Public-IP checks and online reference links require a connection. The full website and Windows downloads are outside the app’s offline cache."
+          ]
+        },
+        {
+          "type": "heading",
+          "children": [
+            "Automatic app updates"
+          ]
+        },
+        {
+          "type": "paragraph",
+          "children": [
+            "The PWA checks for updates on launch, on returning to the foreground (checks are throttled to 15 minutes), and every 15 minutes while visible. New files download in the background. An update can activate automatically when all open app tabs are idle and have no unsaved changes."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "children": [
+            "If work or a dialog prevents activation, the banner offers Update now or Later. Save your work first; Update now may ask you to discard changes or keep working. Save or close other app tabs with unsaved changes too. Learn → Check for updates requests a check manually. App-update checks do not periodically check your public IP."
+          ]
+        },
+        {
+          "type": "heading",
+          "children": [
+            "Recover offline availability"
+          ]
+        },
+        {
+          "type": "ordered-list",
+          "children": [
+            {
+              "type": "item",
+              "children": [
+                "Reconnect and open Learn. Use Check for updates if a newer version may be available."
+              ]
+            },
+            {
+              "type": "item",
+              "children": [
+                "Use Repair offline cache to verify and restore the complete offline files. If repair cannot finish, save your work, close other app tabs and reopen online."
+              ]
+            },
+            {
+              "type": "item",
+              "children": [
+                "On the recovery page, try Retry online. Reset installation resets the service-worker registration without deleting saved plans. Browser Clear site data is different and can delete plans; export backups first."
+              ]
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "children": [
+            "Check your public IP"
+          ]
+        },
+        {
+          "type": "ordered-list",
+          "children": [
+            {
+              "type": "item",
+              "children": [
+                "Open Public IP. The provider is identified as ipify. Start a manual check, or explicitly opt in to checking on launch."
+              ]
+            },
+            {
+              "type": "item",
+              "children": [
+                "Use Recheck for a fresh observation. IPv4 and IPv6 have separate outcomes and timestamps; there is no periodic public-IP polling."
+              ]
+            },
+            {
+              "type": "item",
+              "children": [
+                "Read the status as well as the address. A failed refresh can leave a previous observation visible, labelled as previous. Failure of the IPv6 check does not prove your connection has no IPv6."
+              ]
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "children": [
+            "Requests go over HTTPS to api.ipify.org and api6.ipify.org. The service sees the public address used for that connection. A VPN, proxy or Private Relay may change the observation. This is not your PC’s local adapter address."
+          ]
+        },
+        {
+          "type": "heading",
+          "children": [
+            "Your data"
+          ]
+        },
+        {
+          "type": "paragraph",
+          "children": [
+            "The app has no account, cloud plan sync, analytics or external fonts. Public-IP checks are optional. Copy/Share exports text; subnet inputs are not placed in share URLs."
+          ]
+        },
+        {
+          "type": "paragraph",
+          "children": [
+            {
+              "type": "link",
+              "href": "https://velocityeu.github.io/NetTools/app/",
+              "children": [
+                "Open web app"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "children": [
+            {
+              "type": "link",
+              "href": "https://velocityeu.github.io/NetTools/help/web-app-getting-started/",
+              "children": [
+                "Web app: install and get started"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "children": [
+            {
+              "type": "link",
+              "href": "https://velocityeu.github.io/NetTools/help/web-app-calculations-and-plans/",
+              "children": [
+                "Web app: calculations and saved plans"
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }
