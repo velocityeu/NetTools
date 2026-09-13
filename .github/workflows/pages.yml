@@ -13,6 +13,8 @@ on:
   workflow_dispatch:
   # A future publisher using GITHUB_TOKEN must explicitly dispatch this workflow
   # on main after publishing; token-created release events do not trigger it.
+  # github-pages must allow main (branch) and v[0-9]*.[0-9]*.[0-9]* (tag).
+  # Release events retain their tag ref even though checkout below uses main.
   release:
     types: [published]
 
