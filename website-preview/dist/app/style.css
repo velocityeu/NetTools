@@ -629,3 +629,359 @@ dialog::backdrop {
     scroll-behavior: auto !important;
   }
 }
+
+/* Desktop app frame: header and navigation share grid tracks; only main scrolls. */
+@media (min-width: 651px) {
+  :root {
+    font-size: 14px;
+  }
+  html,
+  body {
+    height: 100%;
+  }
+  body {
+    height: 100dvh;
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: 152px minmax(0, 1fr);
+    grid-template-rows: 52px minmax(0, 1fr);
+    grid-template-areas: "header header" "nav main";
+  }
+  .topbar {
+    grid-area: header;
+    position: relative;
+    height: 52px;
+    min-width: 0;
+    padding: 8px 16px;
+    gap: 16px;
+    z-index: 4;
+  }
+  .brand {
+    font-size: 15px;
+    gap: 8px;
+    white-space: nowrap;
+  }
+  .brand img {
+    width: 28px;
+    height: 28px;
+  }
+  .sidebar {
+    grid-area: nav;
+    position: relative;
+    inset: auto;
+    width: auto;
+    min-height: 0;
+    overflow: auto;
+    padding: 16px 10px;
+    gap: 16px;
+  }
+  .sidebar .eyebrow {
+    font-size: 9px;
+    letter-spacing: 0.06em;
+  }
+  .sidebar nav {
+    gap: 4px;
+  }
+  .sidebar nav button {
+    font-size: 13px;
+    padding: 8px 10px;
+    gap: 8px;
+  }
+  .sidebar > a {
+    font-size: 11px;
+  }
+  main {
+    grid-area: main;
+    min-width: 0;
+    min-height: 0;
+    overflow: auto;
+    overscroll-behavior: contain;
+    max-width: none;
+    margin: 0;
+    padding: 16px 20px 24px;
+    scrollbar-gutter: stable;
+  }
+  main > section,
+  main > .banner,
+  #notice {
+    max-width: 1440px;
+    margin-inline: auto;
+  }
+  h1 {
+    font-size: 24px;
+    letter-spacing: -0.025em;
+    line-height: 1.2;
+    margin: 0 0 4px;
+  }
+  h2 {
+    font-size: 15px;
+    margin-bottom: 12px;
+  }
+  p {
+    line-height: 1.45;
+    margin: 8px 0;
+  }
+  .heading {
+    margin-bottom: 14px;
+    gap: 12px;
+    min-width: 0;
+  }
+  .heading .eyebrow {
+    display: none;
+  }
+  .heading p {
+    font-size: 13px;
+  }
+  .heading > button {
+    flex-shrink: 0;
+  }
+  .workspace {
+    grid-template-columns: 280px minmax(0, 1fr);
+    gap: 16px;
+    align-items: stretch;
+  }
+  .workspace > .card {
+    margin-bottom: 0;
+  }
+  .card {
+    padding: 16px;
+    border-radius: 12px;
+    margin-bottom: 16px;
+  }
+  button {
+    min-height: 34px;
+    padding: 7px 12px;
+    font-size: 13px;
+    border-radius: 7px;
+  }
+  input,
+  select {
+    min-height: 36px;
+    padding: 8px 10px;
+    font-size: 14px;
+    border-radius: 7px;
+    min-width: 0;
+  }
+  label {
+    font-size: 12px;
+    margin: 12px 0 6px;
+  }
+  .segmented {
+    padding: 3px;
+    gap: 3px;
+    border-radius: 8px;
+  }
+  .segmented button {
+    min-height: 32px;
+    padding: 6px 12px;
+  }
+  .field-pair {
+    gap: 12px;
+  }
+  .field-pair > div {
+    width: 90px;
+  }
+  .field-pair .hint {
+    padding-bottom: 10px;
+  }
+  .actions {
+    gap: 8px;
+    margin-top: 12px;
+  }
+  .actions > button {
+    flex-grow: 0;
+  }
+  .result-heading {
+    margin-bottom: 10px;
+  }
+  .network-value {
+    font-size: 20px;
+    line-height: 1.3;
+    margin-bottom: 8px;
+  }
+  .result-row {
+    grid-template-columns: minmax(135px, 0.7fr) minmax(0, 1fr);
+    gap: 12px;
+    padding: 7px 0;
+    font-size: 13px;
+    line-height: 1.3;
+  }
+  .hint {
+    font-size: 12px;
+  }
+  details {
+    margin-top: 12px;
+    padding-top: 8px;
+  }
+  summary {
+    min-height: 30px;
+    line-height: 1.4;
+    font-size: 13px;
+  }
+  .badge {
+    font-size: 11px;
+    padding: 4px 7px;
+  }
+  .empty {
+    padding: 24px 0;
+  }
+  #notice {
+    margin-bottom: 12px;
+    padding: 9px 12px;
+    font-size: 13px;
+  }
+  .plan-modes {
+    margin-bottom: 12px;
+  }
+  #parent {
+    max-width: 560px;
+  }
+  #child {
+    max-width: 160px;
+  }
+  .requirement,
+  .reservation {
+    padding: 12px;
+    margin: 10px 0;
+  }
+  .requirement-fields {
+    grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) minmax(100px, 0.6fr);
+    gap: 12px;
+  }
+  .requirement .advanced-row {
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    gap: 12px;
+    margin-top: 10px;
+  }
+  .allocation-row {
+    padding: 10px 0;
+    font-size: 13px;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+  }
+  .ip-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+  }
+  .ip-grid .network-value {
+    min-height: 36px;
+  }
+  .ip-grid + .actions {
+    margin: 0 0 16px;
+  }
+  dialog {
+    max-height: calc(100dvh - 32px);
+    padding: 20px;
+  }
+  .lesson summary {
+    font-size: 14px;
+  }
+  .lesson table {
+    table-layout: fixed;
+  }
+  #library-list article {
+    padding: 12px 0;
+  }
+  #calc-form .error:empty,
+  #plan-error:empty {
+    display: none;
+  }
+}
+@media (min-width: 651px) and (max-width: 999px) {
+  body {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: 52px 46px minmax(0, 1fr);
+    grid-template-areas: "header" "nav" "main";
+  }
+  .sidebar {
+    padding: 4px 16px;
+    display: block;
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+    overflow: visible;
+  }
+  .sidebar nav {
+    display: flex;
+    gap: 8px;
+    height: 100%;
+  }
+  .sidebar nav button {
+    min-width: 0;
+    flex: 1;
+    justify-content: center;
+  }
+  .sidebar > .eyebrow,
+  .sidebar > a,
+  #saved-side {
+    display: none;
+  }
+  #saved-top {
+    display: block;
+  }
+  main {
+    padding: 14px 16px 24px;
+  }
+  .workspace {
+    grid-template-columns: minmax(235px, 0.75fr) minmax(0, 1fr);
+    gap: 12px;
+  }
+  .topbar > .badge {
+    display: none;
+  }
+}
+@media (min-width: 651px) and (max-width: 759px) {
+  .workspace,
+  .ip-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .workspace > .card {
+    margin-bottom: 4px;
+  }
+  .requirement-fields {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+  .requirement-fields > div:first-child {
+    grid-column: 1/-1;
+  }
+  .reservation {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+  .reservation > div:first-child {
+    grid-column: 1/-1;
+  }
+}
+@media (max-width: 650px) {
+  .calc-secondary {
+    border: 0;
+    margin: 0;
+    padding: 0;
+  }
+  .calc-secondary > summary {
+    display: none;
+  }
+}
+@media (min-width: 651px) and (pointer: coarse) {
+  button,
+  .segmented button,
+  summary {
+    min-height: 44px;
+  }
+  input,
+  select {
+    min-height: 44px;
+    font-size: 16px;
+  }
+}
+
+@media (min-width: 651px) and (pointer: coarse) {
+  body {
+    grid-template-rows: 60px minmax(0, 1fr);
+  }
+  .topbar {
+    height: 60px;
+  }
+}
+@media (min-width: 651px) and (max-width: 999px) and (pointer: coarse) {
+  body {
+    grid-template-rows: 60px 56px minmax(0, 1fr);
+  }
+}

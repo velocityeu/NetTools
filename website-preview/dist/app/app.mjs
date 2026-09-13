@@ -76,7 +76,11 @@ async function run(request) {
     jobs--;
   }
 }
+let currentView = "calculate";
+const desktopScroll = new Map();
 function showView(name) {
+  const desktop = matchMedia("(min-width:651px)").matches;
+  if (desktop) desktopScroll.set(currentView, $("main").scrollTop);
   document
     .querySelectorAll("main>section")
     .forEach((s) => (s.hidden = s.id !== `view-${name}`));
@@ -84,6 +88,8 @@ function showView(name) {
     if (b.dataset.view === name) b.setAttribute("aria-current", "page");
     else b.removeAttribute("aria-current");
   });
+  currentView = name;
+  if (desktop) $("main").scrollTop = desktopScroll.get(name) || 0;
 }
 document
   .querySelectorAll("[data-view]")
@@ -237,20 +243,28 @@ async function calculate() {
     rows(detail, [
       ["Total addresses", count(r.total)],
       ["Subnet mask", r.mask],
-      ["Wildcard", r.wildcard],
       ["First host / endpoint", r.firstHost],
       ["Last host / endpoint", r.lastHost],
-      ["Last address", r.last],
       ["Broadcast", r.broadcast],
+      ["Last address", r.broadcast ? "" : r.last],
       ["Conventional capacity", r.capacity ? count(r.capacity) : ""],
+    ]);
+    const extra = document.createElement("details");
+    extra.className = "calc-secondary";
+    extra.open = matchMedia("(max-width:650px)").matches;
+    const extraRows = text("div", "");
+    rows(extraRows, [
+      ["Wildcard", r.wildcard],
+      ["Last address", r.broadcast ? r.last : ""],
       ["Host offset", count(r.offset)],
     ]);
-    $("calc-results").replaceChildren(
-      hero,
-      detail,
+    extra.append(
+      text("summary", "More details & address guidance"),
+      extraRows,
       text("p", r.note),
       text("p", r.classification, "hint"),
     );
+    $("calc-results").replaceChildren(hero, detail, extra);
     $("calc-actions").hidden = false;
     if (matchMedia("(max-width:650px)").matches) {
       document.activeElement?.blur();
@@ -1353,3 +1367,9 @@ $("repair-cache").onclick = async () => {
   };
   worker.postMessage({ type: "REPAIR" }, [channel.port2]);
 };
+
+// Keep supplemental results expanded in the approved phone layout.
+matchMedia("(max-width:650px)").addEventListener("change", (event) => {
+  const details = document.querySelector(".calc-secondary");
+  if (details) details.open = event.matches;
+});

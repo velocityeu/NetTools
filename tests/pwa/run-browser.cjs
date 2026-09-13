@@ -8,6 +8,7 @@ const {
   webkit,
 } = require("../../out/pwa-test/node_modules/playwright");
 const check = require("./browser-check.cjs");
+const desktopCheck = require("./desktop-check.cjs");
 let version = 0,
   serverUnavailable = false;
 const root = path.resolve(__dirname, "../../website-preview/dist");
@@ -98,8 +99,7 @@ async function publicChecks(browser, base) {
   }
 }
 async function integration(browser, base, browserName) {
-  const useServerOutage =
-    browserName === "WebKit";
+  const useServerOutage = browserName === "WebKit";
   const context = await browser.newContext(),
     page = await context.newPage();
   try {
@@ -186,12 +186,13 @@ async function integration(browser, base, browserName) {
       const browser = await type.launch({ headless: true });
       try {
         const a = await check(browser, base);
+        const layout = await desktopCheck(browser, base);
         const p = await publicChecks(browser, base);
         const b = await integration(browser, base, name);
         console.log(
           name +
             ": " +
-            (a.length + b.length + p.length) +
+            (a.length + b.length + p.length + layout.length) +
             " browser checks passed",
         );
       } finally {
