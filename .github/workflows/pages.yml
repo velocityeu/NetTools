@@ -9,12 +9,13 @@ on:
       - 'scripts/build_help.py'
       - 'scripts/build_seo.py'
       - 'scripts/prepare_site.py'
+      - 'scripts/verify_deployed_site.py'
+      - 'tests/pages_deployment_tests.py'
       - '.github/workflows/pages.yml'
   workflow_dispatch:
-  # A future publisher using GITHUB_TOKEN must explicitly dispatch this workflow
-  # on main after publishing; token-created release events do not trigger it.
-  # github-pages must allow main (branch) and v[0-9]*.[0-9]*.[0-9]* (tag).
-  # Release events retain their tag ref even though checkout below uses main.
+  # Release events only dispatch a main-branch run: direct release deployments
+  # can report success while serving an old artifact (actions/deploy-pages#383).
+  # GITHUB_TOKEN may trigger workflow_dispatch; it cannot trigger release runs.
   release:
     types: [published]
 
@@ -29,10 +30,25 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  release_refresh:
+    if: github.repository == 'velocityeu/NetTools' && github.event_name == 'release'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      actions: write
+    steps:
+      - name: Refresh Pages from the main branch after publication
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run pages.yml --ref main --repo "$GITHUB_REPOSITORY"
+
   build:
-    if: github.repository == 'velocityeu/NetTools' && (github.event_name == 'release' || github.ref == 'refs/heads/main')
+    if: github.repository == 'velocityeu/NetTools' && github.event_name != 'release' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-24.04
     timeout-minutes: 15
+    outputs:
+      source: ${{ steps.site.outputs.source }}
+      release_sha256: ${{ steps.site.outputs.release_sha256 }}
     permissions:
       contents: read
       pages: read
@@ -46,10 +62,17 @@ jobs:
         run: python3 scripts/build_help.py --check
       - name: Check crawlable lesson pages and sitemap
         run: python3 scripts/build_seo.py --check
+      - name: Test deployed-site verification
+        run: python3 tests/pages_deployment_tests.py
       - name: Prepare site and verify release downloads
         env:
           GITHUB_TOKEN: ${{ github.token }}
         run: python3 scripts/prepare_site.py --output _site
+      - name: Record expected deployed release metadata
+        id: site
+        run: |
+          echo "source=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+          echo "release_sha256=$(sha256sum _site/release-data.json | cut -d ' ' -f1)" >> "$GITHUB_OUTPUT"
       - name: Read Pages configuration
         uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6.0.0
         with:
@@ -63,14 +86,25 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-24.04
-    timeout-minutes: 15
+    timeout-minutes: 20
     permissions:
+      contents: read
       pages: write
       id-token: write
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
+      - name: Check out the verified site source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ needs.build.outputs.source }}
+          persist-credentials: false
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1
+      - name: Verify the public site serves this release metadata
+        env:
+          SITE_URL: ${{ steps.deployment.outputs.page_url }}
+          EXPECTED_SHA256: ${{ needs.build.outputs.release_sha256 }}
+        run: python3 scripts/verify_deployed_site.py --url "$SITE_URL" --sha256 "$EXPECTED_SHA256" --timeout 600 --interval 15

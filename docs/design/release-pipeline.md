@@ -33,7 +33,9 @@ flowchart TD
   Verify --> Stage[Create draft release and upload assets]
   Stage --> Audit[Verify complete release assets]
   Audit --> Publish[Publish stable or prerelease]
-  Publish --> Web[Update website release metadata]
+  Publish --> Dispatch[Dispatch Pages workflow on main]
+  Dispatch --> Web[Update website release metadata]
+  Web --> Live[Verify served metadata matches the deployed artifact]
 ```
 
 ## Proposed implementation details
@@ -88,13 +90,17 @@ For a version/size/checksum shown on the page, generate a static manifest from t
 
 Selected hosting: **https://velocityeu.github.io/NetTools/**. Corporate identity and links remain velocity-eu.com; a custom domain can be added later without changing the release source.
 
-The [Pages workflow](../../.github/workflows/pages.yml) checks generated help, prepares the static website and deploys with the official GitHub Pages actions. Relevant main-branch website/help changes, manual dispatch and published-release events refresh the page. It does not build the Windows application. Only website artifacts are uploaded to Pages.
+The [Pages workflow](../../.github/workflows/pages.yml) checks generated help, prepares the static website and deploys with the official GitHub Pages actions. Relevant main-branch website/help changes and dispatches on main build and deploy the page. A published-release event only dispatches a new main-branch workflow run. The release handler and the build job are mutually exclusive, so the dispatch cannot loop. It does not build the Windows application. Only website artifacts are uploaded to Pages.
 
-Configure the github-pages environment with selected deployment rules for the main branch and version tags matching v[0-9]*.[0-9]*.[0-9]*. GitHub evaluates the triggering ref, so a release-triggered run retains its tag ref even when the workflow checks out main. A main-only rule rejects the deploy job after a successful site build. Both rules are provisioned; keep this configuration when recreating the environment. [GitHub environment deployment rules](https://docs.github.com/en/actions/how-tos/deploy/configure-and-manage-deployments/manage-environments).
+Configure the github-pages environment to allow the main branch. All build/deploy runs now execute on main; the release-tag run only dispatches and never enters the deployment environment. A tag deployment rule is not needed. [GitHub environment deployment rules](https://docs.github.com/en/actions/how-tos/deploy/configure-and-manage-deployments/manage-environments).
 
 The [site preparation script](../../scripts/prepare_site.py) reads public GitHub release metadata and verifies downloadable executable bytes before generating versioned download links. No-release, preview-only and stable-with-optional-preview states are explicit. Missing/invalid release data fails the build so the last successful website stays deployed; a verified empty release list shows the truthful design state. The live browser does not depend on GitHub API calls.
 
-The selected publisher is a velocityeu-owned GitHub App, with installation-token publication attributed to the organisation App. Its published release events can trigger Pages directly. If a future publication step instead uses GITHUB_TOKEN, it must explicitly dispatch this Pages workflow after verified publication, or call the same website build/deploy jobs. Merely creating a release with GITHUB_TOKEN does not trigger another workflow. Grant actions write only to that trusted dispatch step if chosen; do not give it to build or PR jobs. Automated website refresh then needs no manual edit of the download button.
+The selected publisher is a velocityeu-owned GitHub App, with installation-token publication attributed to the organisation App. Its published-release event starts a narrowly scoped release handler that dispatches this workflow on main using GITHUB_TOKEN. Only this handler has actions write permission. GitHub explicitly permits GITHUB_TOKEN to trigger workflow_dispatch; its usual recursion prevention still suppresses release events created by that token. A future GITHUB_TOKEN publisher must therefore dispatch Pages itself after verified publication. The App continues to own all public source pushes and releases; GitHub's Actions service performs the website refresh. [GitHub trigger behaviour](https://docs.github.com/en/actions/how-tos/write-workflows/choose-when-workflows-run/trigger-a-workflow).
+
+This separate dispatch works around an observed GitHub Pages service issue: a direct release-event deployment can report success while continuing to serve an older artifact, even when the uploaded artifact is correct. Reusing a commit SHA alone does not explain it; upstream reproductions confirm main-branch workflow_dispatch refreshes work at the same SHA. Do not override the deployment's source SHA or create empty commits to force a refresh. [Upstream action issue and reproductions](https://github.com/actions/deploy-pages/issues/383).
+
+The build records the SHA-256 of release-data.json. After deployment, the [public-site verifier](../../scripts/verify_deployed_site.py) fetches that file from the exact configured HTTPS site with cache-bypass headers and a changing query. It retries propagation for up to ten minutes, then fails if the served bytes still differ from the built artifact. Thus a successful deployment API response alone cannot mark a stale download page as verified. The verification tests cover stale content, transient HTTP failures, timeout, URL validation and a real local HTTP response.
 
 Public publishing identities must follow [the VEU identity contract](publishing-identity.md); never use personal credentials as a fallback. The App registration, restricted installation and encrypted Actions key are provisioned.
 
