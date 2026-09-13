@@ -37,6 +37,19 @@ One portable x64 executable, with a statically linked C++ runtime and Windows-su
 
 **Compatibility target:** Windows 10 x64 build 10240 onward, Windows 11, and Windows Server 2016 onward with Desktop Experience. The oldest Windows/Server images still require clean-machine validation. Server Core is outside this GUI release.
 
+## Download and run
+
+Choose **ZIP** or **EXE** on the [download page](https://velocityeu.github.io/NetTools/#download).
+For ZIP, choose **Extract all** in Windows, then run VelocityNetTools-x64.exe.
+The archive contains the identical standalone EXE, a getting-started guide, licence,
+third-party notices and checksums for the extracted files. No installation is needed.
+Press **F1** for the embedded help.
+
+Each release provides separate ZIP and EXE hashes in SHA256SUMS.txt and the release
+manifest. The checksum file inside the ZIP covers its contents; the checksum beside
+the download covers the ZIP itself. Previews remain unsigned until corporate signing
+is provisioned; archive packaging does not change Windows SmartScreen checks.
+
 ## Learn the method
 
 The [field guide](docs/help/README.md) and [learning centre](https://velocityeu.github.io/NetTools/) share the app’s 28 lessons: subnetting by hand, binary arithmetic, masks, VLSM, IPv6, address sets and diagnostic interpretation.

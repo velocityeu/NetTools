@@ -3,6 +3,7 @@
 #include "veu/storage.hpp"
 #include "veu/subnet.hpp"
 #include "veu/ui_common.hpp"
+#include "veu/result_grid.hpp"
 #include <algorithm>
 #include <array>
 #include <atomic>
@@ -297,6 +298,7 @@ void render(Pane &p) {
     for (size_t c = 1; c < row.size(); c++)
       ListView_SetItemText(p.list, idx, int(c), row[c].data());
   }
+  grid::fit(p.list, p.dpi, v.columns);
   SendMessageW(p.list, WM_SETREDRAW, TRUE, 0);
   InvalidateRect(p.list, nullptr, TRUE);
   SetWindowTextW(p.summary, v.summary.c_str());
@@ -1088,7 +1090,7 @@ LRESULT CALLBACK proc(HWND h, UINT msg, WPARAM wp, LPARAM lp) {
     p->list = make(*p, WC_LISTVIEWW, L"",
                    LVS_REPORT | LVS_SHOWSELALWAYS | WS_TABSTOP, 12);
     ListView_SetExtendedListViewStyle(
-        p->list, LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES | LVS_EX_DOUBLEBUFFER);
+        p->list, LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES | LVS_EX_DOUBLEBUFFER | LVS_EX_LABELTIP);
     SetWindowTheme(p->list, L"Explorer", nullptr);
     try {
       std::thread(worker_loop, p->worker).detach();
@@ -1111,11 +1113,13 @@ LRESULT CALLBACK proc(HWND h, UINT msg, WPARAM wp, LPARAM lp) {
     return 0;
   case WM_SIZE:
     layout(*p);
+    grid::fit(p->list, p->dpi, p->views[p->mode].columns);
     return 0;
   case WM_DPICHANGED:
     p->dpi = HIWORD(wp);
     set_font(*p);
     layout(*p);
+    grid::fit(p->list, p->dpi, p->views[p->mode].columns);
     return 0;
   case WM_VSCROLL: {
     SCROLLINFO si{sizeof(si), SIF_ALL};

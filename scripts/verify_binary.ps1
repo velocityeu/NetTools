@@ -232,6 +232,9 @@ included.
 
 $exeHash = (Get-FileHash -Algorithm SHA256 -LiteralPath $releaseExe).Hash.ToLowerInvariant()
 $signing = if ($signatureStatus -eq "Valid") { "authenticode" } else { "unsigned" }
+& python (Join-Path $PSScriptRoot "build_portable_zip.py") --directory $output --version $Version --signing $signing
+if ($LASTEXITCODE -ne 0) { throw "Portable ZIP creation or verification failed." }
+$releaseZip = Join-Path $output "VelocityNetTools-x64.zip"
 $runnerImage = if ($env:ImageOS) { "$($env:ImageOS) $($env:ImageVersion)" } else { "local verification" }
 $sdkVersion = (Get-Item -LiteralPath $mt).Directory.Parent.Name
 $manifestObject = [ordered]@{
@@ -250,6 +253,11 @@ $manifestObject = [ordered]@{
     filename = "VelocityNetTools-x64.exe"
     size = (Get-Item -LiteralPath $releaseExe).Length
     sha256 = $exeHash
+    archive = [ordered]@{
+        filename = "VelocityNetTools-x64.zip"
+        size = (Get-Item -LiteralPath $releaseZip).Length
+        sha256 = (Get-FileHash -Algorithm SHA256 -LiteralPath $releaseZip).Hash.ToLowerInvariant()
+    }
     signing = [ordered]@{
         policy = if ($RequireSignature) { "required" } else { "not-required-for-this-channel" }
         result = $signing
@@ -271,6 +279,8 @@ $dump | Set-Content -LiteralPath $importPath -Encoding utf8NoBOM
 
 $assetNames = @(
     "VelocityNetTools-x64.exe",
+    "VelocityNetTools-x64.zip",
+    "START-HERE.txt",
     "release-manifest.json",
     "LICENSE.txt",
     "THIRD-PARTY-NOTICES.txt",

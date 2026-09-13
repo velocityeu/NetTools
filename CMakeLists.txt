@@ -81,3 +81,5 @@ set_tests_properties(frame_smoke network_loopback PROPERTIES TIMEOUT 60)
 target_link_options(frame_smoke PRIVATE /MANIFEST:NO)
 
 add_test(NAME workflow_metadata COMMAND "${Python3_EXECUTABLE}" "${CMAKE_SOURCE_DIR}/tests/workflow_metadata_tests.py")
+
+add_test(NAME distribution COMMAND "${Python3_EXECUTABLE}" "${CMAKE_SOURCE_DIR}/tests/distribution_tests.py")

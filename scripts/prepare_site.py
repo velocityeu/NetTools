@@ -78,28 +78,39 @@ def verify_release(release):
     if release.get('immutable') is not True:
         raise ValueError(f'{tag}: enable release immutability before linking an executable')
     version_path = quote(tag, safe='')
-    url = f'{RELEASES_URL}/download/{version_path}/{EXECUTABLE}'
     notes = f'{RELEASES_URL}/tag/{version_path}'
-    if asset.get('browser_download_url') != url or release.get('html_url') != notes:
-        raise ValueError(f'{tag}: asset or release URL is not the expected repository/version')
-    digest = asset.get('digest', '')
-    size = asset.get('size')
-    if (asset.get('state') != 'uploaded' or not isinstance(digest, str)
-            or not re.fullmatch(r'sha256:[0-9a-f]{64}', digest)
-            or type(size) is not int or size <= 0):
-        raise ValueError(f'{tag}: executable is incomplete or lacks a SHA-256 digest')
-    # Do not forward the API token to public asset URLs or their CDN redirects.
-    sha, received = hashlib.sha256(), 0
-    with urlopen(Request(url, headers={'User-Agent': 'Velocity-NetTools-Pages'}), timeout=60) as response:
-        while chunk := response.read(1024 * 1024):
-            received += len(chunk)
-            if received > size:
-                raise ValueError(f'{tag}: executable exceeds its recorded size')
-            sha.update(chunk)
-    if received != size or sha.hexdigest() != digest.removeprefix('sha256:'):
-        raise ValueError(f'{tag}: downloaded executable does not match GitHub metadata')
-    return {'version': tag, 'url': url, 'notes': notes, 'size': size,
-            'sha256': sha.hexdigest(), 'published_at': release['published_at']}
+    if release.get('html_url') != notes:
+        raise ValueError(f'{tag}: release URL is not the expected repository/version')
+
+    def verify_asset(item, filename):
+        url = f'{RELEASES_URL}/download/{version_path}/{filename}'
+        if item.get('browser_download_url') != url:
+            raise ValueError(f'{tag}: asset URL is not the expected repository/version')
+        digest, size = item.get('digest', ''), item.get('size')
+        if (item.get('state') != 'uploaded' or not isinstance(digest, str)
+                or not re.fullmatch(r'sha256:[0-9a-f]{64}', digest)
+                or type(size) is not int or size <= 0):
+            raise ValueError(f'{tag}: {filename} is incomplete or lacks a SHA-256 digest')
+        sha, received = hashlib.sha256(), 0
+        with urlopen(Request(url, headers={'User-Agent': 'Velocity-NetTools-Pages'}), timeout=60) as response:
+            while chunk := response.read(1024 * 1024):
+                received += len(chunk)
+                if received > size:
+                    raise ValueError(f'{tag}: {filename} exceeds its recorded size')
+                sha.update(chunk)
+        if received != size or sha.hexdigest() != digest.removeprefix('sha256:'):
+            raise ValueError(f'{tag}: {filename} does not match GitHub metadata')
+        return {'url': url, 'size': size, 'sha256': sha.hexdigest()}
+
+    result = {'version': tag, 'notes': notes, 'published_at': release['published_at'],
+              **verify_asset(asset, EXECUTABLE)}
+    archives = [item for item in release.get('assets', [])
+                if item.get('name') == 'VelocityNetTools-x64.zip']
+    if len(archives) > 1:
+        raise ValueError(f'{tag}: duplicate ZIP assets')
+    if archives:
+        result['archive'] = verify_asset(archives[0], 'VelocityNetTools-x64.zip')
+    return result
 
 
 def preview_precedence(tag):
@@ -162,15 +173,23 @@ def select_downloads(state):
 def release_card(download, preview=False):
     escape = html.escape
     title = 'Preview' if preview else 'Stable release'
-    label = 'Download preview for Windows x64' if preview else 'Download for Windows x64'
-    button = 'secondary' if preview else 'primary'
+    archive = download.get('archive')
+    formats = [('ZIP', archive), ('EXE', download)] if archive else [('EXE', download)]
+    links, checks = [], []
+    for kind, asset in formats:
+        button = 'primary' if kind == 'ZIP' else 'secondary'
+        links.append(
+            f'<a class="button {button}" href="{escape(asset["url"], quote=True)}">'
+            f'Download {kind} · {asset["size"]:,} bytes</a>')
+        checks.append(f'<p>{kind} SHA-256</p><code class="release-checksum">{asset["sha256"]}</code>')
+    instruction = ('Extract the ZIP, then run the EXE. Or download the EXE directly.'
+                   if archive else 'Run the portable EXE directly.')
     return (
         f'<div class="release-card"><h3>{title} {escape(download["version"])}</h3>'
-        f'<p>Windows x64 · {download["size"]:,} bytes</p>'
-        f'<a class="button {button}" href="{escape(download["url"], quote=True)}">{label}</a> '
+        f'<p>Windows x64. {instruction}</p>'
+        f'<div class="release-format-buttons">{" ".join(links)}</div>'
         f'<a class="text-link" href="{escape(download["notes"], quote=True)}">Release notes</a>'
-        f'<details><summary>Verify SHA-256</summary><code class="release-checksum">'
-        f'{download["sha256"]}</code></details></div>'
+        f'<details><summary>Verify SHA-256</summary>{"".join(checks)}</details></div>'
     )
 
 

@@ -14,6 +14,17 @@ The application is implemented as C++20/Win32, initially x64. Development was ap
 
 These checks establish specific tested behavior, not a claim that the program is bug-free.
 
+## Result tables and portable downloads
+
+Local addresses and prefixes lead the My PC & IP table. DNS answers, next hops,
+neighbours and probe outcomes also precede secondary metadata. Column widths reflect
+their contents and the available viewport; two-column details fill the window.
+Hover native label tips for clipped text. Detailed tables can still scroll when
+the screen cannot fit all fields. Copy and CSV use the displayed network column order.
+
+ZIP and EXE downloads contain identical executable bytes. Use Extract all for the
+ZIP, then run the executable. Corporate signing remains a separate release gate.
+
 ## Preview limits and release gates
 
 - Windows 10 build 10240 and Windows Server 2016 Desktop Experience still require clean VM validation. The development machine is a current Windows 11 system.

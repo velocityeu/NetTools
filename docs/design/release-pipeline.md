@@ -86,6 +86,20 @@ The adjacent **Release notes** link points to `/releases/latest`; **All versions
 
 For a version/size/checksum shown on the page, generate a static manifest from the published release. Bind that displayed metadata to an explicit versioned asset URL so there is no race where an old checksum accompanies a moving latest download. The generic “latest” action may remain separate. Deploy the page only after its referenced release is public. On metadata failure retain the previous valid release view; do not fall back to a prerelease or fictitious version.
 
+## Portable ZIP and standalone EXE
+
+Publish both VelocityNetTools-x64.zip and VelocityNetTools-x64.exe. The ZIP contains
+the exact verified EXE plus LICENSE.txt, THIRD-PARTY-NOTICES.txt, START-HERE.txt and
+an internal SHA256SUMS.txt for those four files. The external checksum list covers
+the ZIP, standalone EXE, guide, manifest and other release assets; there is no
+checksum self-reference. The release manifest records ZIP size/hash in its archive
+object while preserving the existing EXE fields. Both formats receive build attestations
+and uploaded-byte verification. Older EXE-only releases remain valid website inputs.
+
+The website verifies the actual bytes of every linked format and displays distinct
+ZIP/EXE buttons and checksums. Signing, when provisioned, happens before ZIP creation
+so the extracted and standalone executable signatures and bytes stay identical.
+
 ## GitHub Pages implementation
 
 Selected hosting: **https://velocityeu.github.io/NetTools/**. Corporate identity and links remain velocity-eu.com; a custom domain can be added later without changing the release source.

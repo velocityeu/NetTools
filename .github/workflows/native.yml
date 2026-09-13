@@ -120,6 +120,8 @@ jobs:
         with:
           subject-path: |
             package/VelocityNetTools-x64.exe
+            package/VelocityNetTools-x64.zip
+            package/START-HERE.txt
             package/SHA256SUMS.txt
             package/release-manifest.json
             package/LICENSE.txt
@@ -237,14 +239,14 @@ jobs:
           $pre=$env:CHANNEL -ne "stable"
           if (-not $found) {
             $notice=if($manifest.signing.result -ceq "unsigned"){"This preview is explicitly unsigned. Verify SHA256SUMS.txt."}else{""}
-            $body=@("Velocity NetTools $env:VERSION by VEU","","Source commit: $env:GITHUB_SHA","Build date: $env:DATE","Channel: $env:CHANNEL","Platform: Windows x64","",$notice)-join [Environment]::NewLine
+            $body=@("Velocity NetTools $env:VERSION by VEU","","Source commit: $env:GITHUB_SHA","Build date: $env:DATE","Channel: $env:CHANNEL","Platform: Windows x64","","Download the ZIP and Extract all, or download the standalone EXE. Both contain the identical executable. Press F1 for embedded help.","",$notice)-join [Environment]::NewLine
             $json=@{tag_name=$tag;target_commitish="$env:GITHUB_SHA".ToLowerInvariant();name="Velocity NetTools $env:VERSION";body=$body.Trim();draft=$true;prerelease=$pre;make_latest="false"}|ConvertTo-Json
             $release=Invoke-RestMethod -Method Post -Headers $h -ContentType "application/json" -Body $json -Uri "$api/releases"
           } else {
             $release=$found[0]
             if ($release.target_commitish -cne "$env:GITHUB_SHA".ToLowerInvariant()) { throw "Existing draft targets different source." }
           }
-          $names=@("VelocityNetTools-x64.exe","SHA256SUMS.txt","release-manifest.json","LICENSE.txt","THIRD-PARTY-NOTICES.txt","pe-imports.txt")
+          $names=@("VelocityNetTools-x64.exe","VelocityNetTools-x64.zip","START-HERE.txt","SHA256SUMS.txt","release-manifest.json","LICENSE.txt","THIRD-PARTY-NOTICES.txt","pe-imports.txt")
           $upload=$release.upload_url -replace '\{\?name,label\}$',''
           foreach($asset in @($release.assets)) {
             if($asset.name -notin $names){throw "Unexpected draft asset."}

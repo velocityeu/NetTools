@@ -1,5 +1,6 @@
 
 #include "veu/network_pane.hpp"
+#include "veu/result_grid.hpp"
 #include <commctrl.h>
 #include <chrono>
 #include <iostream>
@@ -29,6 +30,19 @@ int main()
 {
     try
     {
+        std::vector<std::wstring> headings{L"Adapter", L"Family", L"Address", L"Prefix", L"Future metadata"};
+        std::vector<std::vector<std::wstring>> cells{
+            {L"Ethernet", L"IPv4", L"192.0.2.42", L"26", L"retained"},
+            {L"VPN", L"IPv6", L"fe80::1234%12", L"64", L"also retained"}};
+        veu::grid::prioritize(headings, cells, {L"Address", L"Prefix", L"Adapter"});
+        check(headings == std::vector<std::wstring>{L"Address", L"Prefix", L"Adapter", L"Family", L"Future metadata"},
+              "key columns precede retained metadata");
+        check(cells[0] == std::vector<std::wstring>{L"192.0.2.42", L"26", L"Ethernet", L"IPv4", L"retained"} &&
+              cells[1] == std::vector<std::wstring>{L"fe80::1234%12", L"64", L"VPN", L"IPv6", L"also retained"},
+              "column reordering preserves all heading-cell associations and IPv6 zones");
+        auto once = cells;
+        veu::grid::prioritize(headings, cells, {L"Address", L"Prefix", L"Adapter"});
+        check(cells == once, "repeated refresh does not reorder cells again");
         INITCOMMONCONTROLSEX controls{sizeof(controls), ICC_WIN95_CLASSES};
         InitCommonControlsEx(&controls);
         HWND parent = CreateWindowExW(0, L"STATIC", L"VEU native smoke", WS_OVERLAPPEDWINDOW, 0, 0, 1000, 720, nullptr,
@@ -62,6 +76,34 @@ int main()
         check(scroll.nMax > static_cast<int>(scroll.nPage), "150-percent small pane has reachable overflow");
         veu::network_set_dpi(pane, 96);
         MoveWindow(pane, 0, 0, 960, 650, TRUE);
+        // Key local IP fields must be visible before secondary adapter metadata.
+        veu::select_network_tool(pane, veu::net::Tool::adapters);
+        SendMessageW(pane, WM_COMMAND, 100, 0);
+        auto adapter_deadline = std::chrono::steady_clock::now() + std::chrono::seconds(6);
+        while (veu::network_busy(pane) && std::chrono::steady_clock::now() < adapter_deadline)
+        {
+            pump();
+            std::this_thread::sleep_for(std::chrono::milliseconds(10));
+        }
+        SendMessageW(pane, WM_TIMER, 1, 0);
+        HWND table = FindWindowExW(pane, nullptr, WC_LISTVIEWW, nullptr);
+        wchar_t heading[128]{};
+        LVCOLUMNW col{};
+        col.mask = LVCF_TEXT;
+        col.pszText = heading;
+        col.cchTextMax = 128;
+        check(ListView_GetColumn(table, 0, &col) && std::wstring(heading) == L"Address",
+              "My PC shows Address first without horizontal scrolling");
+        check(ListView_GetColumn(table, 1, &col) && std::wstring(heading) == L"Prefix",
+              "prefix is immediately beside address");
+        RECT viewport{};
+        GetClientRect(table, &viewport);
+        check(ListView_GetColumnWidth(table, 0) + ListView_GetColumnWidth(table, 1) <= viewport.right,
+              "address and prefix fit inside the initial table viewport");
+        check(ListView_GetColumnWidth(table, 1) < ListView_GetColumnWidth(table, 0),
+              "short prefix does not consume address-sized space");
+        check((ListView_GetExtendedListViewStyle(table) & LVS_EX_LABELTIP) != 0,
+              "native label tips expose clipped details");
         auto fields = veu::network_plan_fields(pane);
         check(!fields.empty(), "default plan fields");
         fields["network.4.target"] = "127.0.0.1; ::1";
@@ -82,6 +124,11 @@ int main()
         check(!veu::network_busy(pane), "multi-target ping completes");
         SendMessageW(pane, WM_TIMER, 1, 0);
         check(SendMessageW(GetDlgItem(pane, 107), CB_GETCOUNT, 0, 0) == 2, "two separately selectable targets");
+        check(ListView_GetColumn(table, 0, &col) && std::wstring(heading) == L"Responder",
+              "ping responder is visible first");
+        check(ListView_GetColumn(table, 1, &col) && std::wstring(heading) == L"Outcome",
+              "ping outcome is beside responder");
+
         veu::select_network_tool(pane, veu::net::Tool::dns);
         veu::select_network_tool(pane, veu::net::Tool::ping);
         check(veu::network_plan_fields(pane).at("network.4.target") == "127.0.0.1; ::1",
@@ -118,7 +165,7 @@ int main()
         for (int i = 0; i < paused_rows; ++i)
         {
             wchar_t outcome[100]{};
-            ListView_GetItemText(list, i, 5, outcome, 100);
+            ListView_GetItemText(list, i, 1, outcome, 100);
             if (std::wstring(outcome) == L"Not sent")
                 gap = true;
         }

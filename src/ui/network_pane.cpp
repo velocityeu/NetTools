@@ -1,6 +1,7 @@
 #include "veu/network_pane.hpp"
 #include "veu/help.hpp"
 #include "veu/storage.hpp"
+#include "veu/result_grid.hpp"
 #include <commctrl.h>
 #include <commdlg.h>
 #include <algorithm>
@@ -567,6 +568,41 @@ void update_table(Pane &p)
 {
     auto &v = view(p);
     auto &result = v.displayed;
+    switch (p.tool)
+    {
+    case net::Tool::adapters:
+        grid::prioritize(result.columns, result.rows, {L"Address", L"Prefix", L"Adapter", L"Kind", L"State", L"Family"});
+        break;
+    case net::Tool::external_ip:
+        grid::prioritize(result.columns, result.rows, {L"Observed address / error", L"State", L"Family"});
+        break;
+    case net::Tool::dns:
+        grid::prioritize(result.columns, result.rows, {L"Data", L"Type", L"Owner", L"TTL (s)"});
+        break;
+    case net::Tool::routes:
+        grid::prioritize(result.columns, result.rows, {L"Destination/prefix", L"Next hop", L"Interface"});
+        break;
+    case net::Tool::neighbours:
+        grid::prioritize(result.columns, result.rows, {L"Address", L"Physical address", L"Reachability state"});
+        break;
+    case net::Tool::ping:
+        grid::prioritize(result.columns, result.rows, {L"Responder", L"Outcome", L"RTT (integer ms)", L"Sequence"});
+        break;
+    case net::Tool::traceroute:
+        grid::prioritize(result.columns, result.rows, {L"TTL/Hop", L"Responder", L"Outcome", L"RTT (integer ms)"});
+        break;
+    case net::Tool::mtu:
+        grid::prioritize(result.columns, result.rows, {L"Data bytes", L"Outcome", L"Responder", L"RTT (integer ms)"});
+        break;
+    case net::Tool::tcp:
+        grid::prioritize(result.columns, result.rows, {L"Attempted address", L"Port", L"Outcome", L"Elapsed ms"});
+        break;
+    case net::Tool::wake_on_lan:
+        grid::prioritize(result.columns, result.rows, {L"Destination", L"Outcome", L"Port", L"Source"});
+        break;
+    default:
+        break;
+    }
     SendMessageW(p.list, WM_SETREDRAW, FALSE, 0);
     ListView_DeleteAllItems(p.list);
     while (ListView_DeleteColumn(p.list, 0))
@@ -595,6 +631,7 @@ void update_table(Pane &p)
         for (size_t cell = 1; cell < row.size() && cell < result.columns.size(); ++cell)
             ListView_SetItemText(p.list, index, static_cast<int>(cell), const_cast<wchar_t *>(row[cell].c_str()));
     }
+    grid::fit(p.list, p.dpi, result.columns);
     SendMessageW(p.list, WM_SETREDRAW, TRUE, 0);
     InvalidateRect(p.list, nullptr, TRUE);
     std::wstring summary = result.observed_at + L"  " + result.context + L"\r\n" + result.summary;
@@ -1013,7 +1050,7 @@ LRESULT CALLBACK procedure(HWND window, UINT message, WPARAM w, LPARAM l)
             p->summary = child(*p, L"EDIT", L"", ES_MULTILINE | ES_READONLY | ES_AUTOVSCROLL | WS_VSCROLL | WS_TABSTOP,
                                0, WS_EX_CLIENTEDGE);
             p->list = child(*p, WC_LISTVIEWW, L"", LVS_REPORT | LVS_SHOWSELALWAYS | WS_TABSTOP, 0, WS_EX_CLIENTEDGE);
-            ListView_SetExtendedListViewStyle(p->list, LVS_EX_FULLROWSELECT | LVS_EX_DOUBLEBUFFER | LVS_EX_GRIDLINES);
+            ListView_SetExtendedListViewStyle(p->list, LVS_EX_FULLROWSELECT | LVS_EX_DOUBLEBUFFER | LVS_EX_GRIDLINES | LVS_EX_LABELTIP);
             p->graph = child(*p, graph_class, L"Ping graph", 0);
             fill_fields(*p);
             target_choices(*p);
@@ -1028,7 +1065,10 @@ LRESULT CALLBACK procedure(HWND window, UINT message, WPARAM w, LPARAM l)
             return 0;
         case WM_SIZE:
             if (p)
+            {
                 layout(*p);
+                grid::fit(p->list, p->dpi, view(*p).displayed.columns);
+            }
             return 0;
         case WM_TIMER:
             if (p && w == poll_timer)

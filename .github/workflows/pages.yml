@@ -11,6 +11,8 @@ on:
       - 'scripts/prepare_site.py'
       - 'scripts/verify_deployed_site.py'
       - 'tests/pages_deployment_tests.py'
+      - 'tests/distribution_tests.py'
+      - 'scripts/build_portable_zip.py'
       - '.github/workflows/pages.yml'
   workflow_dispatch:
   # Release events only dispatch a main-branch run: direct release deployments
@@ -63,7 +65,9 @@ jobs:
       - name: Check crawlable lesson pages and sitemap
         run: python3 scripts/build_seo.py --check
       - name: Test deployed-site verification
-        run: python3 tests/pages_deployment_tests.py
+        run: |
+          python3 tests/pages_deployment_tests.py
+          python3 tests/distribution_tests.py
       - name: Prepare site and verify release downloads
         env:
           GITHUB_TOKEN: ${{ github.token }}
